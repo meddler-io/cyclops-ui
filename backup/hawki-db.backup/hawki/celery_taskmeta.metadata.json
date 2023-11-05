@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.celery_taskmeta"},{"v":{"$numberInt":"2"},"key":{"date_done":{"$numberInt":"1"}},"name":"date_done_1","ns":"hawki.celery_taskmeta","background":true}],"uuid":"a6a2462307d64ee1b4767e00dcc1b877","collectionName":"celery_taskmeta","type":"collection"}

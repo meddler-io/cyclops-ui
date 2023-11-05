@@ -1,0 +1,33 @@
+<nb-card *ngIf="buildDetails | async as buildDetails ">
+
+
+    <nb-card-body style="padding: 2rem;" fxLayoutGap="20px" fxLayout="column">
+
+
+
+
+        <nb-tabset>
+            <nb-tab *ngFor="let file of buildDetails.files" [tabTitle]="file?.name?.split('.')[0]">
+
+                <ng-container>
+
+                    <!-- <pre> -->
+                        <code>
+
+                        
+                        {{
+                            (file.download_url | async  ) 
+                        }}
+                        
+                    </code>
+                    <!-- </pre> -->
+                </ng-container>
+
+            </nb-tab>
+
+        </nb-tabset>
+
+
+    </nb-card-body>
+
+</nb-card>

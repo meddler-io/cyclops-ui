@@ -1,0 +1,187 @@
+<!-- [accent]=" active ?  'success' :  '' " -->
+
+<nb-card fxFill [class.selected]="data?.application?.scan_data  != undefined " [class.active]="active"
+  [class.integrated]="data?.config?.integrated" [class.not_integrated]="!data?.config?.integrated">
+
+  <nb-card-header (click)="onClick()">
+    <div fxFlex fxLayoutAlign="center center" fxLayoutGap="10px">
+
+
+
+
+      <div fxLayoutAlign="center center" class="circle">
+        <span class="text">
+          {{ data?.businessName[0] }}
+        </span>
+      </div>
+
+
+      <div style="height: 100%;" fxLayoutGap="10px" fxLayout="column" fxFlex>
+
+
+
+
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="start start">
+
+
+
+
+          <div style="height: 100%;" fxLayout="column" fxLayoutAlign="center start" fxFlex>
+
+
+            <!-- <span class="text-interactive">
+              <nb-icon status="basic" icon="hash-outline">
+              </nb-icon>
+              {{data?.index}}
+            </span> -->
+
+            <span style="margin-left: 5px; font-weight: 550;" class="text-interactive">
+              {{data?.application?.applicationName}}
+            </span>
+
+            <nb-tag appearance="outline" [status]="active ? 'alternative' : 'basic' " class="buildcount" size="tiny"
+              [text]="data?.platformTag">
+            </nb-tag>
+
+
+          </div>
+
+          <div fxLayout="column" fxLayoutAlign="end center">
+
+
+            <nb-tag [appearance]="active ? 'outline' : 'outline' " [status]="active ? 'alternative' : 'basic' "
+              class="buildcount" size="medium" [text]="data?.application?.noOfBuilds">
+            </nb-tag>
+
+            <span style="margin-left: 5px; font-weight: 350; font-size: 0.8rem;" class="text-interactive-2">
+              Builds
+            </span>
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+
+  </nb-card-header>
+
+
+
+
+
+
+
+  <nb-card-body (click)="onClick()">
+    <div fxLayoutGap="10px" [class.active]="active">
+
+      <div fxLayoutGap="4px" fxLayout="column" fxLayoutAlign="start start">
+
+
+
+
+        <div fxLayoutAlign="start start" fxFlex fxLayoutGap="10px">
+          <!-- <nb-icon class="text-interactive" icon="shuffle-2-outline"></nb-icon> -->
+
+
+          <img class="icon" src="https://img.icons8.com/nolan/64/organization.png" />
+          <span class=" text-interactive-2">
+            {{data?.businessName}}
+
+
+          </span>
+        </div>
+
+        <div fxFlex fxLayoutAlign="center start" fxLayoutAlign="end" fxLayoutGap="10px">
+
+          <img class="icon"
+            src="https://img.icons8.com/external-icongeek26-outline-gradient-icongeek26/64/000000/external-application-mobile-application-icongeek26-outline-gradient-icongeek26.png" />
+
+
+          <span class=" text-interactive-2">
+            {{data?.projectName}}
+
+          </span>
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+  </nb-card-body>
+
+
+  <nb-card-body (click)="onClick()" *ngIf="data?.config != {} ">
+
+    <div fxLayout="column">
+
+      <div [routerLink]="['/' , 'devsec' , data?.application?.applicationId?.$oid ,   'static_scans' ]"
+        *ngIf="data?.config?.git_repo" fxFlex fxLayoutGap="10px">
+        <nb-icon class="text-interactive" icon="shuffle-2-outline"></nb-icon>
+        <span class="text-interactive-2 light">
+          {{data?.config?.git_repo}}
+        </span>
+      </div>
+
+
+      <div [routerLink]="['/' , 'devsec' , data?.application?.applicationId?.$oid ,   'dynamic_scans' ]"
+        *ngIf="data?.config?.app_url" fxFlex fxLayoutGap="10px">
+        <nb-icon class="text-interactive" icon="sun-outline"></nb-icon>
+        <span class="text-interactive-2  light">
+          {{data?.config?.app_url}}
+        </span>
+      </div>
+
+    </div>
+
+  </nb-card-body>
+
+
+  <nb-card-footer style="margin: ; 0px; padding: 10px">
+
+    <div fxLayoutGap="10px" fxLayoutAlign="end">
+
+      <button nbButton status="success" appearance="outline" size="small" (click)="onClick()">Explore</button>
+      <!-- <button nbButton status="primary" appearance="outline" size="small" (click)="onClick()">Edit</button> -->
+
+      <button nbButton status="danger" appearance="outline" size="small" (click)=" open(dialog)">
+        Delete</button>
+    </div>
+  </nb-card-footer>
+
+  <!-- {{data?.scan_data?.scan_data?.dynamic?.APP_URL}} -->
+  <!-- {{data?.scan_data?.scan_data?.static?.GIT_URL}} -->
+  <!-- {{data?.scan_data?.scan_data?.static?.GIT_BRANCH}} -->
+
+</nb-card>
+
+
+
+
+<!--  -->
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      <h5>
+        Delete App
+      </h5>
+    </nb-card-header>
+    <nb-card-body>{{ data }}</nb-card-body>
+    <nb-card-footer 
+    fxLayoutGap="10px"
+    fxLayoutAlign="end">
+      <button status="baisc" appearance="outline" size="small" nbButton (click)="ref.close()">Cancel</button>
+
+      <button status="danger" appearance="outline" size="small" nbButton (click)="deleteApp(ref)">Delete</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

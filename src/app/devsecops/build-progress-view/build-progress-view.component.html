@@ -1,0 +1,58 @@
+<ng-template #hintPopover let-data>
+
+    <div style="padding: 1rem; " fxLayout="column">
+        <div fxFlex>
+            {{ data?.title }}
+        </div>
+        <div fxFlex>
+            {{ data?.ts?.$date | date }}
+        </div>
+        <div fxFlex *ngIf="data?.time_taken">
+            Took {{ data?.time_taken }} seconds
+        </div>
+    </div>
+
+</ng-template>
+
+<div fxFlex
+[class.active]="active"
+[class.success]="build?.status  == 'SUCCESS' " [class.fail]="build?.status  == 'FAIL' "
+    class="container selected" fxLayoutAlign="center center" fxLayout="row">
+
+
+
+    <!-- First Step -->
+
+    <ng-container *ngFor="let build_step of build?.build_state; index as index">
+
+        <ng-container *ngIf="index != 0">
+            <div fxFlex class="horizontal_line " [class.fail]="build_step?.state  == false "
+                [class.primary]="build_step?.state  == undefined " [class.success]="build_step?.state  == true ">
+                <!-- &nbsp;32132 -->
+            </div>
+        </ng-container>
+
+        <div fxLayoutAlign="start center">
+            <!-- <span class="dot " [ngClass]="'text-'+data?._status">&#183;</span> -->
+            <!-- [nbPopover]="  build_step?.ts  ?  hintPopover : null "  -->
+
+
+            <nb-icon [nbPopoverContext]=" build_step " [nbPopover]="  build_step?.ts  ?  hintPopover : null "
+                nbPopoverTrigger="hint" nbPopoverPlacement="bottom" class="dot "
+                [class.spin]="build_step?.state != true" [status]="build_step?.state == true ? 'success'  : 'danger' "
+                [icon]="   build_step?.state == true ? 'checkmark-circle-2-outline' :  'close-circle-outline'  ">
+            </nb-icon>
+
+
+
+
+
+
+        </div>
+    </ng-container>
+
+
+    <!--  -->
+
+
+</div>

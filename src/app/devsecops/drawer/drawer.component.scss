@@ -1,0 +1,38 @@
+@import '../../styles/colors/colors';
+
+.ngx-drawer {
+  display: block;
+  // overflow-y: auto;
+  overflow-x: hidden;
+  text-align: left;
+  z-index: 998;
+  background: $color-blue-grey-800;
+  min-width: 50%;
+  width: 50%;
+
+  &.left-drawer {
+    // top: 0rem ;
+    top: var(--header-height) ;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
+
+  &.bottom-drawer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: calc( 100vh  );
+
+  }
+
+  .ngx-drawer-content {
+    // height: calc( 100% - var(--header-height) );
+    // height: calc( 100%  );
+    // overflow: auto;
+    // display: flex;
+    height: 100%;
+    min-height: 100%;
+
+  }
+}

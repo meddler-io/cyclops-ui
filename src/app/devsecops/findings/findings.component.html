@@ -1,0 +1,402 @@
+<nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+    <nb-card-header fxLayoutAlign="space-between" fxLayout="row">
+
+        <div fxLayoutAlign="start">
+
+            <div *ngIf="false" class="nb-select" fxLayout="column">
+
+                <div class="select_heading">
+                    Build No.
+                    <!-- {{selectedBuildId?.value}} -->
+                </div>
+
+                <!-- <ng-container *ngIf="builds | async as builds"> -->
+
+
+                <nb-select [nbSpinner]="!!!( builds | async )" fullWidth optionsListClass="nb-option"
+                    optionsPanelClass="nb-option" [formControl]="selectedBuildId" size="medium" placeholder="Build Id">
+                    <!-- <nb-option value="">All</nb-option> -->
+                    <nb-option (mouseover)="onMouseOver( build )" (mouseout)="onMouseOut()"
+                        [disabled]="build?.status == 'FAIL'" style="overflow: hidden;"
+                        *ngFor="let build of builds | async " [value]="build?._id?.$oid">
+                        <div fxLayout="row">
+                            <span [class.previousBuild]="previousBuildId == build?._id?.$oid"
+                                [class.currentBuild]="currentBuildId == build?._id?.$oid"
+                                class="dot  {{build?.status}}">&#183;</span>
+                            #{{build?.buildNo}}
+
+
+
+                        </div>
+                    </nb-option>
+
+                </nb-select>
+
+                <!-- </ng-container> -->
+
+            </div>
+            <div style=" 
+  margin   : 0.5rem;
+            " fxLayout="column">
+
+                <app-finding-stats #findingStatsView [findingStats]="findingStats | async">
+
+                </app-finding-stats>
+            </div>
+
+
+        </div>
+
+
+    </nb-card-header>
+
+    <nb-card-header style="margin-top: 0px; margin-bottom: 0px;;">
+
+
+
+        <!-- style="  border-left: 8px solid white;"  -->
+        <div fxLayoutAlign="center start" fxLayout="row">
+
+            <div class="cell_header" fxFlex="0 0 3rem" fxLayoutAlign="start start">
+                <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="medium" class="left" status="basic"
+                    nbButton ghost>
+
+                    <nb-icon icon="hash-outline"></nb-icon>
+
+                </button>
+            </div>
+
+
+
+
+
+            <div class="cell_header" fxFlex="1 0" fxLayoutAlign="start start">
+                <button disabled fullWidth size="medium" class="left" status="basic" nbButton ghost>
+                    Title
+                </button>
+            </div>
+
+
+
+
+
+            <div class="cell_header" fxFlex="0 0 7rem" fxLayoutAlign="center start">
+                <button (click)="toggleSort( 'active' )" fullWidth size="medium" class="left" status="basic" nbButton
+                    ghost>
+
+
+                    <nb-icon *ngIf="sortFindingFilter?.active == 1" icon="arrow-up-outline"></nb-icon>
+                    <nb-icon *ngIf="sortFindingFilter?.active == -1" icon="arrow-down-outline"></nb-icon>
+
+                    Status
+                </button>
+            </div>
+
+            <div class="cell_header" fxFlex="0 0 10rem" fxLayoutAlign="start start">
+                <button fullWidth size="medium" class="left" status="basic" nbButton ghost>
+
+                    Date
+                </button>
+            </div>
+
+
+
+            <div class="cell_header" fxFlex="0 0 5rem" fxLayoutAlign="center start">
+                <button fullWidth size="medium" class="left" status="basic" nbButton ghost>
+                    CWE
+                </button>
+            </div>
+
+
+            <div fxHide fxShow.gt-md class="cell_header" fxFlex="0 0 5rem" fxLayoutAlign="center start">
+                <button fullWidth size="medium" class="left" status="basic" nbButton ghost>
+                    CVE
+                </button>
+            </div>
+            <div class="cell_header" *ngIf="false" fxFlex fxLayoutAlign="center start">
+
+                <button fullWidth size="medium" class="left" status="basic" nbButton ghost>
+                    Description
+                </button>
+            </div>
+            <div class="cell_header" fxFlex="0 0 10rem" fxLayoutAlign="center start">
+                <button (click)="toggleSort( 'found_by' )" fullWidth size="medium" class="left" status="basic" nbButton
+                    ghost>
+
+                    <nb-icon *ngIf="sortFindingFilter?.found_by == 1" icon="arrow-up-outline"></nb-icon>
+                    <nb-icon *ngIf="sortFindingFilter?.found_by == -1" icon="arrow-down-outline"></nb-icon>
+
+
+                    Tool
+                </button>
+            </div>
+
+
+
+            <div class="cell_header" fxFlex="0 0 7rem" fxLayoutAlign="start start">
+                <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="medium" class="left" status="basic"
+                    nbButton ghost>
+
+                    <nb-icon *ngIf="sortFindingFilter?.numerical_severity == -1" icon="arrow-up-outline"></nb-icon>
+                    <nb-icon *ngIf="sortFindingFilter?.numerical_severity == 1" icon="arrow-down-outline"></nb-icon>
+                    Severity
+                </button>
+            </div>
+
+        </div>
+
+
+    </nb-card-header>
+
+
+    <!-- {{iocs | async | json}} -->
+    <!-- {{dns_data | async | json}} -->
+
+
+    <!-- <nb-card-body > -->
+    <!-- <div fxFlex fxLayoutAlign="center start" fxLayout="row"> -->
+
+
+
+
+
+
+    <!-- </div> -->
+    <!-- <ng-template #findingView> -->
+
+    <nb-list fxFlex>
+
+
+        <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
+        <nb-list-item [class.inactive]="data?.active == false" (click)="onClickFinding(data)"
+            *ngFor="let data of _findings | async ; index as index ">
+
+
+            <div fxLayout="row" fxFlex>
+
+                <!-- {{data | json}} -->
+                <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
+
+
+                <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+
+                    <div style="padding: 0;" fxFlex fxLayoutAlign="center center">
+
+                        {{ data?.index}}
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="   item " fxFlex="1 0" fxLayoutALign="start">
+
+                    <!-- <span class="caption title"> -->
+
+                    <!-- <span class="chip">
+                            {{data?.component_name}}
+                        </span> -->
+
+
+
+
+
+                    <div style="
+                    display: inline;
+    line-break: anywhere;
+                    ">
+                        {{data?.title}}
+                    </div>
+
+                    <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline" status="danger"
+                        class="buildcount" size="tiny" text="Supressed">
+                    </nb-tag>
+                    <nb-tag *ngIf="data?.hawki_attributes?.accept_risk?.accepted" appearance="outline" status="danger"
+                        class="buildcount" size="tiny" text="Known Risk">
+                    </nb-tag>
+
+                    <!-- {{data?.title}} -->
+                    <!-- {{data?.title}} -->
+
+                    <!-- </span> -->
+
+                </div>
+
+
+                <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
+                    <div class="severity">
+                        {{ ( data?.active ) ? 'Active' : 'Inactive' }}
+                    </div>
+
+                </div>
+
+                <div fxFlex="0 0 10rem" class="item  ">
+                    {{data?.date}}
+                </div>
+
+                <div class="item " fxFlex="0 0 5rem">
+
+                    {{data?.cwe}}
+
+                </div>
+
+                <div class="item" fxFlex="0 0 5rem">
+
+                    {{data?.cve}}
+
+                </div>
+
+
+                <div *ngIf="false" class="item" class=" item " fxFlex>
+
+
+                    {{data?.description}}
+                    <!-- {{data?.refrence_ids | json}} -->
+
+                </div>
+
+
+                <div class="item  " fxFlex="0 0 10rem">
+
+                    <div>
+
+                        {{data?.found_by}}
+                    </div>
+
+                    <div>
+                        <ng-container *ngIf="data?.component_name">
+
+                            <span class="chip">
+                                {{data?.component_name}}
+                            </span>
+                            <span class="sub_chip">
+                                <ng-container *ngIf="data?.component_version">
+                                    @{{data?.component_version}}</ng-container>
+                            </span>
+                        </ng-container>
+
+                    </div>
+
+                    <!-- <ng-container *ngIf="data?.component_name">
+
+                            in {{data?.component_name}}
+                            <ng-container *ngIf="data?.component_version">
+                                @{{data?.component_version}}</ng-container>
+                        </ng-container> -->
+
+
+                </div>
+
+
+                <div fxLayoutAlign="start start" class=" item " fxFlex="0 0 7rem">
+
+                    <div style="
+                            border          : 2px solid {{ data?.severity | severity : 'color' }} " class="severity">
+
+                        {{data?.severity}}
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+
+
+        </nb-list-item>
+
+
+    </nb-list>
+
+    <!-- </ng-template> -->
+
+
+    <nb-card-footer>
+
+        <div fxFlex fxLayoutAlign="space-between">
+            <button style="margin-left:  1rem;" [disabled]="loadingFindings$
+            ||
+            ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 )
+            " (click)="previousPage()" size="medium" status="success" nbButton ghost>
+
+                <nb-icon icon="arrow-left-outline"></nb-icon>
+                Prev
+
+            </button>
+
+
+
+            <div fxFlex fxLayoutAlign="center center">
+
+                <nb-select
+                [selected]="0"
+                (selectedChange)="goto($event)"
+                placeholder="Select Showcase">
+
+                    <nb-select-label>
+
+                        <div>
+                            Page
+
+                            <span class="page" [class.page_no]="!loadingFindings$">
+
+                                <!-- {{selectedItem}} -->
+                                {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }}
+
+                            </span>
+
+                            of
+                            <span class="page" [class.page_no]="!loadingFindings$">
+
+                                {{ math.ceil( totalFindings / findingsListLimit )}}
+                            </span>
+
+                        </div>
+
+
+                    </nb-select-label>
+
+                    <nb-option *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index" [value]="i">
+                        <div>
+                            Page
+                            {{i + 1}}
+                        </div>
+                    </nb-option>
+
+
+                </nb-select>
+                <!-- {{lastFindingIdOffset}} -->
+                <!-- {{findingsListLimit}} -->
+
+            </div>
+
+            <button style="margin-right:  1rem;"
+                [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
+                (click)="nextPage()" size="medium" status="success" nbButton ghost>
+
+                Next
+                <nb-icon icon="arrow-right-outline"></nb-icon>
+
+            </button>
+        </div>
+
+    </nb-card-footer>
+
+    <!-- </nb-card-body> -->
+
+
+</nb-card>
+
+
+<ng-template let-context="context" #editTmpl>
+
+
+
+    <app-finding-detail-view [finding_id]="context?.finding_id?.$oid">
+
+    </app-finding-detail-view>
+
+</ng-template>

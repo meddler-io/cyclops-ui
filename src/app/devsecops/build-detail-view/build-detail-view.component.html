@@ -1,0 +1,343 @@
+<ng-template #stopBuildDialog let-data let-ref="dialogRef">
+    <nb-card accent="danger">
+        <nb-card-header>
+            <h5 class="text-danger">
+
+                <nb-icon style="margin: 10px" icon="stop-circle-outline" status="danger">
+
+                </nb-icon>
+                Stop {{ data?.delete_all ? 'All': ''}} Scan
+            </h5>
+        </nb-card-header>
+        <nb-card-body>
+
+            <h6 style="line-height: 2rem; ">
+                All the scan-progress wil be lost.
+                <br>
+                Are you sure you want to stop build from scanning ?
+            </h6>
+        </nb-card-body>
+        <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+            <button status="basic" outline nbButton (click)="ref.close()">Cancel</button>
+            <button status="danger" outline nbButton
+                (click)=" stopBuildScan (  data?.buildId , data?.delete_all,   ref ) ">Stop</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+
+<!-- <div fxLayout="column" fxLayoutAlign="start center"> -->
+<!-- {{buildDetails | async | json }} dsa -->
+
+<nb-card *ngIf="buildDetails | async as buildDetails ">
+
+
+
+    <nb-card-header *ngIf="true" fxLayoutAlign="space-between center">
+
+
+
+        <span class="subtitle">
+            <!-- # 12321 -->
+
+            <div fxLayoutGap="5px">
+                <!-- <nb-icon status="basic" icon="hash-outline">
+                    </nb-icon> -->
+
+                <nb-tag appearance="filled" size="medium" [text]="'#' +  buildDetails?.buildNo" status="alternative">
+                </nb-tag>
+
+
+
+
+
+
+                <!-- <nb-tag status="basic" appearance="outline" size="small" text="  build?.buildNo"></nb-tag> -->
+
+            </div>
+
+
+        </span>
+
+        <div fxLayout="row" fxLayoutGap="10px">
+
+
+
+
+
+
+            <nb-button-group fxLayoutGap="1px" appearance="filled" size="small" status="primary" shape="semi-round">
+
+
+
+                <button *ngIf="buildDetails?.buildState != 'Failed'  &&  buildDetails?.buildState != 'Completed' "
+                    (click)="openDialog(stopBuildDialog, { buildId: buildDetails?._id?.$oid , delete_all: false } )"
+                    nbButton size="small" status="danger">
+
+                    <nb-icon icon="stop-circle-outline"></nb-icon>
+                    Stop
+                </button>
+
+                <button *ngIf="buildDetails?.buildState != 'Failed'  &&  buildDetails?.buildState != 'Completed' "
+                    (click)="openDialog(stopBuildDialog, { buildId: buildDetails?._id?.$oid ,  delete_all: true} )"
+                    nbButton size="small" filled status="danger">
+
+                    <!-- <nb-icon icon="stop-circle-outline"></nb-icon> -->
+                    All
+                </button>
+
+
+            </nb-button-group>
+
+            <button *ngIf="buildDetails?.report_generated"
+                (click)="  downloadFile(  buildDetails?.extras?.report_file )  "
+                nbButton size="small" status="success">
+
+                <nb-icon icon="download-outline"></nb-icon>
+                Download Report
+            </button>
+
+            <button *ngIf="buildDetails?.file"
+                (click)="  downloadFile(  buildDetails?.file )  "
+                nbButton size="small" status="success">
+
+                <nb-icon icon="download-outline"></nb-icon>
+                Download
+            </button>
+        </div>
+
+    </nb-card-header>
+
+
+    <nb-card-header *ngIf="false">
+
+        <app-finding-stats theme="1" [interactive]="false" [findingStats]="findingStats | async">
+
+        </app-finding-stats>
+
+    </nb-card-header>
+    <nb-card-body style="padding: 2rem;" fxLayoutGap="20px" fxLayout="column">
+
+
+
+        <div fxLayoutGap="10px" fxLayoutAlign="end center">
+
+            <nb-tag class="status-tag" appearance="outline" size="medium" [status]="buildDetails?._status"
+                [text]="buildDetails?.buildState">
+            </nb-tag>
+
+
+
+        </div>
+
+
+        <div fxLayoutGap="10px" fxLayoutAlign="end center">
+
+            <nb-icon class="text-interactive" icon="clock-outline"></nb-icon>
+
+            <span class="text-interactive">
+                {{buildDetails?.timeElpased || '-' }} sec. elpased
+            </span>
+
+
+        </div>
+
+        <div *ngIf="buildDetails?.buildState != 'Failed'  &&  buildDetails?.buildState != 'Completed' "
+            fxLayoutAlign="center center" style="padding: 2rem;">
+
+
+            <app-build-loading-animation></app-build-loading-animation>
+
+        </div>
+        <div *ngIf="buildDetails?.buildState == 'Completed' " class="findingstats">
+
+            <app-finding-stats fxFlex theme="1" [interactive]="false" [findingStats]="findingStats | async">
+
+            </app-finding-stats>
+        </div>
+
+        <div *ngIf="false" style="padding: 2rem;" fxFlex>
+
+
+            <app-build-progress-view [build]="buildDetails"></app-build-progress-view>
+
+        </div>
+
+
+        <nb-accordion>
+
+            <nb-accordion-item expanded>
+                <nb-accordion-item-header class="text-basic">
+                    Scan Info.
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+
+                    <div fxLayoutGap="1rem" fxLayout="column">
+
+                        <div fxLayoutGap="1rem" fxFlex>
+
+                            <nb-tag appearance="outline" size="small" text="1. Url" status="alternative"></nb-tag>
+
+                            <span class="caption text-hint" style="font-size: 1.2rem; line-height: 1.8rem;">
+
+                                {{buildDetails?.scan_data?.APP_URL}}
+                            </span>
+
+
+
+
+                        </div>
+
+                        <div fxLayoutGap="1rem" fxFlex>
+
+                            <nb-tag appearance="outline" size="small" text="2. Git" status="alternative"></nb-tag>
+
+                            <span class="caption text-hint" style="font-size: 1.2rem; line-height: 1.8rem;">
+                                {{buildDetails?.scan_data?.GIT_URL}}
+                            </span>
+
+                            <nb-tag appearance="filled" size="tiny" [text]="buildDetails?.scan_data?.GIT_BRANCH"
+                                status="basic"></nb-tag>
+
+
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+
+
+
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+
+
+            <nb-accordion-item expanded
+                *ngIf="buildDetails?.buildState == 'Failed'  ||  buildDetails?.buildState == 'Completed' " expanded>
+                <nb-accordion-item-header class="text-basic">
+                    Tools / Scans
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+
+                    <div fxLayout="column"
+                        *ngFor="let tool of  ( buildDetails  )?.tools_executed   | keyvalue ; index as index ">
+
+                        <div fxLayoutGap="1rem" fxFlex>
+                            <span class="caption-2 text-primary" style="font-size: 1.2rem; line-height: 1.8rem;">
+
+                                {{index + 1}}.
+                            </span>
+                            <span class="caption text-hint" style="font-size: 1.2rem; line-height: 1.8rem;">
+                                {{tool?.key}}
+                            </span>
+
+
+                            <nb-tag appearance="outline" size="small" [text]="   tool?.value ? 'Success' : 'Failed' "
+                                [status]="   tool?.value ? 'success' : 'danger' "></nb-tag>
+
+
+                        </div>
+                    </div>
+
+
+
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+
+
+            <nb-accordion-item expanded>
+                <nb-accordion-item-header class="text-basic">
+                    Tools Config
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+
+                    <div fxLayout="column"
+                        *ngFor="let tool of  ( buildDetails  )?.tools_execution_config   | keyvalue ; index as index ">
+
+                        <div fxLayoutGap="1rem" fxFlex>
+                            <span class="caption-2 text-primary" style="font-size: 1.2rem; line-height: 1.8rem;">
+
+                                {{index + 1}}.
+                            </span>
+                            <span class="caption text-hint" style="font-size: 1.2rem; line-height: 1.8rem;">
+                                {{tool?.key | textShowcase}}
+                            </span>
+
+                            <ng-container *ngIf="buildDetails?.tools_execution_progress">
+
+                                <nb-tag *ngIf="buildDetails?.tools_execution_progress[tool?.key]" appearance="outline"
+                                    size="small" [text]="   buildDetails?.tools_execution_progress[tool?.key]?.status ">
+                                </nb-tag>
+                            </ng-container>
+
+
+                        </div>
+                    </div>
+
+
+
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+
+
+
+            <nb-accordion-item expanded>
+                <nb-accordion-item-header class="text-basic">
+                    Environment
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+
+                    <div fxLayout="column">
+
+                        <ng-container *ngIf="buildDetails ">
+
+
+                            <ng-container *ngFor="let kv of (buildDetails )?.raw_request_sent_for_execution | keyvalue">
+
+                                <div fxFlex fxLayout="row">
+
+                                    <div fxLayout="column" fxFlex="50%">
+                                        <button size="medium" status="basic" nbButton ghost>
+                                            {{kv?.key}}
+                                        </button>
+                                    </div>
+
+
+
+
+
+                                    <div fxLayout="column" fxFlex="50%">
+                                        <button size="medium" classstatus="basic" nbButton ghost>
+
+
+                                            {{kv?.value}}
+
+                                        </button>
+                                    </div>
+
+                                </div>
+
+
+
+                            </ng-container>
+
+                        </ng-container>
+
+                    </div>
+
+                </nb-accordion-item-body>
+
+            </nb-accordion-item>
+        </nb-accordion>
+
+    </nb-card-body>
+</nb-card>
+
+<!-- </div> -->

@@ -1,0 +1,251 @@
+<ng-template #hintPopover let-data>
+
+    <div style="padding: 1rem; " fxLayout="column">
+        <div fxFlex>
+            {{ data?.title }}
+        </div>
+        <div fxFlex>
+            {{ data?.ts?.$date | date }}
+        </div>
+        <div fxFlex *ngIf="data?.time_taken">
+            Took {{ data?.time_taken }} seconds
+        </div>
+    </div>
+
+</ng-template>
+
+
+
+<nb-card [class.active]="active" [class.inactive]="!active" [accent]="active ? build?._status : null "
+    [accent]="build?._status">
+
+
+
+
+
+    <nb-card-header  >
+
+
+        <ng-container *ngIf="build?.active_protection == true ; else nonActiveProtectionHeader ">
+
+            <div fxFlex fxLayoutGap="1rem">
+
+                <div fxLayoutGap="10px" fxLayout="column" fxFlex>
+
+
+                    <div fxLayoutAlign="start center" fxLayoutGap="2px">
+
+
+
+                        <nb-tag status="basic" appearance="outline" size="small" [text]=" '@' +  build?.raw_request_sent_for_execution?.SLUG  ">
+                        </nb-tag>
+                    </div>
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+        </ng-container>
+
+        <ng-template #nonActiveProtectionHeader>
+            <div fxFlex fxLayoutGap="1rem">
+
+                <div fxLayoutGap="10px" fxLayout="column" fxFlex>
+
+
+                    <div fxLayoutAlign="start center" fxLayoutGap="2px">
+                        <!-- <nb-icon class="hash" status="basic" icon="hash-outline">                    </nb-icon> -->
+
+
+                        <nb-tag status="basic" appearance="outline" size="small" [text]=" '#' +  build?.index ">
+                        </nb-tag>
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+                <div fxLayoutAlign="end center" fxLayoutGap="5px">
+
+                    <nb-tag appearance="outline" size="tiny" [status]="build?._status" [text]="build?.buildState">
+                    </nb-tag>
+
+                    <button outline [status]="build?._status" nbButton shape="round" size="tiny">
+                        <nb-icon [status]="build?._status"
+                            [class.spin]="build?.transition_state > 0 && build?.transition_state < 8 "
+                            [icon]="build?.progressIcon">
+                        </nb-icon>
+
+                    </button>
+
+
+
+                </div>
+
+            </div>
+        </ng-template>
+
+
+    </nb-card-header>
+
+    <nb-card-header>
+        <app-build-progress-view [active]="active" [build]="build"></app-build-progress-view>
+    </nb-card-header>
+
+    <nb-card-header style="padding: 0px; border: none;  " *ngIf="build?.buildState ==  'Executing' ">
+        <app-progress-bar></app-progress-bar>
+    </nb-card-header>
+
+    <nb-card-body *ngIf="active && build?.active_protection != true">
+        <div fxLayoutGap="1rem" [class.active]="active">
+
+
+
+            <div fxLayoutGap="10px" fxLayout="column" fxLayoutAlign="start start">
+
+                <div fxFill fxLayoutAlign="sspace-between end" fxLayout="row">
+
+
+                    <div fxFlex fxLayoutGap="20px">
+                        <nb-icon class="text-interactive" icon="shuffle-2-outline"></nb-icon>
+                        <span class="text-interactive">
+
+
+                            {{build?.buildNo || build?.raw_request_sent_for_execution?.SLUG || '-'}}
+                            <!-- {{build?.raw_request_sent_for_execution?.GIT_COMMIT?.substring( 32 , 40 ) || '-'}} -->
+                        </span>
+                    </div>
+
+                    <div fxFlex fxLayoutAlign="end" fxLayoutGap="20px">
+
+                        <span class="text-interactive">
+                            {{build?.raw_request_sent_for_execution?.GIT_BRANCH || '-' }}
+                        </span>
+                        <nb-icon class="text-interactive" icon="pricetags-outline"></nb-icon>
+
+                    </div>
+
+                </div>
+
+                <div fxFill fxLayoutAlign="sspace-between" fxLayout="row">
+
+                    <div fxFlex fxLayoutGap="20px">
+                        <nb-icon class="text-interactive" icon="sun-outline"></nb-icon>
+
+                        <span class="text-interactive">
+                            {{build?.raw_request_sent_for_execution?.APP_TYPE || '-' }}
+                        </span>
+
+                    </div>
+
+
+                    <div fxFlex fxLayoutAlign="end" fxLayoutGap="20px">
+
+                        <span class="text-interactive">
+                            {{build?.timeElpased || '-' }} sec.
+                        </span>
+                        <nb-icon class="text-interactive" icon="clock-outline"></nb-icon>
+
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </nb-card-body>
+
+
+    <nb-card-footer *ngIf="false">
+
+
+
+
+
+
+
+        <div fxFlex [class.success]="build?.status  == 'SUCCESS' " [class.fail]="build?.status  == 'FAIL' "
+            class="container selected" fxLayoutAlign="center center" fxLayout="row">
+
+
+
+            <!-- First Step -->
+
+            <ng-container *ngFor="let build_step of build?.build_state; index as index">
+
+                <ng-container *ngIf="index != 0">
+                    <div fxFlex class="horizontal_line " [class.fail]="build_step?.state  == false "
+                        [class.primary]="build_step?.state  == undefined "
+                        [class.success]="build_step?.state  == true ">
+                        <!-- &nbsp;32132 -->
+                    </div>
+                </ng-container>
+
+                <div fxLayoutAlign="start center">
+                    <!-- <span class="dot " [ngClass]="'text-'+data?._status">&#183;</span> -->
+                    <!-- [nbPopover]="  build_step?.ts  ?  hintPopover : null "  -->
+
+
+                    <nb-icon [nbPopoverContext]=" build_step " [nbPopover]="  build_step?.ts  ?  hintPopover : null "
+                        nbPopoverTrigger="hint" nbPopoverPlacement="bottom" class="dot "
+                        [class.spin]="build_step?.state != true"
+                        [status]="build_step?.state == true ? 'success'  : 'danger' "
+                        [icon]="   build_step?.state == true ? 'checkmark-circle-2-outline' :  'close-circle-outline'  ">
+                    </nb-icon>
+
+
+
+
+
+
+                </div>
+            </ng-container>
+
+
+            <!--  -->
+
+
+        </div>
+
+
+
+    </nb-card-footer>
+
+    <nb-card-footer *ngIf="false" fxLayout="row" style="padding: 10px;" fxLayoutGap="20px">
+
+
+        <div fxFlex fxLayoutGap="10px">
+
+            <nb-icon status="basic" icon="clock-outline"></nb-icon>
+            <span class="text-basic">
+                {{build?.timeElpased || ' - ' }} sec.
+            </span>
+        </div>
+
+
+
+        <div fxLayoutAlign="center" fxLayoutGap="5px">
+
+            <nb-tag appearance="filled" size="tiny" [status]="build?._status" [text]="build?.buildState"></nb-tag>
+            <nb-icon [status]="build?._status"
+                [class.spin]="build?.transition_state > 0 && build?.transition_state < 8 " [icon]="build?.progressIcon">
+            </nb-icon>
+
+        </div>
+
+    </nb-card-footer>
+
+</nb-card>

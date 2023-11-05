@@ -1,1 +1,273 @@
-/* You can add global styles to this file, and also import other style files */
+// this is our just created themes.scss file, make sure the path to the file is correct
+@import 'themes';
+
+// framework component styles
+@import '@nebular/theme/styles/globals';
+
+// install the framework styles
+@include nb-install() {
+  @include nb-theme-global();
+}
+
+;
+
+
+// @import '~ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
+// @import '~ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
+
+// @import "../node_modules/ag-grid-community/src/styles/ag-grid.scss";
+// @import "../node_modules/ag-grid-community/src/styles/ag-theme-alpine/sass/_ag-theme-alpine-mixin.scss";
+
+// @import "../node_modules/ag-grid-community/src/styles/ag-theme-material/sass/_ag-theme-material-mixin.scss";
+
+// .ag-theme-alpine {
+//     @include ag-theme-alpine();
+// }
+
+// .ag-theme-material {
+//   @include ag-theme-material();
+// }
+
+:focus {
+  outline: 0 !important;
+}
+
+.heading {
+  font-size    : 1.7rem;
+  margin-bottom: 1rem;
+
+  line-height: 1.8;
+  font-weight: 100;
+  color      : #686868;
+
+}
+
+.subheading {
+  font-size    : 1.4rem;
+  margin-top   : 0.5rem;
+  font-weight  : 400;
+  margin-bottom: 0.5rem;
+  line-height  : 1.6rem;
+  color        : #b6b6b6;
+
+}
+
+.step-content {
+  // height : 100%;
+  flex      : 1;
+  max-height: inherit;
+}
+
+.panelClass {
+  max-height   : 90vh;
+  // width     : 500px;
+  overflow     : auto;
+  max-width    : 90vw;
+}
+
+
+.dialog-card {
+  // max-height   : 90vh;
+  // width        : 500px;
+  overflow : auto;
+  max-width: 90vw;
+
+}
+
+nb-dialog-container {
+  overflow        : hidden scroll;
+  margin-right    : -5px;
+  // max-height   : 90vh;
+  // width     : 500px;
+  overflow        : auto;
+  max-width       : 90vw;
+}
+
+// * {
+//   user-select        : none;
+//   -moz-user-select   : none;
+//   -khtml-user-select : none;
+//   -webkit-user-select: none;
+//   -o-user-select     : none;
+// }
+
+.horizontalScroll::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+.CONTENT {
+  display    : flex;
+  flex       : 1;
+  max-width  : 100%;
+  align-items: flex-start // align-items: stretch;
+}
+
+.LEFT {
+  // @extend .col-6  !optional;
+  flex             : 3;
+  // flex          : 0 0 3;   
+  // width         : 70%;
+  // max-width     : 70%;
+  // flex-grow     : 1;
+  // margin        : 1rem;
+  // flex-shrink   : 0;
+}
+
+.RIGHT {
+  // @extend .col-6 !optional;
+  flex        : 1;
+  // width    : 30%;
+  // flex-grow: 1;
+  // max-width: 30%;
+
+  // flex       : 0 0 1;   
+  padding       : 1rem;
+  // flex-shrink: 0;
+}
+
+.tabset {
+  // overflow-x    : auto;
+  // overflow-y    : hidden;
+  // height        : auto;
+  // width         : 100%;
+  padding-bottom   : 1rem;
+  // overflow      : hidden;
+}
+
+.material-icons {
+  color: #fff;
+}
+
+.legend-labels {
+  white-space: normal;
+  overflow-x : auto !important;
+}
+
+
+// 
+
+.cdk-overlay-container:has(.cdk-overlay-connected-position-bounding-box) {
+
+  background: #000;
+
+}
+
+
+.cdk-overlay-container {
+  // backdrop-filter       : blur(4px);
+  // background         : rgba(0, 0, 0, 0.4);
+  // transition-duration: 0.4s;
+  // pointer-events     : none !important;
+
+
+
+}
+
+.sidebarNextlDilog {
+  left    : nb-theme(sidebar-width);
+  position: absolute !important;
+
+  height: 100%;
+  // top            : 0px;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.sidebarlDilog {
+  right   : 0px;
+  position: absolute !important;
+
+  // top            : 0px;
+  background: rgba(0, 0, 0, 0.6);
+
+}
+
+.positionalDilog {
+  left           : 12px;
+  top            : 60px;
+  position       : absolute !important;
+  backdrop-filter: blur(10px);
+
+}
+
+.fullScreenDialog {
+  width          : 80vw;
+  height         : 80vh;
+  justify-content: center;
+
+  border-radius: 10px !important;
+
+}
+
+.blurBackdrop {
+
+  // backdrop-filter    : blur(10px);
+  background         : rgba(0, 0, 0, 0.8);
+  transition-duration: 0.4s;
+}
+
+
+// 
+
+.lds-ripple {
+  display  : inline-block;
+  position : relative;
+  // width: 80px;
+  // height: 80px;
+
+
+  width : var(--header-height);
+  height: var(--header-height);
+
+}
+
+.lds-ripple div {
+  position: absolute;
+  border  : 4px solid nb-theme(background-alternative-color-2);
+
+
+  opacity      : 1;
+  border-radius: 50%;
+  animation    : lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+
+@keyframes lds-ripple {
+  0% {
+    top    : 36px;
+    left   : 36px;
+    width  : 0;
+    height : 0;
+    opacity: 1;
+  }
+
+  100% {
+    top    : 0px;
+    left   : 0px;
+    width  : 72px;
+    height : 72px;
+    opacity: 0;
+  }
+}
+
+body {
+  background: nb-theme(background-basic-color-2);
+}
+
+nb-card.mainRemain {
+  // width: 0 !important;
+  max-height: calc(100vh - (2 * var(--header-height))) !important;
+  height    : calc(100vh - (2 * var(--header-height))) !important;
+}
+
+.dialogClass {
+  // transition: all .5s ease-in-out; /*make it smooth*/
+  transform : scale(1);
+  /*scale it to a smaller size*/
+  transition: all .5s ease-in-out;
+  /*make it smooth*/
+}

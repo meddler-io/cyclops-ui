@@ -1,0 +1,29 @@
+<div class="host" fxFlex>
+
+
+
+
+    <div fxLayoutAlign="space-between center" fxLayout="row" appearance="filled" (mouseenter)="mouseenter() "
+        (mouseleave)="mouseleave()">
+
+        <div fxLayout="column">
+
+            <div fxLayoutAlign="start center" class="label-container">
+                {{label}}
+            </div>
+
+            <div fxLayoutAlign="start center" class="text-container">
+                {{text}}
+            </div>
+
+        </div>
+
+        <button style="margin: 10px;" shape="round" nbSuffix size="small" outline nbButton>
+
+            <nb-icon icon="search-outline"></nb-icon>
+
+        </button>
+
+    </div>
+
+</div>

@@ -1,0 +1,130 @@
+@import '../../../themes';
+
+button{
+  text-transform: capitalize !important;
+
+}
+::ng-deep th{
+    button{
+
+        text-transform: capitalize !important;
+    }
+}
+
+tr{
+    &:hover {
+        background: nb-theme(background-basic-color-3);
+
+        nb-card-header {
+            border-bottom: 1px solid nb-theme(color-primary-500);
+            ;
+
+        }
+
+        .h5 {
+            color: #fff !important;
+        }
+
+    }
+}
+
+nb-card {
+    border       : 0;
+    margin: 0;
+    // background: nb-theme(background-basic-color-1);
+    background   : nb-theme(background-basic-color-4);
+    box-shadow   : 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
+
+    max-height: 100vh;
+    nb-card-header {
+        border-bottom: 1px solid nb-theme(color-primary-600);
+        ;
+
+
+    }
+
+    &:hover {
+        background: nb-theme(background-basic-color-3);
+
+        nb-card-header {
+            border-bottom: 1px solid nb-theme(color-primary-500);
+            ;
+
+        }
+
+        .h5 {
+            color: #fff !important;
+        }
+
+    }
+
+    border-radius: 1rem;
+
+    nb-card-body {
+        margin-left    : 0rem;
+        margin-right    : 0rem;
+        padding: 0;
+        padding-bottom: 30px;
+
+        ::ng-deep{
+            table{
+                thead{
+                    display: none;
+                }
+            }
+        }
+    }
+
+}
+
+
+.h5 {
+    color      : #8994a3;
+    font-weight: 400;
+}
+
+// 
+
+button[nbTreeGridRowToggle] {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+  
+  .search-label {
+    display: block;
+  }
+  .search-input {
+    margin-bottom: 1rem;
+  }
+  
+  .nb-column-name {
+    width: 100%;
+  }
+  
+  @media screen and (min-width: 400px) {
+    .nb-column-name,
+    .nb-column-size {
+      width: 50%;
+    }
+  }
+  
+  @media screen and (min-width: 500px) {
+    .nb-column-name,
+    .nb-column-size,
+    .nb-column-kind {
+      width: 33.333%;
+    }
+  }
+
+  
+  @media screen and (min-width: 600px) {
+    .nb-column-name {
+      width: 31%;
+    }
+    .nb-column-size,
+    .nb-column-kind,
+    .nb-column-items {
+      width: 23%;
+    }
+  }

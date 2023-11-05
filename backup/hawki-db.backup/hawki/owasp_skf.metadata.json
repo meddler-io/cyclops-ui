@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.owasp_skf"}],"uuid":"38dc0ad94f014884a40ad6fba4aecd8b","collectionName":"owasp_skf","type":"collection"}

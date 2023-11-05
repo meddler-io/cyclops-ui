@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.assesment_scheduler"}],"uuid":"9527c75e01ac49d488300a33e6643aa5","collectionName":"assesment_scheduler","type":"collection"}

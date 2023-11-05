@@ -1,0 +1,63 @@
+@import '../../../themes';
+
+
+.host {
+    background-color: nb-theme(color-basic-800);
+    cursor: pointer;
+
+    border                : 1px solid nb-theme(color-success-400);
+    border-radius         : 0.3rem;
+    // transition-duration: 1s;
+
+    button {
+        // border: 1px solid nb-theme(color-success-400);
+        border-width: 1px;
+        // border-color: nb-theme(color-success-400);
+
+
+
+    }
+
+    &:hover {
+        // border-width    : 2px;
+        border-color    : nb-theme(color-primary-400);
+        background-color: nb-theme(color-basic-900);
+
+        button {
+            border-color: nb-theme(color-primary-400);
+            border-width: 2px;
+
+            &:hover {
+                border-width    : 2px;
+                border-color    : nb-theme(color-primary-400);
+                background-color: nb-theme(color-primary-400);
+                color           : nb-theme(color-basic-100);
+                font-weight     : 800;
+
+
+            }
+
+
+        }
+
+    }
+}
+
+.label-container {
+    font-size    : 0.8rem;
+    padding-left : 20px;
+    padding-right: 20px;
+    line-height  : 1.2rem;
+    color        : nb-theme(color-basic-600);
+
+}
+
+.text-container {
+    font-size    : 1rem;
+    padding-left : 20px;
+    padding-right: 20px;
+    line-height  : 1.2rem;
+    color        : nb-theme(text-color-basic);
+    font-weight: 400;
+
+}

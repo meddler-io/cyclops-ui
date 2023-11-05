@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.bitbucket_repos"},{"v":{"$numberInt":"2"},"key":{"uuid":{"$numberInt":"-1"}},"name":"uuid","ns":"hawki.bitbucket_repos","background":false}],"uuid":"bae44a8c96204b12babef5e26bf75849","collectionName":"bitbucket_repos","type":"collection"}

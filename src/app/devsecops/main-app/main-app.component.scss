@@ -1,0 +1,61 @@
+@import '../../../themes';
+
+nb-card-body {
+
+    // background: nb-theme(background-alternative-color-1);
+    // color     : nb-theme(text-alternate-color);
+    // white-space: pre-wrap;
+    // white-space: pre-wrap;
+    // word-break: keep-all
+}
+
+pre {
+    // white-space: pre-wrap;
+    // word-break:normal;
+}
+
+.containers {
+    width: 0;
+}
+
+nb-card-footer {
+    padding: 0.3rem;
+}
+
+.content{
+    // position: fixed; 
+    background: nb-theme(background-basic-color-2);
+    max-height: calc(
+        100vh -  var(--header-height)
+    );
+    height: calc(
+        100vh -  var(--header-height)
+    );
+    overflow-y: hidden;
+
+}
+
+:host ::ng-deep ul {
+    // margin-bottom: 0.3rem !important;
+    justify-content: end;
+    // right: 0;
+    // position    : absolute;
+    // height      : 60px;
+    height:  var(--header-height);
+    padding-left: 1rem !important;
+
+    // width: 100%;
+    // background: nb-theme(background-alternate-color-2);
+
+
+    li {
+        margin-left: 0.5rem;
+    }
+
+    -webkit-box-shadow: 0 8px 6px -6px nb-theme(background-basic-color-1);
+    -moz-box-shadow   : 0 8px 6px -6px nb-theme(background-basic-color-1);
+    box-shadow        : 0 8px 6px -6px nb-theme(background-basic-color-1);
+    padding-right: 2rem !important;
+}
+
+nb-route-tabset {}

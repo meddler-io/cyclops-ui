@@ -1,0 +1,270 @@
+<!-- <div    fxLayoutAligm="center center"> -->
+
+<!-- <div fxLayout="column"> -->
+
+<ng-template #loadingListItem>
+    <div style="margin: 1rem;" fxFlex class="timeline-wrapper">
+
+        <div class="timeline-item">
+            <div class="animated-background">
+                <div class="background-masker header-top"></div>
+                <div class="background-masker header-left"></div>
+                <div class="background-masker header-right"></div>
+                <div class="background-masker header-bottom"></div>
+                <div class="background-masker subheader-left"></div>
+                <div class="background-masker subheader-right"></div>
+                <div class="background-masker subheader-bottom"></div>
+                <!-- <div class="background-masker content-top"></div>
+                        <div class="background-masker content-first-end"></div>
+                        <div class="background-masker content-second-line"></div>
+                        <div class="background-masker content-second-end"></div>
+                        <div class="background-masker content-third-line"></div>
+                        <div class="background-masker content-third-end"></div> -->
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<nb-layout>
+    <nb-layout-header>
+
+        <div fxLayoutAlign="center" fxFlex>
+
+            <div class="buildListBtn" fxLayoutAlign="center center" fxLayout="row" (click)="toggleSidebar()">
+
+                <div style="margin-left: 20px; margin-right: 20px;">
+                    <app-hamburger-icon [active]=" isMenuOpen | async "></app-hamburger-icon>
+
+                </div>
+
+                <div>
+                    Build Details
+                </div>
+            </div>
+
+            <div fxFlex fxLayoutAlign="end end">
+
+                <!-- <nb-button-group appearance="outline" status="success" size="small" shape="round"> -->
+                <button [appearance]="rla?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla?.isActive ?  'success' : 'basic' " size="medium" shape="round"
+                    (click)=" $event.stopPropagation(); $event.preventDefault(); " [routerLink]="tab?.route"
+                    [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive"
+                    *ngFor="let tab of tabs" nbButton>
+                    {{tab?.title}}
+                </button>
+                <!-- </nb-button-group> -->
+            </div>
+
+        </div>
+
+    </nb-layout-header>
+
+
+    <nb-sidebar tag="buildList" containerFixed>
+        <!-- <div  class="listCosntainer"> -->
+
+        <nb-card fxFlex class=" nbCardList">
+
+
+
+            <nb-card-header *ngIf="newBuildsAvailable" style="margin: 0px; padding: 10px;">
+                <div fxLayoutAlign="center" fxFlex style=" margin-left: 20px; margin-right: 20px;">
+                    <button [routerLink]="[ '../' ]" style="text-transform: capitalize ;" nbButton outline shape="round"
+                        status="basic" size="small">
+
+                        <nb-icon icon="refresh-outline">
+                        </nb-icon>
+                        <span>
+                            Latest Build
+                        </span>
+
+                    </button>
+                </div>
+            </nb-card-header>
+
+
+
+            <nb-list [threshold]="50" nbListPageTracker nbInfiniteList
+                (bottomThreshold)="bottomThresholdTrigger($event)" [nbSpinner]=" loading" nbSpinnerStatus="danger"
+                nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+                <nb-list-item [appScrollableItem]="build?._id?.$oid" (click)="onClickBuild(build)" fxLayout="row"
+                    *ngFor="let build of builds$  ;  index as index  ; trackBy: trackBuild ">
+                    <app-build-item fxFlex [active]=" ( activeBuildId | async ) == build?._id?.$oid" [build]="build">
+
+                    </app-build-item>
+                </nb-list-item>
+
+                <nb-list-item>
+                    <ng-container *ngIf="loading">
+                        <ng-container>
+                            <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </nb-list-item>
+
+                <nb-list-item>
+                    <ng-container *ngIf="loading">
+                        <ng-container>
+                            <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </nb-list-item>
+                
+            </nb-list>
+
+
+        </nb-card>
+        <!-- </div> -->
+    </nb-sidebar>
+    <nb-layout-column>
+        <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
+    </nb-layout-column>
+</nb-layout>
+
+
+
+<div *ngIf="false" fxLayout="column">
+
+
+    <div class="header" fxLayoutAlign="space-between center">
+
+        <div style="margin-left: 20px; margin-right: 20px;">
+            Build Details
+        </div>
+        <nb-button-group outline status="success" size="small" shape="round">
+            <div>
+
+                <button [disabled]="true" (click)=" $event.stopPropagation(); $event.preventDefault(); "
+                    [routerLink]="tab?.route" [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
+                    #rla="routerLinkActive" *ngFor="let tab of tabs" [pressed]="rla?.isActive " nbButtonToggle pressed>
+                    {{tab?.title}}
+
+                </button>
+                
+            </div>
+        </nb-button-group>
+    </div>
+
+    <div class="body" fxLayout="row">
+
+
+
+        <div class="listContainer">
+
+            <nb-card fxFlex fxFill class=" nbCardList">
+
+
+
+
+
+                <nb-card-header *ngIf="newBuildsAvailable" style="margin: 0px; padding: 10px;">
+                    <div fxFlex>
+                        <button (click)="loadNewBuilds()" style="text-transform: capitalize ; " fullWidth nbButton
+                            filled status="primary">
+
+                            <nb-icon icon="refresh-outline">
+                            </nb-icon>
+                            <span>
+                                New Builds Found
+                            </span>
+
+                        </button>
+                    </div>
+                </nb-card-header>
+
+                <!-- <nb-card-body> -->
+
+
+                <!-- <div fxFlex.gt-lg="900px" fxFlex.lt-lg="70%" fxFill [nbSpinner]="loading" nbSpinnerStatus="danger" fxLayout="column"    class="main"> -->
+
+
+                <!-- <div   class="row"> -->
+
+                <!-- *ngIf="builds | async as builds" -->
+
+
+
+
+                <nb-list [threshold]="50" nbListPageTracker nbInfiniteList
+                    (bottomThreshold)="bottomThresholdTrigger($event)" [nbSpinner]=" loading" nbSpinnerStatus="danger"
+                    nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+                    <nb-list-item [appScrollableItem]="build?._id?.$oid" (click)="onClickBuild(build)" fxLayout="row"
+                        *ngFor="let build of builds$  ;  index as index  ; trackBy: trackBuild ">
+
+
+
+                        <app-build-item fxFlex [active]=" ( activeBuildId | async ) == build?._id?.$oid"
+                            [build]="build">
+
+                        </app-build-item>
+
+                        <!-- <div class="row">
+                            <div>
+
+                                <div class="vertical_line" style="height: 100px ; ">
+
+                                </div>
+
+                            </div>
+                        </div> -->
+
+
+
+                    </nb-list-item>
+
+
+
+                </nb-list>
+
+
+
+
+
+            </nb-card>
+        </div>
+        <div class="contentContainer" fxFlex>
+
+
+
+
+
+
+
+
+            <!-- <nb-route-tabset [activeLinkOptions]="{
+            'exact': false
+        }" [tabs]="tabs">
+        </nb-route-tabset> -->
+            <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- </div> -->
+
+<!-- </div> -->
+
+<!-- </div> -->
+
+<!-- </nb-card-body> -->
+
+<!-- </div> -->
+
+
+<ng-template let-context="context" #editTmpl>
+
+
+
+    <app-build-detail-view
+        [selected_build]="{ 'buildId' : context?.build_id , applicationId: context?.application_id  }">
+
+    </app-build-detail-view>
+
+</ng-template>

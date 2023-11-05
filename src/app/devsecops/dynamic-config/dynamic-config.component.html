@@ -1,0 +1,193 @@
+<ng-template #lsRemoteDialog let-data let-ref="dialogRef">
+
+
+
+    <ng-container *ngIf="data?.lsRemote | async as lsRemote  ; else loadingTemplate">
+
+
+        <ng-container *ngIf="lsRemote?.status_code >= -1 ; else invalidAccessTemplate">
+
+            <nb-card fxFlex="0 1 500px" accent="success">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Website is reachable
+                    </h5>
+                </nb-card-header>
+                <nb-card-body>
+
+                    <h6 style="line-height: 2rem; ">
+                        Status Code
+                        <br>
+                        {{lsRemote?.status_code}}
+                    </h6>
+                </nb-card-body>
+
+
+                <nb-card-footer fxLayoutGap="20px" fxLayoutAlign="end">
+
+
+
+                    <button (click)="save(ref)" status="primary" size="medium" nbSuffix nbButton filled>
+                        Save
+                        <nb-icon icon="checkmark-outline">
+                        </nb-icon>
+                    </button>
+                </nb-card-footer>
+
+            </nb-card>
+
+        </ng-container>
+
+
+        <ng-template #invalidAccessTemplate>
+
+            <nb-card fxFlex="0 1 500px" accent="danger">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Website is unreachable
+
+                    </h5>
+                </nb-card-header>
+                <nb-card-body>
+
+                    <h6 style="line-height: 2rem; ">
+                        Website seems to be unreachable
+                        <br>
+                        {{data?.app_url}}
+                    </h6>
+                </nb-card-body>
+
+            </nb-card>
+        </ng-template>
+
+
+    </ng-container>
+
+
+    <ng-template #loadingTemplate>
+
+        <nb-card fxFlex="0 1 500px" accent="primary">
+            <nb-card-header>
+                <h5 class="text-primary">
+
+                    <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+                    </nb-icon>
+                    Checking Website Connectivity
+                </h5>
+            </nb-card-header>
+            <nb-card-body>
+
+                <h6 style="line-height: 2rem; ">
+                    Checking connectivity to
+                    <br>
+                    {{data?.app_url}}
+                </h6>
+            </nb-card-body>
+
+        </nb-card>
+
+    </ng-template>
+
+
+
+</ng-template>
+
+
+
+<div fxFill fxLayoutAlign="center center">
+
+
+    <nb-card (click)="enableFormEdit()" [nbSpinner]="loadingGeneric" nbSpinnerStatus="danger" size="medium"
+        fxFlex="0 1 900px">
+
+
+        <nb-card-header fxLayoutAlign="center space-between">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Dynamic Configuration
+            </div>
+
+            <nb-toggle [(ngModel)]="editEnabled">Edit</nb-toggle>
+
+        </nb-card-header>
+
+        <nb-card-body fxFlex fxLayoutAlign="center center">
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                <div style="font-size: 1.2rem; ;" class="text-hint " fxFlex>
+
+                    Website Url
+                </div>
+
+
+
+                <div fxFlex fxLayoutAlign="center center">
+
+
+
+
+
+                    <nb-form-field fxFlex nbSpinnerStatus="danger">
+
+                        <span class="text-hint" nbPrefix>
+                            Url
+                        </span>
+
+                        <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+                        </nb-icon> -->
+
+                        <input (keyup.enter)="openDialog(lsRemoteDialog)" [readonly]="!editEnabled"
+                            [formControl]="appUrlInputFormControl" [nbAutocomplete]="repoAutoComplete" status="primary"
+                            fullWidth type="text" nbInput fieldSize="giant"
+                            placeholder="https://example.your-website.com/">
+
+
+                    </nb-form-field>
+                </div>
+
+            
+
+            </div>
+
+
+        </nb-card-body>
+
+
+
+        <nb-card-footer fxLayoutGap="20px" fxLayoutAlign="end">
+
+            <button [disabled]="!editEnabled" (click)="loadControlData()" status="danger" size="medium" nbSuffix
+                nbButton hero>
+                Reset
+                <nb-icon icon="refresh-outline">
+                </nb-icon>
+            </button>
+
+            <button
+                [disabled]="!editEnabled ||   appUrlInputFormControl?.invalid  "
+                (click)="openDialog(lsRemoteDialog)" status="primary" size="medium" nbSuffix nbButton filled>
+                Save
+                <nb-icon icon="checkmark-outline">
+                </nb-icon>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+
+</div>
+
+
+<nb-autocomplete #repoAutoComplete [handleDisplayFn]="viewHandle">
+
+    <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+        {{ option }}
+    </nb-option>
+
+</nb-autocomplete>

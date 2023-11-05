@@ -1,0 +1,353 @@
+<ng-template #lsRemoteDialog let-data let-ref="dialogRef">
+
+
+
+    <ng-container *ngIf="data?.lsRemote | async as lsRemote  ; else loadingTemplate">
+
+
+
+        <ng-container *ngIf="lsRemote?.length == 0 ; else branchSelectorTemplate">
+
+            <nb-card accent="primary">
+
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Access Denied
+                    </h5>
+                </nb-card-header>
+                <nb-card-body>
+
+                    <h6 style="line-height: 2rem; ">
+                        Invalid access / Invalid Repository
+                        <br>
+                        {{data?.git_url}}
+                    </h6>
+                </nb-card-body>
+
+            </nb-card>
+
+        </ng-container>
+
+        <ng-template #branchSelectorTemplate>
+
+
+            <nb-card fxFlex="1 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Select Branch
+                    </h5>
+
+                    <div fxLayoutAlign="end">
+                        {{ (lsRemote )?.length}} Branches
+                    </div>
+                </nb-card-header>
+
+                <nb-card-header style="padding: 0.3rem;">
+
+
+                    <div class="search-input" fxLayoutAlign="center center" fxLayoutGap="1rem" fxLayout="row">
+
+
+                        <input [formControl]="searchBranchFilter" focusOnce fullWidth placeholder="Search"
+                            status="basic" nbInput>
+
+
+
+                    </div>
+
+                </nb-card-header>
+
+
+                <!--  -->
+                <nb-list style="max-height: 500px;" fxLayout="column">
+                    <!-- style="  max-width: 500px; width: 100%; " -->
+
+
+
+                    <nb-list-item (click)="selectBranch(_branch)"
+  
+                        *ngFor="let _branch of lsRemote  ">
+
+                        <div fxFlex>
+                            {{ _branch }}
+                        </div>
+
+                        <nb-icon class="loading-icon"  
+                            [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                        </nb-icon>
+
+
+                    </nb-list-item>
+                </nb-list>
+                <!--  -->
+                <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+                    <!-- <button status="basic" outline nbButton (click)="ref.close()">Cancel</button> -->
+                    <!-- <button (click)="save(ref)" status="success" outline nbButton>Save</button> -->
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+
+    </ng-container>
+
+
+    <ng-template #loadingTemplate>
+
+        <nb-card fxFlex="0 1 500px" accent="primary">
+            <nb-card-header>
+                <h5 class="text-primary">
+
+                    <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                    </nb-icon>
+                    Validating Access
+                </h5>
+            </nb-card-header>
+            <nb-card-body>
+
+                <h6 style="line-height: 2rem; ">
+                    Validating access to
+                    <br>
+                    {{data?.git_url}}
+                </h6>
+            </nb-card-body>
+
+        </nb-card>
+
+    </ng-template>
+
+
+
+</ng-template>
+
+<!--  -->
+
+<!-- {{applicationId}}dsadsa -->
+<div fxFlex="1 0 400px">
+    <nb-card [formGroup]="configurationModel" nbSpinnerStatus="danger">
+
+
+
+
+        <nb-card-header fxLayoutAlign="center start">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Create App
+
+                <!-- {{appId}} -->
+
+            </div>
+
+            <!-- <div>
+                <button (click)="save()" [disabled]="canSave" outline size="medium" status="success" nbButton>
+                    <nb-icon icon="checkmark-outline"></nb-icon>
+                    Save
+                </button>
+            </div> -->
+
+
+
+
+        </nb-card-header>
+
+
+
+        <nb-card-body>
+
+            <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="1rem">
+
+
+                <div fxLayout="column" fxLayoutGap="1rem">
+                    <b class="col-2 header">Business</b>
+                    <nb-select [status]="configurationModel.get('business').invalid ?  'danger' : 'primary'"
+                        formControlName="business" placeholder="Select Type" (selectedChange)="onBusinessChange()">
+                        <!-- <nb-option value="">--Select--</nb-option> -->
+                        <nb-option *ngFor="let business of business$ | async" [value]="business?._id?.$oid">
+                            {{business?.name}}</nb-option>
+
+                    </nb-select>
+                </div>
+
+                <!--  -->
+
+                <div fxLayout="column" fxLayoutGap="1rem">
+                    <b class="col-2 header">Projects</b>
+                    <nb-select [status]="configurationModel.get('project').invalid ?  'danger' : 'primary'"
+                        formControlName="project" placeholder="Select Type" (selectedChange)="onBusinessChange()">
+                        <!-- <nb-option value="">--Select--</nb-option> -->
+                        <nb-option *ngFor="let project of projects$ | async" [value]="project?._id?.$oid">
+                            {{project?.name}}</nb-option>
+
+                    </nb-select>
+                </div>
+
+                <!--  -->
+
+                <div fxLayout="column" fxLayoutGap="1rem">
+                    <b class="col-2 header">Platform</b>
+                    <nb-select [status]="configurationModel.get('platform').invalid ?  'danger' : 'primary'"
+                        formControlName="platform" placeholder="Select Platform">
+                        <!-- <nb-option value="">--Select--</nb-option> -->
+                        <nb-option *ngFor="let platform of platforms$ | async" [value]="platform?._id?.$oid">
+                            {{platform?.name}}</nb-option>
+
+                    </nb-select>
+                </div>
+
+            </div>
+
+        </nb-card-body>
+
+
+        <nb-card-footer fxLayoutAlign="end">
+
+            <button (click)="saveApp()" [disabled]="configurationModel?.invalid" nbButton color="success">
+                Save
+            </button>
+        </nb-card-footer>
+
+        <nb-card-body>
+
+
+
+            <nb-form-field fxFlex nbSpinnerStatus="danger">
+
+                <span style="margin-left: 0.5rem; margin-bottom: 1rem;" class="text-hint">
+                    Name
+                </span>
+
+
+                <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+            </nb-icon> -->
+
+                <input formControlName="name" [status]="configurationModel.get('name').invalid ?  'danger' : 'primary'"
+                    fullWidth type="text" nbInput fieldSize="small" placeholder="Hawki-App">
+
+
+            </nb-form-field>
+
+
+
+        </nb-card-body>
+
+
+        <!--  -->
+
+
+        <nb-card-body>
+
+
+
+            <nb-form-field fxFlex nbSpinnerStatus="danger">
+
+                <span style="margin-left: 0.5rem; margin-bottom: 1rem;" class="text-hint">
+                    Description
+                </span>
+
+
+                <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+            </nb-icon> -->
+
+                <input formControlName="desc" status="primary" fullWidth type="text" nbInput fieldSize="small"
+                    placeholder="">
+
+
+            </nb-form-field>
+
+
+
+        </nb-card-body>
+
+
+
+
+        <nb-card-body fxLayout="column" fxLayoutAlign="end">
+
+            <div fxLayoutGap="1rem" fxLayoutAlign="start end">
+
+
+                <nb-form-field fxFlex nbSpinnerStatus="danger">
+                    <span style="margin-left: 0.5rem; margin-bottom: 1rem;" class="text-hint">
+                        Repository
+                    </span>
+                    <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+            </nb-icon> -->
+
+                    <input (focus)="focusRepoField( true  )" (focusout)="focusRepoField(false , lsRemoteDialog)"
+                        [status]="configurationModel.get('git').invalid ?  'danger' : 'primary'" #gitInp
+                        (keyup.enter)="openDialog(lsRemoteDialog , gitInp.value )" formControlName="git" fullWidth
+                        type="text" nbInput fieldSize="small"
+                        placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
+
+
+                </nb-form-field>
+
+                <!--  -->
+
+                <div fxLayoutAlign="end end">
+
+                    <nb-form-field nbSpinnerStatus="danger">
+
+                        <span style="margin-left: 0.5rem; margin-bottom: 1rem;" class="text-hint">
+                            Branch
+                        </span>
+
+                        
+
+
+                        <input
+                        (click)="openDialog(lsRemoteDialog , gitInp.value )"
+                        [status]="branchName?.value?.length == 0 ?  'danger' : 'primary'" #branchName readonly
+                            formControlName="branch" status="primary" type="text" nbInput fieldSize="small"
+                            placeholder="Select Branch">
+
+
+                    </nb-form-field>
+
+                </div>
+
+
+
+            </div>
+
+
+        </nb-card-body>
+
+
+        <!--  -->
+        <nb-card-body>
+
+
+
+            <nb-form-field fxFlex nbSpinnerStatus="danger">
+
+                <span style="margin-left: 0.5rem; margin-bottom: 1rem;" class="text-hint">
+                    Url
+                </span>
+
+
+                <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+            </nb-icon> -->
+
+                <input [status]="configurationModel.get('url').invalid ?  'danger' : 'primary'" formControlName="url"
+                    fullWidth type="text" nbInput fieldSize="small" placeholder="http://hawkeye.com">
+
+
+            </nb-form-field>
+
+
+
+        </nb-card-body>
+
+
+
+
+
+    </nb-card>
+</div>

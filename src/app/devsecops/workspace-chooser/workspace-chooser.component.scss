@@ -1,0 +1,23 @@
+@import '../../../themes';
+
+nb-card{
+    background: nb-theme(background-basic-color-3);
+    border-radius: 1rem;
+    &:hover{
+    background: nb-theme(background-basic-color-4);
+
+    }
+
+    -webkit-box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+
+}
+.text-heading {
+    color: nb-theme(text-hint-color);
+
+}
+
+.filter-icon{
+    color: nb-theme(text-hint-color);
+
+}

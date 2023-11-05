@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.bitbucket_mapping"}],"uuid":"83913f7303084efc8c5b5b2b1c61c68c","collectionName":"bitbucket_mapping","type":"collection"}

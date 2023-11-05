@@ -1,0 +1,32 @@
+<div (click)="onClick(toggleView )" class="host" fxFlex>
+
+
+
+
+    <div fxLayoutAlign="space-between center" fxLayout="row" appearance="filled" (mouseenter)="mouseenter() "
+        (mouseleave)="mouseleave()">
+
+        <div fxLayout="column">
+
+            <div fxLayoutAlign="start center" class="label-container">
+                {{label}}
+            </div>
+
+            <div fxLayoutAlign="start center" class="text-container">
+                {{text}}
+            </div>
+
+        </div>
+
+
+
+        <nb-toggle
+        style="margin: 10px;" 
+        [checked]="toggleState"
+        #toggleView (click)="$event.preventDefault()" status="success"></nb-toggle>
+
+
+
+    </div>
+
+</div>

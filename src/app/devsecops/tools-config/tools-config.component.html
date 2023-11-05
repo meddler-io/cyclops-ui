@@ -1,0 +1,311 @@
+<div fxFill style="padding: 2rem;" fxLayout="column" fxLayoutGap="2rem">
+
+    <nb-card [formGroup]="configurationModel" nbSpinnerStatus="danger">
+
+
+        <nb-card-header fxLayoutAlign="center start">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Configuration
+            </div>
+
+            <!-- <div>
+                <button (click)="save()" [disabled]="canSave" outline size="medium" status="success" nbButton>
+                    <nb-icon icon="checkmark-outline"></nb-icon>
+                    Save
+                </button>
+            </div> -->
+
+
+
+            <app-activate-toggle (activeState)="onChangeActiveState( $event )"></app-activate-toggle>
+
+        </nb-card-header>
+
+        <nb-card-body fxLayout="row" fxLayoutAlign="start start">
+
+            <fieldset style="border: 0; " fxFlex [disabled]=!formEnabled>
+
+
+                <div fxFlex fxLayoutAlign="start  space-between" fxLayout="row">
+
+                    <div fxLayout="column" fxFlex>
+
+                        <ng-container formGroupName="configuration">
+
+                            <div fxFlex fxLayoutAlign="start">
+                                <h6>Configuration</h6>
+                            </div>
+
+
+
+
+                            <nb-toggle formControlName="email" status="success">
+                                Email Notifications
+                            </nb-toggle>
+
+                            <nb-toggle formControlName="jira" status="success">
+                                Jira Integration
+                            </nb-toggle>
+                        </ng-container>
+
+
+                        <!--  -->
+                        <ng-container formGroupName="static_tools">
+
+                            <div fxFlex fxLayoutAlign="start">
+                                <h6>Static Tools</h6>
+                            </div>
+
+
+                            <ng-container
+                                *ngFor="let tool of configurationModel?.controls?.static_tools?.controls | keyvalue ">
+                                <nb-toggle [nbSpinner]="tool?.value?.value == undefined" nbSpinnerStatus="primary"
+                                    [disabled]="tool?.value?.value == undefined" [formControlName]="tool.key"
+                                    status="success">
+                                    {{tool?.key | textShowcase}}
+                                </nb-toggle>
+                            </ng-container>
+
+                        </ng-container>
+
+
+                        <!--  -->
+                        <ng-container formGroupName="dynamic_tools">
+
+                            <div fxFlex fxLayoutAlign="start">
+                                <h6>Dynamic Tools</h6>
+
+                            </div>
+
+
+
+                            <ng-container
+                                *ngFor="let tool of configurationModel?.controls?.dynamic_tools?.controls | keyvalue">
+
+                                <nb-toggle [nbSpinner]="tool?.value?.value == undefined" nbSpinnerStatus="primary"
+                                    [disabled]="tool?.value?.value == undefined" [formControlName]="tool.key"
+                                    status="success">
+                                    {{tool?.key | textShowcase}}
+                                </nb-toggle>
+
+
+
+                            </ng-container>
+                        </ng-container>
+
+                    </div>
+
+
+                </div>
+
+            </fieldset>
+
+
+        </nb-card-body>
+
+
+        <nb-card-body *ngIf="false" fxLayout="row" fxLayoutAlign="center start">
+
+
+            <div fxFlex fxLayoutAlign="center  space-between" fxLayout="row">
+
+                <div fxLayout="column" fxFlex>
+                    <div fxFlex fxLayoutAlign="center">
+                        <h6>Static Tools</h6>
+                    </div>
+
+                    <div fxFlex>
+                        <div *ngFor="let tool of static_tools | keyvalue">
+
+
+                            <nb-toggle (checkedChange)="formInvalidated()" [(ngModel)]="static_tools[tool?.key]"
+                                status="success">
+                                {{tool?.key}}
+                            </nb-toggle>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="end start" fxFlex>
+
+                    <div fxFlex fxLayoutAlign="center">
+                        <h6>Dynamic Tools</h6>
+                    </div>
+
+
+
+
+                    <div fxFlex>
+                        <div fxLayoutGap="30px" *ngFor="let tool of dynamic_tools | keyvalue">
+
+
+                            <nb-toggle (checkedChange)="formInvalidated()" [(ngModel)]="dynamic_tools[tool?.key]"
+                                status="success">
+                                {{tool?.key}}
+                            </nb-toggle>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+            <div *ngIf="false" fxFlex fxLayout="column">
+
+                <h6>Dynamic Tools</h6>
+
+                <div fxFlex>
+                    <div fxLayoutGap="30px" *ngFor="let tool of dynamic_tools | keyvalue">
+
+
+                        <nb-toggle [disabled]="!tool?.value" status="success">
+                            {{tool?.key}}
+                        </nb-toggle>
+
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </nb-card-body>
+
+    </nb-card>
+
+
+    <nb-card *ngIf="false" [nbSpinner]="loadingGeneric" nbSpinnerStatus="danger">
+
+
+        <nb-card-header fxLayoutAlign="center start">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Manage Tools
+            </div>
+
+            <div>
+                <button (click)="save()" [disabled]="!canSave" outline size="medium" status="success" nbButton>
+                    <nb-icon icon="checkmark-outline"></nb-icon>
+                    Save
+                </button>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body fxLayout="row" fxLayoutAlign="center start">
+
+
+            <div fxFlex fxLayoutAlign="center  space-between" fxLayout="row">
+
+                <div fxLayout="column" fxFlex>
+                    <div fxFlex fxLayoutAlign="center">
+                        <h6>Static Tools</h6>
+                    </div>
+
+                    <div fxFlex>
+                        <div *ngFor="let tool of static_tools | keyvalue">
+
+
+                            <nb-toggle (checkedChange)="formInvalidated()" [(ngModel)]="static_tools[tool?.key]"
+                                status="success">
+                                {{tool?.key}}
+                            </nb-toggle>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="end start" fxFlex>
+
+                    <div fxFlex fxLayoutAlign="center">
+                        <h6>Dynamic Tools</h6>
+                    </div>
+
+
+
+
+                    <div fxFlex>
+                        <div fxLayoutGap="30px" *ngFor="let tool of dynamic_tools | keyvalue">
+
+
+                            <nb-toggle (checkedChange)="formInvalidated()" [(ngModel)]="dynamic_tools[tool?.key]"
+                                status="success">
+                                {{tool?.key}}
+                            </nb-toggle>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div *ngIf="false" fxFlex fxLayout="column">
+
+                <h6>Static Tools</h6>
+
+                <div fxFlex>
+                    <div *ngFor="let tool of static_tools | keyvalue">
+
+
+                        <nb-toggle [disabled]="!tool?.value" status="success">
+                            {{tool?.key}}
+                        </nb-toggle>
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div *ngIf="false" fxFlex fxLayout="column">
+
+                <h6>Dynamic Tools</h6>
+
+                <div fxFlex>
+                    <div fxLayoutGap="30px" *ngFor="let tool of dynamic_tools | keyvalue">
+
+
+                        <nb-toggle [disabled]="!tool?.value" status="success">
+                            {{tool?.key}}
+                        </nb-toggle>
+
+
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </nb-card-body>
+
+
+
+    </nb-card>
+
+</div>

@@ -1,0 +1,109 @@
+<!-- [@enterAnimation] -->
+<nb-card
+fxFill
+fxFlex="1 1 500px" accent="primary">
+    <nb-card-header>
+        <div fxLayout="column">
+            <div class="h5" fxFlex>
+                Switch Business
+
+            </div>
+
+            <div class="caption-2" style="color: white;" fxFlex>
+                {{ ( selectedBusiness | async )?.title}}
+
+            </div>
+
+        </div>
+
+
+    </nb-card-header>
+
+    <nb-card-header style="padding: 2px;">
+
+
+        <div fxFlex>
+
+
+
+            <div fxLayout="row">
+
+
+                <!--  -->
+
+                <nb-form-field fxFlex>
+                    <input focusOnce status="basic" type="text" fullWidth nbInput (keyup.escape)="clearSearch()"
+                        [formControl]="searchFieldControl" fieldSize="medium" placeholder="Search">
+
+
+                    <button nbSuffix (click)="clearSearch()" nbButton control status="primary" ghost>
+                        <nb-icon icon="close-outline"></nb-icon>
+                    </button>
+                </nb-form-field>
+
+            </div>
+        </div>
+
+
+    </nb-card-header>
+
+    <!-- <nb-card-body> -->
+
+    <nb-list nbInfiniteList>
+
+        <nb-list-item *ngIf="false" class="selected">
+
+            <nb-icon icon="checkmark-outline">
+            </nb-icon>
+
+
+
+
+            <div fxFlex>
+
+                1. {{ ( selectedBusiness | async )?.title}}
+
+            </div>
+
+
+
+
+        </nb-list-item>
+
+
+        <nb-list-item [class.selected]="business?._id?.$oid == (selectedBusiness | async)?._id?.$oid"
+            (click)="selectBusiness( business?.index )" *ngFor="let business of list_items | async; index as index ">
+
+
+            <nb-icon class="checkmark"
+                [status]=" business?._id?.$oid == (selectedBusiness | async)?._id?.$oid  ?   'success' : 'primary'     "
+                [icon]=" business?._id?.$oid == (selectedBusiness | async)?._id?.$oid  ?   'checkmark-circle-2-outline' : 'radio-button-off-outline'     ">
+            </nb-icon>
+
+            <div class="title" style="margin-left: 10px;" fxFlex>
+                <!-- {{index + 1}}. -->
+                {{ business?.title }}
+
+                <!-- {{
+                business?.projectCount
+                }} -->
+            </div>
+
+
+
+            <!--  -->
+
+            <button class="projectsBtn" outline nbButton shape="round" size="medium">
+                <nb-icon icon="arrowhead-right-outline">
+                </nb-icon>
+
+            </button>
+
+        </nb-list-item>
+
+
+    </nb-list>
+
+    <!-- </nb-card-body> -->
+
+</nb-card>

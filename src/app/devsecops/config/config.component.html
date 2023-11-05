@@ -1,0 +1,891 @@
+<!-- </nb-card-body> -->
+<!-- </nb-card> -->
+<nb-autocomplete #autoWebUrl>
+
+    <nb-option *ngFor="let option of appSuggestions?.APP_URL" [value]="option">
+        {{ option }}
+    </nb-option>
+
+</nb-autocomplete>
+
+<nb-autocomplete #autoGitUrl>
+
+    <nb-option *ngFor="let option of appSuggestions?.GIT_URL" [value]="option">
+        {{ option }}
+    </nb-option>
+
+</nb-autocomplete>
+
+
+
+<nb-card
+fxFill
+fxFlex="0 1 900px"
+
+class="_mainRemain"
+>
+
+
+    <nb-card-header style="padding: 0px;" nbSpinnerStatus="danger" fxLayout="row">
+
+        <div fxLayoutAlign="center center" fxFlex>
+
+            <ng-container [ngSwitch]="currentStep">
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.GIT_URL">
+
+                    <ng-container>
+
+
+
+
+                        <!-- <div class="cardbody" style="justify-content: center; max-width: 900px;" fxLayout="column" fxFlex> -->
+                        <div fxFlex fxLayout="column" fxLayoutAlign="center start">
+
+
+                            <div fxLayoutAlign="center  center">
+                                <h6 class="title">Code Repository</h6>
+                            </div>
+
+                            <!-- <div   fxLayoutAlign="center  center"> -->
+
+
+
+                        </div>
+
+
+                    </ng-container>
+
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.GIT_BRANCH">
+
+                    <ng-container>
+
+
+
+
+                        <div fxFlex style="justify-content: center;" fxLayoutAlign="center center" fxLayout="column"
+                            class="cardbody">
+
+                            <div fxLayoutAlign="center  center">
+                                <h6 class="title">Branch</h6>
+                            </div>
+
+
+
+                        </div>
+
+
+                    </ng-container>
+
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.APP_URL">
+
+                    <ng-container>
+
+
+
+
+                        <div fxFlex style="justify-content: center;" fxLayout="column" fxLayoutAlign="center center">
+
+
+
+                            <div fxLayoutAlign="center  center">
+                                <h6 class="title">Website URL </h6>
+                            </div>
+
+
+
+                        </div>
+
+
+                    </ng-container>
+
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.LANG">
+
+                    <ng-container>
+                        <div fxFlex fxLayoutAlign="center center" class="cardbody" fxLayout="column">
+                            <div fxFlex fxLayoutAlign="center  center">
+                                <h6 class="title">Coding Language</h6>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                </ng-container>
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.INTEGRATION">
+                    <ng-container>
+                        <div fxFlex fxLayoutAlign="center center" class="cardbody" fxLayout="column">
+
+                            <div fxFlex fxLayoutAlign="center  center">
+                                <h6 class="title">Integration</h6>
+                            </div>
+
+                        </div>
+                    </ng-container>
+                </ng-container>
+
+            </ng-container>
+
+
+            <button fxLayoutGap="10px" outline style="text-transform:capitalize; margin-right: 20px !important;"
+                size="small" 
+                (click)="saveScanDetails()"
+                nbButton status="basic">
+                <span>
+                    Save
+                </span>
+
+                <nb-icon icon="info-outline"></nb-icon>
+            </button>
+
+
+        </div>
+
+
+    </nb-card-header>
+
+    <nb-card-header fxLayoutGap="50px" fxLayoutAlign="center center" nbSpinnerStatus="danger" fxLayout="row"
+        [formGroup]="scanDetails">
+
+        <!-- <button outline style="text-transform:capitalize;" size="medium" (click)="previousStep()"
+            [disabled]="currentStep == 0 " nbButton status="primary">
+            <nb-icon icon="chevron-left-outline"></nb-icon>
+            Back
+        </button> -->
+
+
+        <div fxLayout="row" fxFlex="0 1 900px">
+
+
+
+
+
+
+            <div style="height: 4rem;  " fxFlex fxLayoutAlign="center center" fxLayout="row">
+
+                <!-- icon="checkmark-circle-2-outline"  -->
+
+
+                <ng-container *ngIf="currentStep == StepTypeEnum.INTEGRATION ; else stepperTemplate">
+
+                </ng-container>
+
+                <!-- <ng-container *ngFor="let step of scanDetails | keyvalue ; index as index"> -->
+                <ng-template #stepperTemplate>
+
+                    <ng-container *ngFor="let step of stepper; index as index">
+
+
+                        <!-- {{ scanDetails?.get( stepper[ step?.depends_upon ]?.key)?.valid }} -->
+                        <!-- {{!!!step?.depends_upon }} -->
+                      
+                        <ng-container
+                            *ngIf=" step?.depends_upon == undefined  ||  ( scanDetails?.get(  stepper[  step?.depends_upon ]?.key)?.valid) == true   ">
+
+
+
+
+
+                            <div style=" margin-top: 0.0rem;;" fxLayout="column" fxLayoutAlign="center center">
+                                <ng-template #defaultIconTemplate>
+                                    <nb-icon [class.current_step]="currentStep ==  index  "
+                                        [class.invaliid_step]="scanDetails?.get(step?.key).invalid"
+                                        [icon]="  scanDetails?.get(step?.key).valid ? 'checkmark-circle-2-outline' : 'close-circle-outline'"
+                                        (click)="changeStep( index   )" status="primary" class="dot ">
+                                    </nb-icon>
+                                </ng-template>
+
+                                <ng-container *ngIf=" ( currentStep == index  ) ; else defaultIconTemplate">
+                                    <nb-icon [class.invaliid_step]="scanDetails?.get(step?.key).invalid"
+                                        [icon]="  scanDetails?.get(step?.key).valid ? 'checkmark-circle-2-outline' : 'close-circle-outline' "
+                                        [class.current_step]="currentStep ==  index " (click)="changeStep(index )"
+                                        status="primary" class="dot ">
+                                    </nb-icon>
+
+                                </ng-container>
+
+
+                                <div [class.current_step_title]="currentStep ==  index  " class="caption-2"
+                                    style="text-align: center;">
+                                    {{step?.alias}}
+                                </div>
+
+                            </div>
+                            <div fxFlex="1 1 100%" class="horizontal_line ">
+                                &nbsp;
+                            </div>
+
+
+                        </ng-container>
+
+                    </ng-container>
+
+                </ng-template>
+
+                <div fxLayoutAlign="center center">
+
+
+
+
+                    <!--  -->
+
+                    <div style=" margin-top: 0.0rem;;" fxLayout="column" fxLayoutAlign="center center">
+
+
+
+                        <nb-icon (click)="changeStep( 4   )" [class.invaliid_step]="scanDetails?.invalid"
+                            icon="message-square-outline" [class.current_step]="currentStep ==  4 " status="primary"
+                            class="dot ">
+                        </nb-icon>
+
+
+                        <div class="caption-2" style="text-align: center;">
+                            Integration Guide
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+        </div>
+
+        <!-- <button outline style="text-transform:capitalize;" size="medium" (click)="nextStep()"
+            [disabled]="currentStep == stepper.length - 1 " nbButton status="primary">Next
+            <nb-icon icon="chevron-right-outline"></nb-icon>
+        </button> -->
+    </nb-card-header>
+
+    <nb-card-header fxLayoutAlign="end center" nbSpinnerStatus="danger" fxLayout="row">
+
+        <nb-toggle >Toggle with FormControl</nb-toggle>
+    </nb-card-header>
+   
+
+    <nb-card-body
+    
+
+    fxLayoutAlign="center start" 
+    [formGroup]="scanDetails"  >
+
+        <!-- <div fxLayout="row"> -->
+
+
+
+
+        <div
+        style="align-self: center;"
+        fxLayoutAlign="center" 
+        fxFlex="0 1 900px">
+
+            <ng-container [ngSwitch]="currentStep">
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.GIT_URL">
+
+                    <ng-container>
+
+
+
+
+                        <!-- <div class="cardbody" style="justify-content: center; max-width: 900px;" fxLayout="column" fxFlex> -->
+                        <div fxLayoutGap="2rem" fxLayout="column" fxLayoutAlign="center center">
+
+
+
+
+                            <div fxLayoutGap="1rem" fxLayout="column" fxLayoutAlign="center  center">
+
+                                <div fxLayoutAlign="center  center" fxFlex>
+
+                                    <span class="caption-2 text-basic"
+                                        style="font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+
+                                        Please make sure that you have provided read access permission of the
+                                        code-repository to <b>
+                                            `whitehat`
+
+                                        </b>
+                                        group.
+
+                                    </span>
+                                </div>
+
+                                <div fxLayoutAlign="center  center" fxFlex>
+                                    <span class="caption-2"
+                                        style="font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+
+                                        Or
+                                    </span>
+                                </div>
+                                <div fxLayoutAlign="center  center" fxFlex>
+
+                                    <span class="caption-2 text-basic"
+                                        style="   font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+
+                                        Add SSH Public Access key
+                                        <button (click)="copySshKey()" style="text-transform: capitalize ; " size="tiny"
+                                            nbButton filled status="basic" outline>
+
+                                            <nb-icon icon="copy-outline">
+                                            </nb-icon>
+                                            <span>
+                                                Copy
+                                            </span>
+
+                                        </button>
+
+                                        to your Bitbucket Cloud repositories.
+
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- <div   fxLayoutAlign="center  center"> -->
+
+                            <!-- style="max-width: 900px; width: 100%; "  -->
+                            <nb-form-field [nbSpinner]="disableFormChange" nbSpinnerStatus="danger">
+
+
+                                <nb-icon nbPrefix status="basic"
+                                    [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                                </nb-icon>
+
+                                <input [disabled]="true"
+                                    [class.disabled]=" (disableFormChange || CODE_REPOSITORY_DISABLED) "
+                                    (keyup.enter)="validateGitAccess()" fullWidth [nbAutocomplete]="autoGitUrl"
+                                    [status]="  (disableFormChange || CODE_REPOSITORY_DISABLED) ? 'basic':  'primary'  "
+                                    type="text" nbInput [readonly]="disableFormChange || CODE_REPOSITORY_DISABLED "
+                                    fieldSize="giant" formControlName="GIT_URL"
+                                    placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
+
+                                <button (click)="toggleCodeRepo()" size="small" nbSuffix nbButton filled
+                                    [status]=" CODE_REPOSITORY_DISABLED ? 'primary':  'success'  ">
+
+
+                                    <nb-icon
+                                        [icon]=" CODE_REPOSITORY_DISABLED ? 'edit-outline':  'corner-down-left-outline'  ">
+                                    </nb-icon>
+
+                                </button>
+                            </nb-form-field>
+
+                            <!-- </div> -->
+                            <div fxLayoutAlign="center  center">
+                                <span class="caption-2"
+                                    style="font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+
+                                    {{code_repository_message}}
+
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                    </ng-container>
+
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.GIT_BRANCH">
+
+                    <ng-container *ngIf="!disableFormChange; else loadingBranches">
+
+
+
+
+                        <div [nbSpinner]="disableFormChange" fxFlex="01 1 500px" fxLayoutAlign="center center"
+                            fxLayoutGap="20px" fxLayout="column" class="cardbody">
+
+
+
+                            <nb-list style="max-height: 500px;" fxLayout="column">
+                                <!-- style="  max-width: 500px; width: 100%; " -->
+
+                                <nb-list-item (click)="selectBranch(undefined)">
+
+
+                                    <div fxFlex>
+                                        Default
+                                    </div>
+
+                                    <nb-icon class="loading-icon"
+                                        *ngIf="scanDetails?.controls?.GIT_BRANCH?.value == '' "
+                                        [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                                    </nb-icon>
+
+                                </nb-list-item>
+
+                                <nb-list-item [class.selected]="scanDetails?.controls?.GIT_BRANCH?.value == _branch"
+                                    (click)="selectBranch(_branch)" *ngFor="let _branch of repoBranchList ">
+
+                                    <div fxFlex>
+                                        {{ _branch }}
+                                    </div>
+
+                                    <nb-icon class="loading-icon"
+                                        *ngIf="scanDetails?.controls?.GIT_BRANCH?.value == _branch"
+                                        [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                                    </nb-icon>
+
+
+                                </nb-list-item>
+                            </nb-list>
+
+                            <div *ngIf="retryBranchFetch" fxLayoutAlign="center center">
+                                <button style="text-transform:capitalize;" (click)="validateGitAccess()" nbSuffix
+                                    nbButton filled status="danger">
+                                    <nb-icon icon="refresh-outline">
+                                    </nb-icon>
+                                    Retry
+                                </button>
+                            </div>
+
+                        </div>
+
+
+
+
+
+                    </ng-container>
+
+                    <ng-template #loadingBranches>
+
+
+                        <nb-list [nbSpinner]="disableFormChange" fxLayout="column">
+                            <!-- style="  max-width: 500px; width: 100%; " -->
+
+                            <nb-list-item>
+
+
+                                <div fxLayout="column" fxLayoutGap="2rem" fxFlex>
+                                    <div class="title" fxLayoutAlign="center center">
+
+                                        Loading branches for repository:
+                                    </div>
+                                    <br>
+                                    <div class="subtitle" fxLayoutAlign="center center">
+
+                                        {{scanDetails?.controls?.GIT_URL?.value}}
+                                    </div>
+
+
+                                </div>
+
+                            </nb-list-item>
+                        </nb-list>
+
+                    </ng-template>
+
+
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.APP_URL">
+
+                    <ng-container>
+
+
+
+
+                        <div fxFlex style="justify-content: center;" fxLayout="column" fxLayoutAlign="center center">
+
+
+
+
+
+                            <nb-form-field [nbSpinner]="website_healthcheck_loading" nbSpinnerStatus="danger">
+
+                                <input (keyup.enter)="validateWebsiteHealthCheck()" fullWidth
+                                    [status]="scanDetails?.controls?.APP_URL?.valid ? 'primary' : 'danger' " type="text"
+                                    nbInput [readonly]="website_healthcheck_loading" fieldSize="giant"
+                                    formControlName="APP_URL" placeholder="http://hawki.indiatimes.com">
+
+                                <button (click)="validateWebsiteHealthCheck()" nbSuffix nbButton filled
+                                    status="primary">
+                                    <nb-icon icon="refresh-outline">
+                                    </nb-icon>
+                                </button>
+                            </nb-form-field>
+
+                            <div fxLayoutAlign="center  center">
+                                <span class="caption-2"
+                                    style="font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+                                    {{website_healthcheck_message}}
+
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                    </ng-container>
+
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.LANG">
+
+                    <ng-container>
+
+
+
+
+                        <div fxFlex fxLayoutAlign="center center" class="cardbody" fxLayout="column">
+
+
+
+                            <nb-list fxLayout="column" style="  max-width: 500px; width: 100%;
+                             
+                        max-height: 500px;
+                             
+                             ">
+
+
+
+                                <nb-list-item (click)="selectLang(_lang)"
+                                    [class.selected]="scanDetails?.controls?.LANG_NAME?.value == _lang"
+                                    *ngFor="let _lang of programming_languages ">
+                                    <div fxFlex>
+                                        {{ _lang }}
+                                    </div>
+
+                                    <nb-icon class="loading-icon"
+                                        *ngIf="scanDetails?.controls?.LANG_NAME?.value == _lang"
+                                        [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                                    </nb-icon>
+
+
+
+                                </nb-list-item>
+                            </nb-list>
+
+                        </div>
+
+
+                    </ng-container>
+
+                </ng-container>
+
+                <ng-container *ngSwitchCase=" StepTypeEnum.INTEGRATION">
+                    <ng-container>
+                        <app-integration></app-integration>
+                    </ng-container>
+                </ng-container>
+
+            </ng-container>
+
+
+        </div>
+     
+        <!-- </div> -->
+
+    </nb-card-body>
+
+    <nb-card-body #overlayHost *ngIf="false" nbSpinnerStatus="danger" [formGroup]="scanDetails">
+
+        <div fxLayout="column">
+
+
+
+            <!--  -->
+
+            <ng-container>
+
+
+
+
+                <!-- <div class="cardbody" style="justify-content: center; max-width: 900px;" fxLayout="column" fxFlex> -->
+                <div fxLayout="column" fxLayoutAlign="center center">
+
+
+
+
+                    <!-- <div   fxLayoutAlign="center  center"> -->
+
+                    <!-- style="max-width: 900px; width: 100%; "  -->
+                    <nb-form-field [nbSpinner]="disableFormChange" nbSpinnerStatus="danger">
+
+                        <input (keyup.enter)="validateGitAccess()" fullWidth
+                            [status]="scanDetails?.controls?.GIT_URL?.valid ? 'primary' : 'danger' " type="text" nbInput
+                            [readonly]="disableFormChange" fieldSize="giant" formControlName="GIT_URL"
+                            placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
+
+                        <button (click)="validateGitAccess()" nbSuffix nbButton filled status="primary">
+                            <nb-icon icon="refresh-outline">
+                            </nb-icon>
+                        </button>
+                    </nb-form-field>
+
+                    <!-- </div> -->
+                    <div fxLayoutAlign="center  center">
+                        <span class="caption-2" style="font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+
+                            {{code_repository_message}}
+
+                        </span>
+                    </div>
+
+                </div>
+
+
+            </ng-container>
+
+
+
+            <ng-container>
+
+
+
+
+                <div fxFlex style="justify-content: center;" fxLayout="column" fxLayoutAlign="center center">
+
+
+
+
+
+                    <nb-form-field [nbSpinner]="website_healthcheck_loading" nbSpinnerStatus="danger">
+
+                        <input scrollStrategy="close" #websiteInp [nbAutocomplete]="autoWebUrl"
+                            (keyup.enter)="validateWebsiteHealthCheck()" fullWidth
+                            [status]="scanDetails?.controls?.APP_URL?.valid ? 'primary' : 'danger' " type="text" nbInput
+                            [readonly]="website_healthcheck_loading" fieldSize="giant" formControlName="APP_URL"
+                            placeholder="http://hawki.indiatimes.com">
+
+                        <button (click)="validateWebsiteHealthCheck()" nbSuffix nbButton filled status="primary">
+                            <nb-icon icon="refresh-outline">
+                            </nb-icon>
+                        </button>
+                    </nb-form-field>
+
+                    <div fxLayoutAlign="center  center">
+                        <span class="caption-2" style="font-size: 1rem; font-weight: 500;  margin-top: 0.0rem;;">&nbsp;
+                            {{website_healthcheck_message}}
+
+                        </span>
+                    </div>
+
+                </div>
+
+
+            </ng-container>
+
+
+            <ng-container>
+
+
+
+
+                <div fxFlex fxLayoutAlign="center center" class="cardbody" fxLayout="column">
+
+
+
+                    <nb-list fxLayout="column" style="  max-width: 500px; width: 100%; ">
+
+
+
+                        <nb-list-item (click)="selectLang(_lang)"
+                            [class.selected]="scanDetails?.controls?.LANG_NAME?.value == _lang"
+                            *ngFor="let _lang of programming_languages ">
+                            {{ _lang }}
+
+                        </nb-list-item>
+                    </nb-list>
+
+                </div>
+
+
+            </ng-container>
+
+            <!--  -->
+            <div fxFlex *ngIf="false" fxLayoutAlign="center center" fxLayout="row">
+
+
+                <div fxLayoutAlign="center center">
+
+                    <nb-icon status="success" icon="checkmark-circle-2-outline" class="dot ">
+                    </nb-icon>
+
+                </div>
+
+                <ng-container *ngFor="let step of stepper">
+
+                    <div fxFlex class="horizontal_line ">
+                        &nbsp;
+                    </div>
+
+                    <div fxLayoutAlign="center center">
+
+                        <nb-icon status="success" icon="checkmark-circle-2-outline" class="dot ">
+                        </nb-icon>
+
+                    </div>
+
+                </ng-container>
+
+
+
+
+            </div>
+
+
+
+
+
+
+            <div class="row">
+
+                <span>
+                    Feed in the below details devsecops mapping. <br>
+                    <strong>Note:</strong> The changes would reflect instantly, so be extra cautious.
+                </span>
+
+            </div>
+
+            <div class="row">
+
+                <input [nbAutocomplete]="autoWebUrl"
+                    [status]="scanDetails?.controls?.APP_URL?.valid ? 'primary' : 'danger' " type="text" fullWidth
+                    nbInput fieldSize="small" formControlName="APP_URL"
+                    [placeholder]="'Application URL (e.g. http://hawki.indiatimes.com/)'">
+
+
+                <nb-autocomplete #autoWebUrl>
+
+                    <nb-option *ngFor="let option of appSuggestions?.APP_URL" [value]="option">
+                        {{ option }}
+                    </nb-option>
+
+                </nb-autocomplete>
+            </div>
+
+            <div class="row">
+
+
+                <input [nbAutocomplete]="autoGitUrl" type="text" fullWidth nbInput fieldSize="small"
+                    [status]="scanDetails?.controls?.GIT_URL?.valid ? 'primary' : 'danger' " formControlName="GIT_URL"
+                    [placeholder]="'Git Repo URL (e.g. git@bitbucket.org:times_internet/hawkeye-ui.git)'">
+
+
+
+                <nb-autocomplete #autoGitUrl>
+
+                    <nb-option *ngFor="let option of appSuggestions?.GIT_URL" [value]="option">
+                        {{ option }}
+                    </nb-option>
+
+                </nb-autocomplete>
+            </div>
+
+            <div class="row">
+                <div class="label">
+
+                    <span class="caption-2">
+                        Platform
+                    </span>
+                </div>
+                <nb-select size="small" fullWidth placeholder="--Select App Type--" formControlName="APP_TYPE"
+                    [status]="scanDetails?.controls?.APP_TYPE?.valid ? 'primary' : 'danger' ">
+                    <nb-option value="web">web</nb-option>
+                    <nb-option value="mobile">mobile</nb-option>
+                </nb-select>
+            </div>
+
+            <div class="row">
+                <div class="label">
+
+                    <span class="caption-2">
+                        Programming Language
+                    </span>
+                </div>
+                <nb-select size="small" [status]="scanDetails?.controls?.LANG_NAME?.valid ? 'primary' : 'danger' "
+                    formControlName="LANG_NAME" fullWidth placeholder="Language Used">
+                    <nb-option value="java">java</nb-option>
+                    <nb-option value="go">go</nb-option>
+                    <nb-option value="javascript">javascript</nb-option>
+                    <nb-option value="python">python</nb-option>
+                    <nb-option value="ruby">ruby</nb-option>
+                    <nb-option value="php">php</nb-option>
+                    <nb-option value="nodejs">nodejs</nb-option>
+                    <nb-option value="django">django</nb-option>
+                    <nb-option value="flask">flask</nb-option>
+                    <nb-option value="react">react</nb-option>
+                </nb-select>
+            </div>
+
+            <div class="row" fxLayoutGap="1rem">
+                <div class="label">
+
+                    <span class="caption-2">
+                        Deployment Time
+                    </span>
+                </div>
+                <input type="number" [status]="scanDetails?.controls?.DEP_TIME?.valid ? 'primary' : 'danger' "
+                    type="text" fullWidth nbInput fieldSize="small" formControlName="DEP_TIME"
+                    [placeholder]="'Deployment Time (e.g. 100)'">
+            </div>
+
+
+        </div>
+
+    </nb-card-body>
+
+    <nb-card-footer >
+
+        <div 
+        fxLayoutAlign="end"
+        fxLayoutGap="1rem" fxFlex>
+
+
+            <button fxLayoutGap="1rem" outline style="text-transform:capitalize;" size="medium" (click)="previousStep()"
+                [disabled]="currentStep == 0 " nbButton status="basic">
+                <nb-icon icon="chevron-left-outline"></nb-icon>
+                <span>
+
+                    Back
+                </span>
+            </button>
+
+            <button outline style="text-transform:capitalize;" size="medium" (click)="nextStep()"
+                [disabled]="currentStep == stepper.length - 1 " nbButton status="primary">
+                <span>
+
+                    Next
+                </span>
+                <nb-icon icon="chevron-right-outline"></nb-icon>
+            </button>
+        </div>
+        <button
+        *ngIf="false"
+        fxLayoutGap="1rem" outline style="text-transform:capitalize;" size="medium" (click)="saveScanDetails()"
+            [disabled]="currentStep == 0 " nbButton status="success">
+            <span>
+                Save
+            </span>
+            <nb-icon icon="sync-outline"></nb-icon>
+
+        </button>
+    </nb-card-footer>
+
+
+
+
+</nb-card>

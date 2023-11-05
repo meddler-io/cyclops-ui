@@ -1,0 +1,12 @@
+<ng-template #appListDialog let-data let-ref="dialogRef">
+
+  <app-list-selector></app-list-selector>
+
+</ng-template>
+
+<button (click)="openAppListDialog( appListDialog )" fxFlex shape="round" class="title button" nbButton size="large">
+  <nb-icon icon="toggle-left-outline"></nb-icon>
+  Switch
+</button>
+
+

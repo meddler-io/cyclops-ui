@@ -1,0 +1,462 @@
+<!-- <div    fxLayoutAligm="center center"> -->
+
+<!-- <div fxLayout="column"> -->
+
+<ng-template #loadingListItem>
+    <div style="margin: 1rem;" fxFlex class="timeline-wrapper">
+
+        <div class="timeline-item">
+            <div class="animated-background">
+                <div class="background-masker header-top"></div>
+                <div class="background-masker header-left"></div>
+                <div class="background-masker header-right"></div>
+                <div class="background-masker header-bottom"></div>
+                <div class="background-masker subheader-left"></div>
+                <div class="background-masker subheader-right"></div>
+                <div class="background-masker subheader-bottom"></div>
+                <!-- <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div> -->
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+<nb-layout>
+
+    <nb-layout-header *ngIf="false" fxLayoutGap="1rem" fxLayoutAlign="end center">
+
+        <nb-select style="margin-right: 1rem;" status="primary" hero #formDomainFieldRef [selected]="domainField?.value"
+            [formControl]="domainField" placeholder="Select Domain">
+            <!-- <nb-option value="">--Select--</nb-option> -->
+            <nb-option *ngFor="let url of assetUrls | async " [value]="url?._id?.$oid">
+
+
+                <!-- {{domainField?.value == url?._id?.$oid}} -->
+                {{url?.domain}}
+            </nb-option>
+
+        </nb-select>
+    </nb-layout-header>
+
+    <nb-layout-header>
+
+        <div fxLayoutAlign="center" fxFlex>
+
+            <div class="buildListBtn" fxLayoutAlign="center center" fxLayout="row" (click)="toggleSidebar()">
+
+                <div style="margin-left: 20px; margin-right: 20px;">
+                    <app-hamburger-icon [active]=" isMenuOpen | async "></app-hamburger-icon>
+                </div>
+                Findings
+
+
+            </div>
+
+
+            <div fxFlex fxLayoutAlign="end end">
+
+                <nb-select shape="round" size="medium" style="margin-right: 1rem;" status="success" outline
+                    #formDomainFieldRef [selected]="domainField?.value" [formControl]="domainField"
+                    placeholder="Select Domain">
+                    <!-- <nb-option value="">--Select--</nb-option> -->
+                    <nb-option *ngFor="let url of assetUrls | async " [value]="url?._id?.$oid">
+
+
+                        <!-- {{domainField?.value == url?._id?.$oid}} -->
+                        {{url?.domain}}
+                    </nb-option>
+
+                </nb-select>
+
+
+                <!-- <nb-button-group appearance="outline" status="success" size="small" shape="round"> -->
+                <button [appearance]="rla?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla?.isActive ?  'success' : 'basic' " size="medium" shape="round"
+                    (click)=" $event.stopPropagation(); $event.preventDefault(); " [routerLink]="tab?.route"
+                    [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive"
+                    *ngFor="let tab of tabs" nbButton>
+                    {{tab?.title}}
+                </button>
+                <!-- </nb-button-group> -->
+            </div>
+
+        </div>
+
+    </nb-layout-header>
+
+
+    <nb-sidebar tag="buildList" containerFixed>
+        <!-- <div  class="listCosntainer"> -->
+
+        <nb-card fxFlex class=" nbCardList">
+
+            <nb-card-header *ngIf="false" style="margin: 0px; padding: 3px;">
+
+                <nb-select size="large" fullWidth style="margin-right: 1rem;" status="info" outline #formDomainFieldRef
+                    [selected]="domainField?.value" [formControl]="domainField" placeholder="Select Domain">
+                    <!-- <nb-option value="">--Select--</nb-option> -->
+                    <nb-option *ngFor="let url of assetUrls | async " [value]="url?._id?.$oid">
+
+
+                        <!-- {{domainField?.value == url?._id?.$oid}} -->
+                        {{url?.domain}}
+                    </nb-option>
+
+                </nb-select>
+
+
+            </nb-card-header>
+
+            <nb-card-header *ngIf="false" style="margin: 0px; padding: 3px;">
+
+                <nb-select [formControl]="subdomainField" fullWidth placeholder="Select subomain">
+                    <!-- <nb-option value="">--Select--</nb-option> -->
+                    <nb-option *ngFor="let url of assetSubUrls | async " [value]="url?.domain">
+
+                        {{url?.domain}}
+                    </nb-option>
+
+                </nb-select>
+            </nb-card-header>
+
+
+
+
+
+            <nb-card-header [nbSpinner]=" loading || loadingResults " nbSpinnerStatus="info" nbSpinnerSize="small"
+                style="margin: 0px; padding: 0px;">
+                <div fxLayoutAlign="center">
+                    <nb-form-field fxFlex>
+                        <input #refInpSearch [status]=" searchActive ? 'info' : 'control' "
+                            (focus)="searchActivated($event)" (focusout)="searchDeactivated($event)" fullWidth
+                            fieldSize="medium" [formControl]="searchField"
+                            (keyup.enter)="searchDomain( ) ; refInpSearch.blur() ;"
+                            (keyup.escape)="cancelSearch( ) ; refInpSearch.blur() ; " type="text" nbInput
+                            placeholder="Search">
+
+                        <button nbSuffix size="small" [status]=" searchActive ? 'info' : 'control' " outline
+                            (click)="searchDomain() ; refInpSearch.blur() ;" nbButton>
+
+                            <nb-icon icon="search-outline"></nb-icon>
+
+                        </button>
+                    </nb-form-field>
+                </div>
+            </nb-card-header>
+
+
+
+            <nb-list  [nbSpinner]=" loading || loadingResults "
+                nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+                <nb-list-item (click)="onClickBuild(url)" style="padding: 10px;" fxLayout="row"
+                    *ngFor="let url of assetSubUrls | async ">
+
+                    <div fxFlex fxLayoutAlign="center center" fxLayoutGap="10px" fxLayout="row">
+
+
+
+
+                        <div *ngIf="url?.scan_runningn == 1 ;  else scanStartTemplateRef">
+                            <span [class.spin]="url?.scan_runningn == 1" class="dot low blinking"></span>
+                        </div>
+
+
+
+                        <ng-template #scanStartTemplateRef>
+
+                            <div>
+
+
+
+
+                                <button [class.spin]="url?.scan_runningn == 1"
+                                    (click)="runQuickDynamicScan(url?.domain)"
+                                    style="text-transform: capitalize ; padding: 0;" fullWidth nbButton size="tiny"
+                                    ghost status="info">
+                                    <nb-icon icon="refresh-outline">
+                                    </nb-icon>
+                                </button>
+                            </div>
+                        </ng-template>
+                        <div>
+                            <span [class.spin]="url?.scan_runningn == 1" [ngClass]="url?.riskScoreColor"
+                                class="dot"></span>
+                        </div>
+
+                        <div fxFlex>
+                            {{url?.domain}}
+                        </div>
+
+
+                    </div>
+                </nb-list-item>
+            </nb-list>
+
+
+            <nb-list *ngIf="false" [threshold]="50" nbListPageTracker nbInfiniteList
+                (bottomThreshold)="bottomThresholdTrigger($event)" [nbSpinner]=" loading" nbSpinnerStatus="danger"
+                nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+                <nb-list-item [appScrollableItem]="build?._id?.$oid" (click)="onClickBuild(build)" fxLayout="row"
+                    *ngFor="let build of builds$  ;  index as index  ; trackBy: trackBuild ">
+                    <app-build-item fxFlex [active]=" ( activeBuildId | async ) == build?._id?.$oid" [build]="build">
+
+                    </app-build-item>
+                </nb-list-item>
+
+                <nb-list-item>
+                    <ng-container *ngIf="loading">
+                        <ng-container>
+                            <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </nb-list-item>
+
+                <nb-list-item>
+                    <ng-container *ngIf="loading">
+                        <ng-container>
+                            <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                        </ng-container>
+                    </ng-container>
+                </nb-list-item>
+
+            </nb-list>
+
+
+            <nb-card-footer [nbSpinner]=" loadingResults " nbSpinnerStatus="info" nbSpinnerSize="small">
+
+                <div fxFlex fxLayoutAlign="space-between">
+                    <button style="margin-left:  1rem;" (click)="previousPage()" size="small" status="success" nbButton
+                        ghost>
+                        <nb-icon icon="arrow-left-outline"></nb-icon>
+                        <!-- Prev -->
+
+                    </button>
+
+
+                    <div fxFlex fxLayoutAlign="center center">
+
+                        <nb-select size="small" [selected]="0" (selectedChange)="goto($event)" placeholder="Go to">
+
+                            <nb-select-label>
+
+                                <div>
+                                    Page
+
+                                    <span class="page">
+
+                                        <!-- {{selectedItem}} -->
+                                        {{ math.ceil( last_doc?.domain_index / page_limit ) }}
+
+                                    </span>
+
+                                    of
+                                    <span class="page">
+
+                                        {{ math.ceil( last_doc?.domain_count / page_limit )}}
+                                    </span>
+
+                                </div>
+
+
+                            </nb-select-label>
+
+                            <nb-option (selectedChange)="goto($event)"
+                                *ngFor="let item of [].constructor(  math.ceil( last_doc?.domain_count / page_limit ) ); let i = index"
+                                [value]="i">
+                                <div>
+                                    Page
+                                    {{i + 1}}
+                                </div>
+                            </nb-option>
+
+
+                        </nb-select>
+
+
+                    </div>
+
+
+                    <button (click)="goToNext(    )" style="margin-right:  1rem;" size="small" status="success" nbButton
+                        ghost>
+
+                        <!-- Next -->
+                        <nb-icon icon="arrow-right-outline"></nb-icon>
+
+                    </button>
+                </div>
+
+            </nb-card-footer>
+
+        </nb-card>
+        <!-- </div> -->
+    </nb-sidebar>
+    <nb-layout-column>
+        <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
+    </nb-layout-column>
+</nb-layout>
+
+
+
+<div *ngIf="false" fxLayout="column">
+
+
+    <div class="header" fxLayoutAlign="space-between center">
+
+        <div style="margin-left: 20px; margin-right: 20px;">
+
+
+            <nb-select size="large" fullWidth style="margin-right: 1rem;" status="info" outline #formDomainFieldRef
+                [selected]="domainField?.value" [formControl]="domainField" placeholder="Select Domain">
+                <!-- <nb-option value="">--Select--</nb-option> -->
+                <nb-option *ngFor="let url of assetUrls | async " [value]="url?._id?.$oid">
+
+
+                    <!-- {{domainField?.value == url?._id?.$oid}} -->
+                    {{url?.domain}}
+                </nb-option>
+
+            </nb-select>
+
+        </div>
+        <nb-button-group outline status="success" size="small" shape="round">
+            <div>
+
+                <button [disabled]="true" (click)=" $event.stopPropagation(); $event.preventDefault(); "
+                    [routerLink]="tab?.route" [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
+                    #rla="routerLinkActive" *ngFor="let tab of tabs" [pressed]="rla?.isActive " nbButtonToggle pressed>
+                    {{tab?.title}}
+
+                </button>
+
+            </div>
+        </nb-button-group>
+    </div>
+
+    <div class="body" fxLayout="row">
+
+
+
+        <div class="listContainer">
+
+            <nb-card fxFlex fxFill class=" nbCardList">
+
+
+
+
+
+                <nb-card-header *ngIf="newBuildsAvailable" style="margin: 0px; padding: 10px;">
+                    <div fxFlex>
+                        <button (click)="loadNewBuilds()" style="text-transform: capitalize ; " fullWidth nbButton
+                            filled status="primary">
+
+                            <nb-icon icon="refresh-outline">
+                            </nb-icon>
+                            <span>
+                                New Builds Found
+                            </span>
+
+                        </button>
+                    </div>
+                </nb-card-header>
+
+                <!-- <nb-card-body> -->
+
+
+                <!-- <div fxFlex.gt-lg="900px" fxFlex.lt-lg="70%" fxFill [nbSpinner]="loading" nbSpinnerStatus="danger" fxLayout="column"    class="main"> -->
+
+
+                <!-- <div   class="row"> -->
+
+                <!-- *ngIf="builds | async as builds" -->
+
+
+
+
+                <nb-list [threshold]="50" nbListPageTracker nbInfiniteList
+                    (bottomThreshold)="bottomThresholdTrigger($event)" [nbSpinner]=" loading" nbSpinnerStatus="danger"
+                    nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+                    <nb-list-item [appScrollableItem]="build?._id?.$oid" (click)="onClickBuild(build)" fxLayout="row"
+                        *ngFor="let build of builds$  ;  index as index  ; trackBy: trackBuild ">
+
+
+
+                        <app-build-item fxFlex [active]=" ( activeBuildId | async ) == build?._id?.$oid"
+                            [build]="build">
+
+                        </app-build-item>
+
+                        <!-- <div class="row">
+                                <div>
+    
+                                    <div class="vertical_line" style="height: 100px ; ">
+    
+                                    </div>
+    
+                                </div>
+                            </div> -->
+
+
+
+                    </nb-list-item>
+
+
+
+                </nb-list>
+
+
+
+
+
+            </nb-card>
+        </div>
+        <div class="contentContainer" fxFlex>
+
+
+
+
+
+
+
+
+            <!-- <nb-route-tabset [activeLinkOptions]="{
+                'exact': false
+            }" [tabs]="tabs">
+            </nb-route-tabset> -->
+            <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- </div> -->
+
+<!-- </div> -->
+
+<!-- </div> -->
+
+<!-- </nb-card-body> -->
+
+<!-- </div> -->
+
+
+<ng-template let-context="context" #editTmpl>
+
+
+
+    <app-build-detail-view
+        [selected_build]="{ 'buildId' : context?.build_id , applicationId: context?.application_id  }">
+
+    </app-build-detail-view>
+
+</ng-template>

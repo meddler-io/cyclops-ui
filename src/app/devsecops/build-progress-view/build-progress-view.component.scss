@@ -1,0 +1,146 @@
+@import '../../../themes';
+
+
+
+.horizontal_line {
+    width : 30px;
+    height: 2px;
+
+    background-color: nb-theme(color-primary-600) !important;
+    box-shadow      : inset 0px 0px 5px 1px nb-theme(color-primary-300),
+        0px 0px 5px 1px nb-theme(color-primary-600);
+
+
+
+
+    &.success {
+        background-color: nb-theme(color-success-600) !important;
+        box-shadow      : inset 0px 0px 5px 1px nb-theme(color-success-300),
+            0px 0px 5px 1px nb-theme(color-success-600);
+    }
+
+    &.fail {
+        background-color: nb-theme(color-danger-600) !important;
+        box-shadow      : inset 0px 0px 5px 1px nb-theme(color-danger-300),
+            0px 0px 5px 1px nb-theme(color-danger-600);
+
+    }
+
+    &.active {}
+}
+
+
+.spin {
+    -webkit-animation: spin 2s linear infinite;
+    -moz-animation   : spin 2s linear infinite;
+    animation        : spin 2s linear infinite;
+}
+
+.container {
+    opacity: 0.3;
+
+    &.active {
+        opacity: 1;
+    }
+}
+
+.circle {
+
+
+    // 
+
+    justify-content: center;
+    align-items    : center;
+
+    text-align: center;
+    display   : flex;
+
+
+    width        : 3rem;
+    height       : 3rem;
+    line-height  : 3rem;
+    border-radius: 50%;
+    font-size    : 0.8rem;
+
+    // background-color: nb-theme(color-primary-600) !important;
+
+
+    text-shadow: 1px 1px 1px nb-theme(color-primary-300),
+        -1px 1px 1px nb-theme(color-primary-600),
+        1px -1px 1px nb-theme(color-primary-600),
+        -1px -1px 1px nb-theme(color-primary-600);
+
+    box-shadow: inset 0px 0px 5px 1px nb-theme(color-primary-300),
+        0px 0px 5px 1px nb-theme(color-primary-600);
+
+
+    &.success {
+        background-color: nb-theme(color-success-600) !important;
+        box-shadow      : inset 0px 0px 5px 1px nb-theme(color-success-300),
+            0px 0px 5px 1px nb-theme(color-success-600);
+
+        // 
+
+        text-shadow: 1px 1px 1px nb-theme(color-primary-300),
+            -1px 1px 1px nb-theme(color-success-600),
+            1px -1px 1px nb-theme(color-success-600),
+            -1px -1px 1px nb-theme(color-success-600);
+    }
+
+    &.fail {
+        background-color: nb-theme(color-danger-600) !important;
+        box-shadow      : inset 0px 0px 5px 1px nb-theme(color-danger-300),
+            0px 0px 5px 1px nb-theme(color-danger-600);
+
+        // 
+
+        text-shadow: 1px 1px 1px nb-theme(color-danger-300),
+            -1px 1px 1px nb-theme(color-danger-600),
+            1px -1px 1px nb-theme(color-danger-600),
+            -1px -1px 1px nb-theme(color-danger-600);
+
+    }
+
+    &.active {}
+
+    &:hover {
+        font-size : 1rem;
+        transition: 0.2s;
+
+        width : 4rem;
+        height: 4rem;
+    }
+
+
+}
+
+.vertical_line {
+
+    height     : 80px;
+    // position: absolute;
+    // top: 0px;
+    // bottom: 0px;    
+
+    width           : 2px;
+    background-color: nb-theme(color-primary-600) !important;
+    box-shadow      : inset 2px 2px 5px 1px nb-theme(color-primary-300),
+        2px 0px 5px 1px nb-theme(color-primary-600);
+
+
+
+    &.success {
+        background-color: nb-theme(color-success-600) !important;
+        box-shadow      : inset 0px 0px 5px 1px nb-theme(color-success-300),
+            0px 0px 5px 1px nb-theme(color-success-600);
+    }
+
+    &.fail {
+        background-color: nb-theme(color-danger-600) !important;
+        box-shadow      : inset 0px 0px 5px 1px nb-theme(color-danger-300),
+            0px 0px 5px 1px nb-theme(color-danger-600);
+
+    }
+
+    &.active {}
+
+}

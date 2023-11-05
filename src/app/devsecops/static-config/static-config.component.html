@@ -1,0 +1,227 @@
+<ng-template #lsRemoteDialog let-data let-ref="dialogRef">
+
+
+
+    <ng-container *ngIf="data?.lsRemote | async as lsRemote  ; else loadingTemplate">
+
+
+        <ng-container *ngIf="lsRemote?.length == 0 ; else branchSelectorTemplate">
+
+            <nb-card fxFlex="0 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Access Denied
+                    </h5>
+                </nb-card-header>
+                <nb-card-body>
+
+                    <h6 style="line-height: 2rem; ">
+                        Invalid access / Invalid Repository
+                        <br>
+                        {{data?.git_url}}
+                    </h6>
+                </nb-card-body>
+
+            </nb-card>
+
+        </ng-container>
+
+        <ng-template #branchSelectorTemplate>
+
+
+            <nb-card fxFlex="1 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Select Branch
+                    </h5>
+
+                    <div
+                    fxLayoutAlign="end"
+                    >
+                        {{ (lsRemote  )?.length}} Branches
+                    </div>
+                </nb-card-header>
+
+                <nb-card-header style="padding: 0.3rem;">
+
+
+                    <div class="search-input" fxLayoutAlign="center center" fxLayoutGap="1rem" fxLayout="row">
+
+
+                        <input [formControl]="searchBranchFilter" focusOnce fullWidth placeholder="Search" status="basic" nbInput  >
+
+                  
+
+                    </div>
+
+                </nb-card-header>
+
+
+                <!--  -->
+                <nb-list style="max-height: 500px;" fxLayout="column">
+                    <!-- style="  max-width: 500px; width: 100%; " -->
+
+
+
+                    <nb-list-item (click)="selectBranch(_branch)"
+                        [class.selected]="gitBranchInputFormControl?.value == _branch"
+                        *ngFor="let _branch of lsRemote  ">
+
+                        <div fxFlex>
+                            {{ _branch }}
+                        </div>
+
+                        <nb-icon class="loading-icon" *ngIf="gitBranchInputFormControl?.value == _branch"
+                            [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                        </nb-icon>
+
+
+                    </nb-list-item>
+                </nb-list>
+                <!--  -->
+                <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+                    <button status="basic" outline nbButton (click)="ref.close()">Cancel</button>
+                    <button (click)="save(ref)" status="success" outline nbButton>Save</button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+
+    </ng-container>
+
+
+    <ng-template #loadingTemplate>
+
+        <nb-card fxFlex="0 1 500px" accent="primary">
+            <nb-card-header>
+                <h5 class="text-primary">
+
+                    <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                    </nb-icon>
+                    Validating Access
+                </h5>
+            </nb-card-header>
+            <nb-card-body>
+
+                <h6 style="line-height: 2rem; ">
+                    Validating access to
+                    <br>
+                    {{data?.git_url}}
+                </h6>
+            </nb-card-body>
+
+        </nb-card>
+
+    </ng-template>
+
+
+
+</ng-template>
+
+
+
+<div fxFill fxLayoutAlign="center center">
+
+
+    <nb-card (click)="enableFormEdit()" [nbSpinner]="loadingGeneric" nbSpinnerStatus="danger" size="medium"
+        fxFlex="0 1 900px">
+
+
+        <nb-card-header fxLayoutAlign="center space-between">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Static Configuration
+            </div>
+
+            <nb-toggle [(ngModel)]="editEnabled">Edit</nb-toggle>
+
+        </nb-card-header>
+
+        <nb-card-body fxFlex fxLayoutAlign="center center">
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                <div style="font-size: 1.2rem; ;" class="text-hint " fxFlex>
+
+                    Code Repository
+                </div>
+
+
+
+                <div fxFlex fxLayoutAlign="center center">
+
+
+
+
+
+                    <nb-form-field fxFlex nbSpinnerStatus="danger">
+
+                        <span class="text-hint" nbPrefix>
+                            ssh
+                        </span>
+
+                        <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+                        </nb-icon> -->
+
+                        <input (keyup.enter)="openDialog(lsRemoteDialog)" [readonly]="!editEnabled"
+                            [formControl]="gitRepoInputFormControl" [nbAutocomplete]="repoAutoComplete" status="primary"
+                            fullWidth type="text" nbInput fieldSize="giant"
+                            placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
+
+
+                    </nb-form-field>
+                </div>
+
+                <div *ngIf="gitBranchInputFormControl?.valid" fxLayoutAlign="end" style="font-size: 1.2rem;  "
+                    class="text-hint " fxFlex>
+
+                    <nb-icon icon="corner-up-right-outline"></nb-icon>
+                    <span style="font-size: 1.1rem; ; margin-right: 1rem; ">
+
+                        {{gitBranchInputFormControl?.value}}
+                    </span>
+                </div>
+
+            </div>
+
+
+        </nb-card-body>
+
+
+
+        <nb-card-footer fxLayoutGap="20px" fxLayoutAlign="end">
+
+            <button [disabled]="!editEnabled" (click)="loadControlData()" status="danger" size="medium" nbSuffix
+                nbButton hero>
+                Reset
+                <nb-icon icon="refresh-outline">
+                </nb-icon>
+            </button>
+
+            <button
+                [disabled]="!editEnabled ||   gitRepoInputFormControl?.invalid || gitBranchInputFormControl?.invalid "
+                (click)="openDialog(lsRemoteDialog)" status="primary" size="medium" nbSuffix nbButton filled>
+                Save
+                <nb-icon icon="checkmark-outline">
+                </nb-icon>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+
+</div>
+
+
+<nb-autocomplete #repoAutoComplete [handleDisplayFn]="viewHandle">
+
+    <nb-option *ngFor="let option of filteredOptions$ | async" [value]="option">
+        {{ option }}
+    </nb-option>
+
+</nb-autocomplete>

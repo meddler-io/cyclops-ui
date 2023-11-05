@@ -1,0 +1,420 @@
+<nb-card fxFill>
+
+
+
+
+    <nb-card-header *ngIf="selectedApp | async as selectedApp">
+        <div fxLayoutAlign="space-between center">
+
+            <img [routerLink]="[ '/', 'devsec'  ]  " class="logo" src="/assets/secops.png">
+
+            <!-- <app-switch-workspace></app-switch-workspace> -->
+
+            <app-activate-toggle></app-activate-toggle>
+
+            <!-- <h5>CI/CD Hawki</h5> -->
+
+
+
+        </div>
+
+
+    </nb-card-header>
+
+    <nb-card-header>
+
+        <!--  -->
+
+
+        <nb-form-field>
+            <input fxFlex ghost nbInput type="text" placeholder="Enter value" [nbAutocomplete]="auto" />
+            <button nbPrefix nbButton ghost>
+                <!-- Switch projects and business -->
+                <nb-icon icon="at-outline" pack="eva"></nb-icon>
+
+            </button>
+        </nb-form-field>
+
+        <nb-autocomplete #auto [activeFirst]="true">
+            <!-- List ot projects -->
+
+            <nb-option value="1">Option 1</nb-option>
+            <nb-option value="2">Option 2</nb-option>
+            <nb-option value="3">Option 3</nb-option>
+            <nb-option value="4">Option 4</nb-option>
+
+        </nb-autocomplete>
+        <!--  -->
+
+
+    </nb-card-header>
+
+    <nb-card-footer class="nb-card-footer" fxLayout="column" *ngIf="selectedApp | async as selectedApp">
+
+        <div class="appName">
+
+
+            <button fxFlex fxLayoutGap="10px" shape="round" class="title button" nbButton size="medium">
+                <!-- <nb-icon icon="toggle-left-outline"></nb-icon> -->
+
+
+                <nb-tag appearance="filled" size="tiny" [text]="selectedApp?.platformTag"></nb-tag>
+                <span>
+                    {{(selectedApp)?.application?.applicationName}}
+                </span>
+
+
+
+            </button>
+
+
+        </div>
+
+        <div class="selectedApp">
+
+
+            <div *ngIf="selectedApp?.identifier" fxFlex fxLayout="row">
+
+                <div fxLayoutAlign="center center" class="circle">
+                    <span class="text">
+                        {{(selectedApp)?.businessName[0]}}
+                    </span>
+                </div>
+
+                <div fxLayout="column" fxLayoutAlign="space-between">
+
+                    <div style="font-size: 1.2rem; font-weight: 500;" fxLayoutAlign="start center texttitle"
+                        class="text-hint">
+                        {{(selectedApp)?.businessName}}
+                    </div>
+
+                    <div style="font-size: 1rem; font-weight: 600;" fxLayoutAlign="start center texttitle"
+                        class="text-vasic">
+                        {{(selectedApp)?.projectName}}
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </nb-card-footer>
+
+
+
+
+    <nb-card-body>
+
+        <nb-list>
+
+            <!-- Risk Dashboard -->
+            <nb-list-item class="subitem-header">
+
+
+
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Business Wide Risk
+                </div>
+
+
+
+            </nb-list-item>
+
+            <!-- Applications -->
+            <nb-list-item class="subitem-header">
+
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Applications
+                </div>
+
+                <nb-tag *ngIf="build_count" appearance="filled" size="small" [text]="build_count"></nb-tag>
+
+
+
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="manage-apps" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Manage
+                </div>
+            </nb-list-item>
+
+            <!-- VA/PT -->
+            <nb-list-item class="subitem-header">
+
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    VAPT
+                </div>
+
+                <nb-tag *ngIf="build_count" appearance="filled" size="small" [text]="build_count"></nb-tag>
+
+
+
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="assesments" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Assessments
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="builds" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Issues
+                </div>
+            </nb-list-item>
+
+
+
+            <!-- CI CD Integration -->
+            <nb-list-item class="subitem-header">
+
+
+
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    CI/CD Integration
+                </div>
+
+                <nb-tag *ngIf="build_count" appearance="filled" size="small" [text]="build_count"></nb-tag>
+
+
+
+            </nb-list-item>
+
+
+            
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="builds" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Scans
+                </div>
+            </nb-list-item>
+
+
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="static_scans"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/color-glass/48/000000/code.png" />
+                    Static Configuration
+
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="dynamic_scans"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+
+                    Dynamic Configuration
+
+                </div>
+            </nb-list-item>
+
+            <!-- Assets -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Assets
+                </div>
+
+
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="dns" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+                    DNS
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="quick_scan" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+                    Findings
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="recon_jobs" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+                    Recon Jobs
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="quick_scan_admin"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+                    Recon Jobs Admin
+                </div>
+            </nb-list-item>
+
+
+
+
+            <!-- <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="dns_discovered"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+                    Discovered Assets
+                </div>
+            </nb-list-item> -->
+
+
+
+            <nb-list-item *ngIf="accessChecker.isGranted('view', 'active_protection') | async" class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Active Protection
+                </div>
+
+
+            </nb-list-item>
+
+
+
+
+            <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('view', 'active_protection') | async"
+                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'scans' ]"
+                [class.disabled]="false">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/shield.png" />
+                    Scans
+                </div>
+            </nb-list-item>
+
+
+
+            <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('view', 'active_protection') | async"
+                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]="[ 'active_protection' ]" [class.disabled]="false">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/shield.png" />
+                    Configuration
+                </div>
+            </nb-list-item>
+
+            <!-- External Tools -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Add-on Tools
+                </div>
+
+
+
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool_scans' ] "
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Scans
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool' ] "
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Tools
+                </div>
+            </nb-list-item>
+            <!--  -->
+
+            <!-- External Tools New -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    External Tools
+                </div>
+
+
+
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool_scans_new' ] "
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Scans
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool_new' ] "
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Tools
+                </div>
+            </nb-list-item>
+            <!--  -->
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [class.disabled]="menu_item?.disabled"
+                [routerLink]=" menu_item?.disabled == true ? null :   menu_item?.link" routerLinkActive="active"
+                *ngFor="let menu_item of menu_items">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img [src]="menu_item?.icon" />
+                    {{menu_item?.title}}
+                </div>
+
+                <!-- {{selectedApp | async  | json }} -->
+
+
+                <nb-tag [routerLinkActiveOptions]="{ exact: false }" routerLinkActive [routerLink]="menu_item?.link"
+                    [status]="rlActive?.isActive ? 'alternative' : 'basic' " #rlActive="routerLinkActive"
+                    *ngIf="menu_item?.tag" appearance="outline" size="small" [text]="     menu_item?.tag"></nb-tag>
+
+            </nb-list-item>
+
+
+
+
+            <!-- Administration -->
+
+
+            <nb-list-item *ngIf="accessChecker.isGranted('modify', 'active_protection') | async" class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Admin
+                </div>
+
+
+            </nb-list-item>
+
+
+
+
+            <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('modify', 'bitbucket') | async"
+                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]="[ 'bitbucket', 'manage' ]" [class.disabled]="false">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/shield.png" />
+                    Bitbucket Access Control
+                </div>
+            </nb-list-item>
+
+            <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('modify', 'bitbucket') | async"
+                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]="[ 'active_protection' ]" [class.disabled]="false">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/shield.png" />
+                    Configuration
+                </div>
+            </nb-list-item>
+
+        </nb-list>
+
+
+
+    </nb-card-body>
+</nb-card>

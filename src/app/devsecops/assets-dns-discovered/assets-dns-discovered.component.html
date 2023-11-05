@@ -1,0 +1,50 @@
+<nb-card fxFill *ngIf="assetUrls | async  as assetUrls">
+    <nb-card-header>
+        <div fxFlex class="h5" fxLayoutAlign="start start">
+            DNS Discovered
+        </div>
+
+
+        <button (click)="runAll( assetUrls )" status="primary" size="small" nbButton hero>
+            Run All
+            <nb-icon icon="plus-outline">
+            </nb-icon>
+        </button>
+
+
+
+    </nb-card-header>
+
+
+
+    <nb-list>
+        <nb-list-item *ngFor="let url of assetUrls ">
+
+            <div fxFlex fxLayout="column">
+
+                <div fxFlex fxLayoutAlign="space-between">
+
+                    <div fxFlex>
+                        {{ url?.domain }}
+                    </div>
+                    <div 
+                    fxLayoutAlign="center center"
+                    fxLayoutGap="0.4rem">
+
+                        <nb-icon *ngIf="url?.last_in_process_build?._id" class="dot spin" status="info" icon="close-circle-outline">
+                        </nb-icon>
+
+                        <button (click)="runQuickDynamicScan( url?.domain )" status="success" size="tiny" nbButton
+                            control>
+                            Scan
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </nb-list-item>
+    </nb-list>
+</nb-card>

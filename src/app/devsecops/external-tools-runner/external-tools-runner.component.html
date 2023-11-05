@@ -1,0 +1,206 @@
+<div #parent fxFill style="padding: 2rem;" fxLayout="column" fxLayoutGap="2rem">
+
+    <nb-card nbSpinnerStatus="danger">
+
+
+        <nb-card-header fxLayoutAlign="center start">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Add-on Tools
+            </div>
+
+
+
+
+
+
+
+        </nb-card-header>
+
+        <nb-card-body fxLayout="row" fxLayoutAlign="center center">
+
+
+
+            <div fxFlex fxLayoutAlign="center" fxLayout="row">
+
+                <div fxLayoutGap="2rem" fxLayout="column" fxFlex>
+
+
+
+
+
+                    <!--  -->
+                    <ng-container>
+
+
+
+
+                        <ng-container *ngFor="let tool of external_tools_list  | async">
+                            <div fxLayoutGap="2rem" fxLayoutAlign="start center" fxFlex fxLayout="row">
+
+                                <button (click)="openDialog(toolRunnerDialog,  tool)" nbButton shape="round" outline
+                                    size="small" status="success">Run</button>
+
+                                <div class="text">
+                                    {{tool?.name}}
+                                </div>
+                            </div>
+
+                        </ng-container>
+
+                    </ng-container>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </nb-card-body>
+
+
+
+        <nb-card-body fxLayout="row" fxLayoutAlign="center center">
+
+
+
+            <div fxFlex fxLayoutAlign="center" fxLayout="row">
+
+                <div fxLayoutGap="2rem" fxLayout="column" fxFlex>
+
+
+
+
+
+                    <!--  -->
+                    <ng-container>
+
+
+
+
+                        <ng-container *ngFor="let tool of external_tools_devsec_list  | async">
+                            <div fxLayoutGap="2rem" fxLayoutAlign="start center" fxFlex fxLayout="row">
+
+                                <button (click)="openDialog(toolNewRunnerDialog,  tool)" nbButton shape="round" outline
+                                    size="small" status="success">Run</button>
+
+                                <div
+                                style="text-transform: capitalize;"
+                                class="text">
+                                    {{tool?.name}}
+                                </div>
+                            </div>
+
+                        </ng-container>
+
+                    </ng-container>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </nb-card-body>
+
+    </nb-card>
+
+
+</div>
+
+<ng-template #toolRunnerDialog let-data let-ref="dialogRef">
+    <nb-card [formGroup]="dialogFormGroup" class="dialog">
+        <nb-card-header>
+            <h4 class="field"><strong>Execute {{data?.name}}</strong></h4>
+        </nb-card-header>
+
+     
+
+
+        <nb-card-body *ngIf=" data?.required_field?.indexOf('URL') >= 0">
+
+
+            <span class="subheading">
+                Application URL
+                <br>
+                <input formControlName="url" style="margin-top: 2rem;" fullWidth fieldSize="medium" #appUrlInput
+                    type="text" nbInput placeholder="Url">
+            </span>
+
+        </nb-card-body>
+
+        <nb-card-body *ngIf=" data?.required_field?.indexOf('REPO') >= 0">
+
+            <span class="subheading">
+                Git Repository
+                <br>
+                <input formControlName="repo" style="margin-top: 2rem;" fullWidth fieldSize="medium" type="text" nbInput
+                    placeholder="Git Url">
+            </span>
+
+        </nb-card-body>
+
+        <nb-card-footer fxLayoutAlign="end">
+            <div class="row">
+
+
+                <button [disabled]="dialogFormGroup.invalid" (click)="ref.close( [data])" nbButton size="small"
+                    status="danger">Run</button>
+
+            </div>
+
+            <!-- <button nbButton (click)="closeDialog()">Close Dialog</button> -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #toolNewRunnerDialog let-data let-ref="dialogRef">
+    <nb-card [formGroup]="dialogFormGroup" class="dialog">
+        <nb-card-header>
+            <h4 class="field"><strong>Execute {{data?.name}}</strong></h4>
+        </nb-card-header>
+
+    
+
+
+        <nb-card-body>
+
+
+            <span class="subheading">
+                Application URL
+                <br>
+                <input formControlName="url" style="margin-top: 2rem;" fullWidth fieldSize="medium" #appUrlInput
+                    type="text" nbInput placeholder="Url">
+            </span>
+
+        </nb-card-body>
+
+        <nb-card-body>
+
+            <span class="subheading">
+                Git Repository
+                <br>
+                <input formControlName="repo" style="margin-top: 2rem;" fullWidth fieldSize="medium" type="text" nbInput
+                    placeholder="Git Url">
+            </span>
+
+        </nb-card-body>
+
+        <nb-card-footer fxLayoutAlign="end">
+            <div class="row">
+
+
+                <button [disabled]="dialogFormGroup.invalid" (click)="ref.close( [data , true])" nbButton size="small"
+                    status="danger">Run</button>
+
+            </div>
+
+            <!-- <button nbButton (click)="closeDialog()">Close Dialog</button> -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

@@ -1,0 +1,84 @@
+
+
+
+<div fxFill  class="listContainer">
+    <nb-card fxFlex fxFill  class=" nbCardList">
+
+
+        <!-- <nb-card-header style="margin-bottom: 10px;">
+            <div fxFlex>
+                <span class="subtitle text-primary">
+                    Builds
+                </span>
+            </div>
+        </nb-card-header> -->
+
+
+
+        <nb-card-header *ngIf="newBuildsAvailable" style="margin: 0px; padding: 10px;">
+            <div >
+                <button (click)="loadNewBuilds()" style="text-transform: capitalize ; "  nbButton filled
+                    status="primary">
+
+                    <nb-icon icon="refresh-outline">
+                    </nb-icon>
+                    <span>
+                        New Builds Found
+                    </span>
+
+                </button>
+            </div>
+        </nb-card-header>
+
+        <!-- <nb-card-body> -->
+
+
+        <!-- <div fxFlex.gt-lg="900px" fxFlex.lt-lg="70%" fxFill [nbSpinner]="loading" nbSpinnerStatus="danger" fxLayout="column"    class="main"> -->
+
+
+        <!-- <div   class="row"> -->
+
+        <!-- *ngIf="builds | async as builds" -->
+
+
+
+        <nb-list [threshold]="50" nbListPageTracker nbInfiniteList (bottomThreshold)="bottomThresholdTrigger($event)"
+            [nbSpinner]=" loading" nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+            <nb-list-item (click)="onClickBuild(build)" fxLayout="row"
+                *ngFor="let build of builds$  ;  index as index  ; trackBy: trackBuild ">
+
+
+
+
+
+
+
+                <app-build-item fxFlex [active]=" ( activeBuildId | async ) == build?._id?.$oid" [build]="build">
+
+                </app-build-item>
+
+                <!-- <div class="row">
+                        <div>
+
+                            <div class="vertical_line" style="height: 100px ; ">
+
+                            </div>
+
+                        </div>
+                    </div> -->
+
+
+
+            </nb-list-item>
+
+
+
+        </nb-list>
+
+
+
+
+
+    </nb-card>
+</div>

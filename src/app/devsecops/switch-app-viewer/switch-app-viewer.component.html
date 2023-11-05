@@ -1,0 +1,100 @@
+<ng-template #loadingTemplate>
+
+    <app-create-app
+    [appId]="'5fd9d91331a6a8556c11b34a'"
+    (onclose)="onClose($event)">
+
+    </app-create-app>
+
+</ng-template>
+
+<!-- fxFlex="0 1 900px"  -->
+<div fxFill fxFlex="0 1 1200px" class="container" fxLayout="column">
+
+
+
+
+    <div  fxLayoutAlign="space-between center" class="header">
+        <span   class="_heading">
+            Select Application
+        </span>
+
+
+
+        <div fxLayout="row" fxLayoutGap="2rem">
+
+
+            <nb-form-field>
+                <input [(ngModel)]="searchQuery" fieldSize="medium" type="text" nbInput placeholder="Search">
+                <button nbSuffix size="medium" status="primary" ghost nbButton>
+                    <nb-icon icon="search-outline"></nb-icon>
+                </button>
+
+
+            </nb-form-field>
+
+            <button
+            style="
+    text-transform: capitalize;
+            "
+            (click)="openDialog(loadingTemplate)" size="medium" status="success" outline nbButton>
+                <nb-icon icon="plus-outline"></nb-icon>
+                Create App
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!--  -->
+
+    <!-- <app-create-app></app-create-app> -->
+
+    <!--  -->
+
+    <div fxLayoutGap="1rem"  class="content">
+
+
+
+
+
+
+
+        <div *ngIf="false" fxFlex="300px" style="height:  100%;" fxLayoutGap="30px" fxLayout="column">
+
+            <div>
+
+                <app-workspace-chooser>
+
+                </app-workspace-chooser>
+            </div>
+            <div>
+
+                <app-workspace-chooser-filter>
+
+                </app-workspace-chooser-filter>
+
+            </div>
+            <!-- <app-business-list fxFlex="0 0 50vh">
+        </app-business-list> -->
+
+            <!-- <app-business-list fxFlex="0 0 50vh">
+        </app-business-list> -->
+
+            <!-- <app-project-list fxFlex="0 0 50vh">
+        </app-project-list> -->
+        </div>
+
+
+        <!-- <nb-card fxFill> -->
+            <!-- <nb-card-body> -->
+                <app-list [searchQuery]="searchQuery"></app-list>
+            <!-- </nb-card-body> -->
+        <!-- </nb-card> -->
+    </div>
+
+
+
+
+</div>

@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.nsoc_email"}],"uuid":"c0b6d7f27aba41dcb72ff9ec982f8d06","collectionName":"nsoc_email","type":"collection"}

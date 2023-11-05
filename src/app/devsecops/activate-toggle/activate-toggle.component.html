@@ -1,0 +1,11 @@
+<div fxLayoutAlign="start center" style="margin-right: 10px;">
+
+
+
+    <nb-toggle #toggleBtn labelPosition="left" size="small" [disabled]="updatingActiveAttribute"
+        [checked]="active_state$ | async "
+        [class.unselected]="!!! ( active_state$ | async) "
+        (checkedChange)="toggleActivateAppSwitch($event)" [status]="toggleBtn?.checked ? 'success' : 'basic'   ">
+        {{ toggleBtn?.checked ? 'Deactivate' : 'Activate'}}
+    </nb-toggle>
+</div>

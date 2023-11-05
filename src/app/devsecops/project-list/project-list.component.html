@@ -1,0 +1,87 @@
+<!-- [@enterAnimation] -->
+<nb-card
+fxFill
+size="medium" fxFlex="1 1 500px" accent="primary">
+    <nb-card-header>
+
+        <div fxLayout="column">
+            <div fxFlex>
+                Switch Project
+
+
+            </div>
+
+            <div class="caption-2" style="color: white;" fxFlex>
+                {{ ( selectedProject | async )?.title}}
+
+            </div>
+
+        </div>
+
+    </nb-card-header>
+
+
+    <nb-card-header style="padding: 2px;">
+
+
+        <div fxFlex>
+
+
+
+            <div fxLayout="row">
+
+
+                <!--  -->
+
+                <nb-form-field fxFlex>
+                    <input focusOnce status="basic" type="text" fullWidth nbInput (keyup.escape)="clearSearch()"
+                        [formControl]="searchFieldControl" fieldSize="medium" placeholder="Search">
+
+
+                    <button nbSuffix (click)="clearSearch()" nbButton control status="primary" ghost>
+                        <nb-icon icon="close-outline"></nb-icon>
+                    </button>
+                </nb-form-field>
+
+            </div>
+        </div>
+
+
+    </nb-card-header>
+    
+    <nb-list nbInfiniteList>
+
+        <nb-list-item [class.selected]="list_item?._id?.$oid == (selectedProject | async)?._id?.$oid"
+            (click)="selectProject( list_item?.index )" *ngFor="let list_item of list_items | async">
+
+
+
+            <nb-icon class="checkmark"
+                [status]=" list_item?._id?.$oid == (selectedProject | async)?._id?.$oid  ?   'success' : 'primary'     "
+                [icon]=" list_item?._id?.$oid == (selectedProject | async)?._id?.$oid  ?   'checkmark-circle-2-outline' : 'radio-button-off-outline'     ">
+            </nb-icon>
+
+            <div class="title" style="margin-left: 10px;" fxFlex>
+                <!-- {{index + 1}}. -->
+                {{ list_item?.title }}
+
+                <!-- {{
+                business?.projectCount
+                }} -->
+            </div>
+
+
+
+            <!--  -->
+
+            <button class="projectsBtn" outline nbButton shape="round" size="medium">
+                <nb-icon icon="arrowhead-right-outline">
+                </nb-icon>
+
+            </button>
+
+        </nb-list-item>
+
+
+    </nb-list>
+</nb-card>

@@ -1,0 +1,434 @@
+<ng-template #commentDialog let-data let-ref="dialogRef">
+    <nb-card class="dialog">
+        <nb-card-header>
+            <h1 class="field"><strong>Critical Action</strong></h1>
+        </nb-card-header>
+        <nb-card-body>
+
+            <span class="subheading">
+
+                {{data}}
+                <br>
+
+
+                <input style="margin-top: 2rem;" fullWidth fieldSize="medium" #commentInput
+                    (keyup.enter)="ref.close(commentInput?.value)" type="text" nbInput placeholder="Comment">
+            </span>
+
+        </nb-card-body>
+
+        <nb-card-footer fxLayoutAlign="end">
+            <div class="row">
+
+                <button [disabled]="commentInput.value.length <= 0" (click)="ref.close(commentInput?.value)" nbButton
+                    size="small" status="danger">Update</button>
+
+            </div>
+
+            <!-- <button nbButton (click)="closeDialog()">Close Dialog</button> -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+
+<nb-card *ngIf="finding_details | async as finding_details" fxFill>
+
+    <nb-card-header>
+
+        <div fxFlex fxLayout="start">
+
+            <h6>
+                Finding Details
+            </h6>
+
+        </div>
+        <div fxLayoutGap="1rem" fxLayout="column">
+
+            <div fxLayout="row" fxLayoutGap="1rem" fxLayout="end end">
+
+
+
+                <button [appearance]=" finding_details?.hawki_attributes?.reset_state?.reset ?  'filled': 'outline' "
+                    (click)=" open(commentDialog , 'Are you sure you want to reset the vulnerability state ?' , 'resetFindingState',  finding_details?._id?.$oid  )  "
+                    size="small" status="danger" nbButton>
+                    <nb-icon icon="info-outline">
+
+                    </nb-icon>
+                    <span>
+                        Reset
+                    </span>
+
+                </button>
+
+                <button
+                    [appearance]=" finding_details?.hawki_attributes?.supress_vuln?.supressed ?  'filled': 'outline' "
+                    (click)=" open(commentDialog , 'Are you sure you want to supress the vulnerability ?' , 'suppressFinding',  finding_details?._id?.$oid  )  "
+                    size="small" status="success" nbButton>
+                    <nb-icon icon="info-outline">
+
+                    </nb-icon>
+                    <span>
+                        Supress
+                    </span>
+
+                </button>
+
+                <button
+                    (click)=" open(commentDialog , 'Are you sure you want to accept the risk ?' , 'acceptRisk',  finding_details?._id?.$oid  )  "
+                    size="small"
+                    [appearance]=" finding_details?.hawki_attributes?.accept_risk?.accepted ?  'filled': 'outline' "
+                    status="warning" nbButton>
+                    <nb-icon icon="info-outline">
+
+                    </nb-icon>
+                    <span>
+                        Known Risk
+                    </span>
+
+                </button>
+
+            </div>
+
+            <div fxLayoutGap="1rem" *ngIf="finding_details?.hawki_attributes?.supress_vuln?.supressed " fxLayout="row">
+
+                <span class="paragraph">
+                    <b>
+                        Last Action:
+                    </b>
+                </span>
+                <span class="paragraph">
+                    {{finding_details?.hawki_attributes?.supress_vuln?.performed_by}}
+                </span>
+
+
+
+            </div>
+
+            <div fxLayoutGap="1rem" *ngIf="finding_details?.hawki_attributes?.accept_risk?.accepted " fxLayout="row">
+
+                <span class="paragraph">
+                    <b>
+                        Last Action:
+                    </b>
+                </span>
+                <span class="paragraph">
+                    {{finding_details?.hawki_attributes?.accept_risk?.performed_by}}
+                </span>
+
+
+            </div>
+        </div>
+
+    </nb-card-header>
+    <nb-card-body fxLayout="column">
+
+        <ng-container *ngIf="finding_details?.title">
+            <div fxLayout="column">
+                <div class="field item">
+                    Discovered By
+                </div>
+
+
+                <div (click)="copyToCB( finding_details?.found_by )" class="field_details item">
+                    {{finding_details?.found_by}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+        </ng-container>
+
+
+
+        <ng-container *ngIf="finding_details?.title">
+            <div fxLayout="column">
+                <div class="field item">
+                    Scan Type
+                </div>
+
+
+                <div (click)="copyToCB( finding_details?.found_by )" class="field_details item">
+                    {{finding_details?.static_finding ? 'Static Analysis': ''}}
+                    {{finding_details?.dynamic_finding ? 'Dynamic Analysis': ''}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="finding_details?.title">
+            <div fxLayout="column">
+                <div class="field item item">
+                    Title
+                </div>
+
+
+
+
+                <div (click)="copyToCB( finding_details?.title )" class="field_details item">
+                    {{finding_details?.title}}
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="finding_details?.severity">
+            <div fxLayout="column">
+                <div class="field item item">
+                    Severity
+                </div>
+
+
+
+                <div (click)="copyToCB( finding_details?.severity )" class="field_details item">
+                    {{finding_details?.severity}}
+                </div>
+            </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="finding_details?.description">
+            <div fxLayout="column">
+                <div class="field item">
+                    Description
+                </div>
+
+
+
+                <div (click)="copyToCB( finding_details?.description )" class="field_details item">
+                    {{finding_details?.description}}
+                </div>
+
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="finding_details?.endpoints">
+            <div fxLayout="column">
+                <div class="field item">
+                    Endpoints
+
+                </div>
+
+
+
+                <div
+                *ngFor="let endpoint of finding_details?.endpoints"
+                (click)="copyToCB( endpoint )" class="field_details item">
+                    {{endpoint}}
+                </div>
+
+
+            </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="finding_details?.description">
+            <div fxLayout="column">
+                <div class="field item">
+                    Mitigation
+                </div>
+
+
+                <div (click)="copyToCB( finding_details?.mitigation )" class="field_details item">
+                    {{finding_details?.mitigation}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+
+
+
+        <ng-container *ngIf="finding_details?.component_name">
+            <div fxLayout="column">
+                <div class="field">
+                    Component
+                </div>
+
+                <div class="field_details">
+
+                    <ng-container *ngIf="finding_details?.component_name">
+
+                        <span>{{finding_details?.component_name}}</span>
+                        <span>
+                            <ng-container *ngIf="finding_details?.component_version">
+                                @{{finding_details?.component_version}}</ng-container>
+                        </span>
+                    </ng-container>
+
+                </div>
+            </div>
+        </ng-container>
+
+
+        <ng-container *ngIf="finding_details?.date">
+            <div fxLayout="column">
+                <div class="field item">
+                    Date
+                </div>
+
+
+
+                <div (click)="copyToCB( finding_details?.date )" class="field_details item">
+                    {{finding_details?.date}}
+                </div>
+
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="finding_details?.cwe">
+            <div fxLayout="column">
+                <div class="field item">
+                    CWE
+                </div>
+
+
+
+                <div (click)="copyToCB( finding_details?.cwe )" class="field_details item">
+                    {{finding_details?.cwe}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="finding_details?.cwe">
+            <div fxLayout="column">
+                <div class="field item">
+                    CVE
+                </div>
+
+
+
+
+                <div (click)="copyToCB( finding_details?.cve )" class="field_details item">
+                    {{finding_details?.cve}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+
+        <ng-container *ngIf="finding_details?.cwe">
+            <div fxLayout="column">
+                <div class="field item">
+                    Refrences
+                </div>
+
+                <div (click)="copyToCB( finding_details?.references )" class="field_details item">
+                    {{finding_details?.references}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="finding_details?.file_path">
+            <div fxLayout="column">
+                <div class="field item">
+                    File Path
+                </div>
+
+                <div (click)="copyToCB( finding_details?.file_path )" class="field_details item">
+                    {{finding_details?.file_path}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="finding_details?.line">
+            <div fxLayout="column">
+                <div class="field item">
+                    Line No.
+                </div>
+
+                <div (click)="copyToCB( finding_details?.line )" class="field_details item">
+                    {{finding_details?.line}}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+        <ng-container *ngIf="build_details | async as build_details">
+
+            <ng-container *ngIf="finding_details?.line">
+                <div fxLayout="column">
+                    <div class="field item">
+                        Go To Line
+                    </div>
+
+                    <div (click)="goToFile(  finding_details?.file_path ,  finding_details?.line , build_details?.raw_request_sent_for_execution?.GIT_URL,  build_details?.raw_request_sent_for_execution?.GIT_COMMIT )"
+                        class="field_details item">
+                        {{finding_details?.line}}
+                    </div>
+
+                    <div fxFlex>
+
+                        <hr>
+                    </div>
+                </div>
+
+            </ng-container>
+        </ng-container>
+
+        <!-- <ng-container *ngIf="build_details | async as build_details">
+            <div fxLayout="column">
+                <div class="field item">
+                    Build Details
+                </div>
+
+                <div (click)="copyToCB( finding_details?.line )" class="field_details item">
+                    {{build_details | json }}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container> -->
+
+
+
+    </nb-card-body>
+
+</nb-card>

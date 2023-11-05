@@ -1,0 +1,46 @@
+@import '../../../themes';
+
+
+nb-card {
+    // background: nb-theme(background-basic-color-3);
+    // max-height: 100vh;
+    height: 100%;
+    margin: 0rem;
+    border: 0;
+}
+
+nb-card-body {
+    // margin    : 2rem;
+    // background: nb-theme(background-basic-color-1);
+    padding: 0;
+}
+
+.container {
+    border-radius: 2rem;
+    max-height   : 100vh;
+    height       : 100vh;
+    padding      : 1rem;
+    // overflow: hidden;
+}
+
+
+._heading {
+    font-size  : 1.8rem;
+    font-weight: 400;
+    color      : nb-theme(text-hint-color);
+
+}
+
+.content{
+    // overflow-y: hidden;
+    // max-width: 1200px;
+    // width: 1200px;
+    // align-self: center;
+    overflow: scroll;
+    height: calc(100vh - 6rem);
+
+}
+
+.header{
+    height: 5rem;
+}

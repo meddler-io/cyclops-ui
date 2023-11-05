@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.appscan_cache"},{"v":{"$numberInt":"2"},"key":{"scan_id":{"$numberInt":"1"},"now":{"$numberInt":"1"}},"name":"scan_id_1_now_1","ns":"hawki.appscan_cache"}],"uuid":"ee402a031d74409689744badfe50c682","collectionName":"appscan_cache","type":"collection"}

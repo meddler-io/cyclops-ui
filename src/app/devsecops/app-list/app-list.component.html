@@ -1,0 +1,670 @@
+<ng-template #businessListDialog let-data let-ref="dialogRef">
+    <app-business-list></app-business-list>
+</ng-template>
+
+<ng-template #projectListDialog let-data let-ref="dialogRef">
+    <app-project-list></app-project-list>
+</ng-template>
+
+<ng-template #loadingView>
+
+    <nb-card fxFill>
+
+        <nb-card-body fxLayoutAlign="center center">
+
+            <div class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </nb-card-body>
+
+    </nb-card>
+</ng-template>
+
+<!--  -->
+
+<ng-template #loadingListItem>
+    <div fxFlex class="timeline-wrapper">
+
+        <div class="timeline-item">
+            <div class="animated-background">
+                <div class="background-masker header-top"></div>
+                <div class="background-masker header-left"></div>
+                <div class="background-masker header-right"></div>
+                <div class="background-masker header-bottom"></div>
+                <div class="background-masker subheader-left"></div>
+                <div class="background-masker subheader-right"></div>
+                <div class="background-masker subheader-bottom"></div>
+                <!-- <div class="background-masker content-top"></div>
+                    <div class="background-masker content-first-end"></div>
+                    <div class="background-masker content-second-line"></div>
+                    <div class="background-masker content-second-end"></div>
+                    <div class="background-masker content-third-line"></div>
+                    <div class="background-masker content-third-end"></div> -->
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- <ng-container *ngIf="selectedProject | async;  else loadingView"> -->
+
+
+<div class="main" fxLayoutAlign="flex-start" fxLayout.xs="column">
+
+    <ng-container *ngIf="false">
+
+        <div fxFlex="50%" *ngFor="let app of applications | async ; index as index  ">
+
+            <!-- {{app | json}} -->
+
+            <!-- Upper Loading -->
+
+
+            <!-- {{app | json}} -->
+            <app-list-item (_reset)="_reset($event)" fxFill fxFkex [index]="index + 1 + current_slice_offset"
+                [integrated]="app?.integrated"
+                [active]="( activeAppId | async ) == app?.application?.applicationId?.$oid " (click)="selectApp( app )"
+                [data]="app">
+
+            </app-list-item>
+
+        </div>
+
+    </ng-container>
+
+
+    <ng-container *ngIf="buildExplorer; else buildSearchComp ">
+
+
+        <nb-card fxFill size="small">
+
+
+
+            <nb-card-header fxLayoutAlign="space-between" fxLayout="row">
+
+                <div fxLayoutGap="20px" fxLayout="row">
+
+                    <ng-container *ngIf="projects$ | withLoading | async as projects$ ">
+                        <ng-container *ngIf="projects$?.loading == false ">
+                            <nb-select [formControl]="_integrated" placeholder="Show Applications" status="control">
+
+
+                                <nb-option value="">All Applications</nb-option>
+                                <nb-option [value]="true">Integrated</nb-option>
+                                <nb-option [value]="false">Non-Integrated</nb-option>
+        
+
+        
+                            </nb-select>
+                        </ng-container>
+
+                    </ng-container>
+
+                 
+
+                </div>
+
+                <div fxLayoutAlign="space-between" fxLayoutGap="1rem" fxLayout="row" class="text-heading">
+
+
+                    <ng-container *ngIf="business$ | withLoading | async as business$ ">
+
+                        <ng-container *ngIf="business$?.loading == false ; else loading">
+
+
+                            <nb-select [formControl]="_selectedBusiness" placeholder="Business" status="control">
+                                <nb-option value="">All Businesses</nb-option>
+                                <nb-option *ngFor="let business of business$?.value" [value]="business?._id?.$oid">
+
+                                    <div fxFlex fxLayoutAlign="space-between">
+                                        <span>
+                                            {{business?.name}}
+                                        </span>
+
+                                        <nb-icon
+                                            (click)=" $event.stopPropagation(); $event.preventDefault();  open( editBusiness , { '_id': business._id.$oid,   'name': business.name , 'description': business.description }  )"
+                                            nbPrefix icon="settings-2-outline"></nb-icon>
+                                    </div>
+
+
+
+                                </nb-option>
+
+                            </nb-select>
+
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="projects$ | withLoading | async as projects$ ">
+
+                        <ng-container *ngIf="projects$?.loading == false ; else loading">
+
+                            <nb-select [formControl]="_selectedProject" placeholder="Project" status="control">
+
+                                <nb-option value="">All Projects</nb-option>
+
+                                <nb-option *ngFor="let projects of projects$?.value" [value]="projects?._id?.$oid">
+
+
+                                    <div fxFlex fxLayoutAlign="space-between">
+                                        <span>
+                                            {{projects?.name}}
+                                        </span>
+
+                                        <nb-icon
+                                            (click)=" $event.stopPropagation(); $event.preventDefault();  open( editProjectTemplate , { '_id': projects._id.$oid , 'businessId' : projects?.businessId?.$oid ,   'name': projects.name , 'description': projects.description }  )"
+                                            nbPrefix icon="settings-2-outline"></nb-icon>
+                                    </div>
+
+                                </nb-option>
+
+
+                            </nb-select>
+
+
+
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-template #loading>
+                        <nb-select disabled placeholder="Loading" status="primary">
+
+                        </nb-select>
+                    </ng-template>
+
+                </div>
+
+            </nb-card-header>
+
+            <nb-card-header *ngIf="false" fxLayoutAlign="end center">
+
+
+
+                <div fxFlex style="overflow: hidden; " fxLayoutAlign="center center">
+
+
+
+                    <button fxLayout="column" fxLayoutAlign="start start" style="overflow: hidden; " fxFlex
+                        (click)="openDialog( businessListDialog )" outline status="basic" shape="semi-round"
+                        style="padding: 0px ;  padding-left: 20px; padding-bottom: 10px; padding-top: 10px;"
+                        class="title" nbButton size="small">
+
+                        <div class="text-alternative" style="font-size: 15px; font-weight: 300; margin-bottom: 5px; ">
+                            Business
+                        </div>
+                        <div style="font-size: 25px; font-weight: 500; ">
+                            {{
+                            (selectedBusiness | async)?.title
+                            }}
+                        </div>
+
+                    </button>
+
+
+                    <!-- <button [nbPopover]="BusinessListComponent" nbPopoverPlacement="bottom" ghost status="primary"
+                            shape="round" class="title" nbButton size="medium">
+
+                            {{
+                            (selectedBusiness | async)?.title
+                            }}
+                        </button> -->
+
+                    <nb-icon icon="chevron-right-outline"></nb-icon>
+                    <button fxLayout="column" fxLayoutAlign="start start" style="overflow: hidden; " fxFlex
+                        (click)="openDialog( projectListDialog )" outline status="basic" shape="semi-round"
+                        style="padding: 0px ;  padding-left: 20px; padding-bottom: 10px; padding-top: 10px;"
+                        class="title" nbButton size="small">
+
+                        <div class="text-alternative" style="font-size: 15px; font-weight: 300; margin-bottom: 5px; ">
+                            Project
+                        </div>
+
+                        <div style="font-size: 25px; font-weight: 500; ">
+                            {{
+
+                            (selectedProject | async)?.title
+
+                            }}
+                        </div>
+
+
+
+                    </button>
+
+                    <!-- <button [nbPopover]="ProjectListComponent" nbPopoverPlacement="bottom" ghost shape="round"
+                        class="title" nbButton size="medium">
+
+                        {{
+                        (selectedProject | async)?.title
+                        }}
+
+                    </button> -->
+
+                </div>
+
+
+            </nb-card-header>
+
+            <nb-card-header style="padding: 0px; margin: 0px; " *ngIf="searchActivated && false"
+                fxLayoutAlign="start center">
+
+
+
+                <div fxFlex>
+
+
+
+                    <div fxLayout="row">
+
+
+                        <!--  -->
+
+                        <nb-form-field fxFlex>
+                            <input focusOnce status="basic" type="text" fullWidth nbInput
+                                (keyup.escape)="toggleSearch()" [formControl]="searchFieldControl" fieldSize="medium"
+                                placeholder="Search">
+
+
+                            <button nbSuffix (click)="toggleSearch()" nbButton control status="primary" ghost>
+                                <nb-icon icon="close-outline"></nb-icon>
+                            </button>
+                        </nb-form-field>
+                        <!--  -->
+
+                        <!-- [formControl]="searchFieldControl" -->
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+            </nb-card-header>
+
+
+            <nb-card-header class="actionCardHeader" *ngIf="!searchActivated && false " fxLayoutAlign="center  center">
+
+                <div fxFlex>
+                    <nb-button-group shape="round" status="success" outline multiple>
+                        <button (pressedChange)="toggleActive($event)" nbButtonToggle [pressed]="true">Active</button>
+                        <button (pressedChange)="toggleInActive($event)" nbButtonToggle [pressed]="true"
+                            class="text-italic">Inactive</button>
+                    </nb-button-group>
+                </div>
+                <button class="searchBtn" shape="round" size="medium" (click)="toggleSearch()" nbButton status="basic"
+                    filled>
+                    <nb-icon icon="search-outline"></nb-icon>
+                </button>
+
+
+
+            </nb-card-header>
+
+            <nb-card-header style="margin: 0; padding: 0;" *ngIf="!enableTopMoreLoading && topOffsetId > 1">
+                <ng-container>
+                    <div style="margin-left: 2rem; margin-right: 2rem;" fxFlex fxLayoutAlign="center center">
+
+                        <button fxFlex size="small" (click)="goToPreviousPage()" nbButton status="primary" outline
+                            shape="round">
+                            Load {{topOffsetId}} more apps
+                        </button>
+                    </div>
+
+                </ng-container>
+            </nb-card-header>
+
+
+            <!-- {{applications | async |}} -->
+
+            <nb-card-body>
+
+
+                <nb-list fxFill fxLayout="row wrap" fxLayoutAlign="space-between" #appList [threshold]="150"
+                    nbInfiniteList (topThreshold)="topThresholdTrigger($event)"
+                    (bottomThreshold)="bottomThresholdTrigger($event)" *ngIf="!searchActivated">
+
+
+
+
+                    <!-- Upper Loading -->
+
+                    <nb-list-item *ngIf="enableTopMoreLoading && _loadingTop" fxFlex="1 0 calc(50% )"
+                        fxFlex.lg="1 0 calc(30% )">
+
+
+                        <!-- <ng-container *ngIf="enableTopMoreLoading"> -->
+                        <!-- <ng-container *ngIf="_loadingTop"> -->
+                        <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                        <!-- </ng-container> -->
+                        <!-- </ng-container> -->
+
+
+                        <ng-template #enableTopLoadingTempalte>
+                            <div fxFlex fxLayoutAlign="center center">
+
+                                <button fxFlex size="small" (click)="goToPreviousPage()" nbButton status="primary"
+                                    outline shape="round">
+                                    Load More
+                                </button>
+                            </div>
+
+                        </ng-template>
+                    </nb-list-item>
+
+
+                    <!-- <nb-list-item *ngIf="_loadingTop">
+                    <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                </nb-list-item> -->
+
+                    <nb-list-item fxFlex="1 0 calc(50% )" fxFlex.lg="1 0 calc(30% )" *ngIf="!initLoaded$">
+
+                        <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                    </nb-list-item>
+
+
+                    <!--  -->
+                    <!-- *ngFor="let app of applications | async | slice : current_slice_offset : (current_slice_offset + pagination_limit) ; index as index  " -->
+
+                    <nb-list-item fxFlex="1 0 calc(50% )" fxFlex.lg="1 0 calc(30% )" [appScrollableItem]="app?.index"
+                        *ngFor="let app of applications | async ; index as index  ">
+
+                        <!-- {{app | json}} -->
+
+                        <!-- Upper Loading -->
+
+
+                        <!-- {{app | json}} -->
+                        <app-list-item (_reset)="_reset($event)" fxFill fxFkex
+                            [index]="index + 1 + current_slice_offset" [integrated]="app?.integrated"
+                            [active]="( activeAppId | async ) == app?.application?.applicationId?.$oid "
+                            (click)="selectApp( app )" [data]="app">
+
+                        </app-list-item>
+                    </nb-list-item>
+
+
+
+                    <nb-list-item
+                        *ngFor="let app of apps | async | keyvalue: customOrder | slice : current_slice_offset : (current_slice_offset + pagination_limit) ; index as index  ">
+
+                        <!-- {{app | json}} -->
+
+                        <!-- {{app | json}} -->
+                        <app-list-item (_reset)="_reset($event)" fxFill fxFkex
+                            [index]="index + 1 + current_slice_offset" [integrated]="app?.integrated"
+                            [active]="( activeAppId | async ) == app?.value?.application?.applicationId?.$oid "
+                            (click)="selectApp( app?.value )" fxFlex [data]="app?.value">
+
+                        </app-list-item>
+                    </nb-list-item>
+
+                    <!--  -->
+
+                    <nb-list-item fxFlex="1 0 calc(50% )" fxFlex.lg="1 0 calc(30% )" *ngIf="_loadingBottom">
+                        <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                    </nb-list-item>
+
+
+                    <nb-list-item fxFlex="1 0 calc(50% )" fxFlex.lg="1 0 calc(30% )" *ngIf="false">
+                        <ng-container *ngTemplateOutlet="loadingListItem"></ng-container>
+                    </nb-list-item>
+
+
+                    <!--  -->
+
+
+                    <!-- <nb-list-item *ngFor="let app of (selectedProject | async)?.platform "> -->
+
+                    <!-- {{app?.applicationName}} -->
+                    <!-- <app-list-item (_reset)="_reset($event)" fxFill fxFlex [data]="app">
+            </app-list-item> -->
+                    <!-- </nb-list-item> -->
+                </nb-list>
+
+                <nb-list body nbInfiniteList *ngIf="searchActivated ">
+
+                    <!--  -->
+                    <nb-list-item *ngIf="loadingSearchResults">
+                        <ng-container>
+                            <div style="padding: 1rem;  padding-bottom: 0px;" fxFlex class="timeline-wrapper">
+
+                                <div class="timeline-item">
+                                    <div class="animated-background">
+                                        <div class="background-masker header-top"></div>
+                                        <div class="background-masker header-left"></div>
+                                        <div class="background-masker header-right"></div>
+                                        <div class="background-masker header-bottom"></div>
+                                        <div class="background-masker subheader-left"></div>
+                                        <div class="background-masker subheader-right"></div>
+                                        <div class="background-masker subheader-bottom"></div>
+                                        <!-- <div class="background-masker content-top"></div>
+                                        <div class="background-masker content-first-end"></div>
+                                        <div class="background-masker content-second-line"></div>
+                                        <div class="background-masker content-second-end"></div>
+                                        <div class="background-masker content-third-line"></div>
+                                        <div class="background-masker content-third-end"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                    </nb-list-item>
+
+                    <nb-list-item *ngIf="loadingSearchResults">
+                        <ng-container>
+                            <div style="padding: 1rem; padding-bottom: 0px;" fxFlex class="timeline-wrapper">
+
+                                <div class="timeline-item">
+                                    <div class="animated-background">
+                                        <div class="background-masker header-top"></div>
+                                        <div class="background-masker header-left"></div>
+                                        <div class="background-masker header-right"></div>
+                                        <div class="background-masker header-bottom"></div>
+                                        <div class="background-masker subheader-left"></div>
+                                        <div class="background-masker subheader-right"></div>
+                                        <div class="background-masker subheader-bottom"></div>
+                                        <!-- <div class="background-masker content-top"></div>
+                                        <div class="background-masker content-first-end"></div>
+                                        <div class="background-masker content-second-line"></div>
+                                        <div class="background-masker content-second-end"></div>
+                                        <div class="background-masker content-third-line"></div>
+                                        <div class="background-masker content-third-end"></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                    </nb-list-item>
+
+
+
+                    <!--  -->
+
+                    <nb-list-item style="padding: 1rem; padding-bottom: 0rem"
+                        *ngFor="let app of apps_filtered | keyvalue: customOrder | slice : current_slice_offset : (current_slice_offset + pagination_limit)   ">
+
+                        <app-list-item (_reset)="_reset($event)" fxFill fxFkex
+                            [active]="( activeAppId | async ) == app?.value?.application?.applicationId?.$oid "
+                            (click)="selectApp( app?.value )" fxFlex [data]="app?.value">
+
+                        </app-list-item>
+                    </nb-list-item>
+                </nb-list>
+            </nb-card-body>
+
+
+            <nb-card-footer *ngIf="false" fxLayoutAlign="space-between center">
+
+                <button size="medium" [disabled]="current_slice_offset <= 0" (click)="goToPreviousPage()" nbButton
+                    status="primary" ghost>
+                    <nb-icon icon="arrow-ios-back-outline"></nb-icon>
+                </button>
+
+                <div fxFlex fxLayoutAlign="center center">
+                    <span class="select_heading">
+
+                        {{ ( (current_slice_offset / pagination_limit ) + 1 ) | number }}
+                    </span>
+                    <span class="select_heading" style="font-size: 1.4rem; margin-left: 5px; margin-right: 5px;">
+                        /
+                    </span>
+                    <span class="select_heading">
+
+                        {{ ( pagination_text | async )?.total_pages}}
+
+                    </span>
+
+                </div>
+
+                <button
+                    [disabled]="  ( current_slice_offset / pagination_limit ) + 1  >=  (pagination_text | async)?.total_pages "
+                    size="medium" (click)="goToNextPage()" nbButton status="primary" ghost>
+                    <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+                </button>
+
+
+            </nb-card-footer>
+        </nb-card>
+
+    </ng-container>
+    <ng-template #buildSearchComp>
+
+
+        <nb-card fxFlex.gt-xs="1 1 " style="height: 0;" fxFill>
+        </nb-card>
+
+    </ng-template>
+
+
+    <div *ngIf="false" fxFlex>
+        <router-outlet name="app_main">
+
+        </router-outlet>
+    </div>
+
+    <nb-card *ngIf="false" class="main" fxFlex fxFill style="height: 0; margin-left: 2rem; width: 0px;">
+
+
+        <nb-card-header fxLayoutAlign="start center">
+            <div fxFlex>
+                Integration
+                {{ (selectedApp | async)?.application?.applicationName }}
+            </div>
+        </nb-card-header>
+
+
+        <!-- <nb-card-header
+            
+            fxLayoutAlign="start center">
+                <nb-tabset (changeTab)="changeTab($event)">
+
+                    <nb-tab [active]="true" *ngFor="let tab of tabs" [tabTitle]="tab?.title">
+                    </nb-tab>
+                </nb-tabset>
+            </nb-card-header> -->
+
+
+        <nb-card-body>
+
+            <router-outlet name="app_main">
+
+            </router-outlet>
+
+        </nb-card-body>
+
+    </nb-card>
+
+</div>
+
+
+<!-- </ng-container> -->
+
+
+<ng-template #editBusiness let-data let-ref="dialogRef">
+    <nb-card class="image">
+        <nb-card-header>
+            <h1>Edit Business</h1>
+        </nb-card-header>
+        <nb-card-body>
+
+            <span>
+
+                If you wish to edit the business, please fill in the new name, and press save. <br>
+                <strong>Note:</strong> The changes will reflect instantly, so be extra cautious.
+            </span>
+
+        </nb-card-body>
+
+
+
+
+        <nb-card-body>
+            <input #name_field type="text" fullWidth nbInput fieldSize="medium" placeholder="Name" [value]="data.name">
+
+        </nb-card-body>
+        <nb-card-body>
+            <input #description_field type="text" fullWidth nbInput fieldSize="medium" placeholder="Description"
+                [value]="data.description">
+
+        </nb-card-body>
+
+
+        <nb-card-footer>
+            <div class="row">
+
+                <button nbButton class="col-12" status="success"
+                    (click)="edit(ref,data._id, {  'name': name_field.value , 'description': description_field.value } ) ">Save</button>
+
+            </div>
+
+            <!-- <button nbButton (click)="closeDialog()">Close Dialog</button> -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+
+<ng-template #editProjectTemplate let-data let-ref="dialogRef">
+    <nb-card class="dialog">
+        <nb-card-header>
+            <h1>Edit Project</h1>
+        </nb-card-header>
+        <nb-card-body>
+
+            <span>
+                If you wish to edit the project, please fill in the new name, and press save. <br>
+                <strong>Note:</strong> The changes will reflect instantly, so be extra cautious.
+            </span>
+
+        </nb-card-body>
+
+
+
+        <nb-card-body>
+            <input #name type="text" fullWidth nbInput fieldSize="medium" placeholder="Name" [value]="data.name">
+
+        </nb-card-body>
+        <nb-card-body>
+            <input #description type="text" fullWidth nbInput fieldSize="medium" placeholder="Email"
+                [value]="data.description">
+
+        </nb-card-body>
+
+        <nb-card-footer>
+            <div class="row">
+                <div class="col-2"></div>
+                <button class="col-3" nbButton outline status="danger" (click)="ref.close()">Close </button>
+                <div class="col-2"></div>
+                <button nbButton class="col-3" outline status="success"
+                    (click)="editproject(ref, data.businessId ,  data._id, {  'name': name.value , 'description': description.value } ) ">Save</button>
+            </div>
+
+            <!-- <button nbButton (click)="closeDialog()">Close Dialog</button> -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

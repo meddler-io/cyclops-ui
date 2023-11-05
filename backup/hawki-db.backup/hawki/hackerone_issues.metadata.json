@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"hawki.hackerone_issues"}],"uuid":"04b62a8eb5004c749e00d520dfd931f4","collectionName":"hackerone_issues","type":"collection"}

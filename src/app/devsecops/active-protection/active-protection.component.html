@@ -1,0 +1,180 @@
+<!-- <div fxFill style="padding: 2rem;" fxLayout="column" fxLayoutGap="2rem"> -->
+
+<nb-card>
+
+    <nb-card-header style="padding: 0; padding-top: 1rem; padding-left: 1rem;" fxLayoutAlign="center start">
+        <div fxFlex class="h5" fxLayoutAlign="start start">
+            Repositories
+        </div>
+
+        <!-- <div>
+                <button (click)="save()" [disabled]="canSave" outline size="medium" status="success" nbButton>
+                    <nb-icon icon="checkmark-outline"></nb-icon>
+                    Save
+                </button>
+            </div> -->
+
+
+        <div class="search-input" fxLayoutAlign="center center" fxLayoutGap="1rem" fxLayout="row">
+
+            <!-- <label class="search-label" for="search">Search</label> -->
+            <input placeholder="Search" status="primary" nbInput [nbFilterInput]="dataSource" id="search">
+
+            <div fxLayoutAlign="center center">
+
+                <app-activate-toggle flagName="active_protection_state"></app-activate-toggle>
+            </div>
+
+        </div>
+
+
+    </nb-card-header>
+
+    <nb-card-header style="padding: 0;">
+
+
+        <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
+
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+            <tr [clickToToggle]="false" nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns; index as index">
+            </tr>
+
+
+            <ng-container nbTreeGridColumnDef="select">
+                <th style="width: 40px;" nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                    <nb-checkbox [formControl]="formControlSelectAll"></nb-checkbox>
+
+                </th>
+
+            </ng-container>
+
+
+            <ng-container nbTreeGridColumnDef="#">
+                <th style="width: 80px;" nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                    #
+                </th>
+
+            </ng-container>
+
+
+            <ng-container [nbTreeGridColumnDef]="customColumn">
+                <th style="width: 300px;"  nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn)" *nbTreeGridHeaderCellDef>
+                    {{customColumn}}
+                </th>
+
+
+            </ng-container>
+
+
+
+            <ng-container *ngFor="let column of defaultColumns; let index = index" [nbTreeGridColumnDef]="column"
+                [showOn]="getShowOn(index)">
+                <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column)" *nbTreeGridHeaderCellDef>
+                    {{column}}
+                </th>
+
+            </ng-container>
+            
+
+            <ng-container nbTreeGridColumnDef="action">
+                <th nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+                    Action
+                </th>
+
+            </ng-container>
+
+        </table>
+
+    </nb-card-header>
+
+
+    <nb-card-body>
+
+
+        <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
+
+            <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+            <tr [clickToToggle]="false" nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns; "></tr>
+
+
+            <ng-container nbTreeGridColumnDef="select">
+                <th style="height: 0; width: 40px;" nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+
+                </th>
+                <td nbTreeGridCell style="width: 40px;" *nbTreeGridCellDef="let row; index as index ">
+
+                    <nb-checkbox [(ngModel)]="row.data.selected" #selectCheckboxView></nb-checkbox>
+
+                    <!-- {{row?.index}} -->
+                </td>
+            </ng-container>
+
+            <ng-container nbTreeGridColumnDef="#">
+                <th style="height: 0; width: 80px;" nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+
+                </th>
+                <td nbTreeGridCell style="width: 80px;" *nbTreeGridCellDef="let row; index as index ">
+
+                    <!-- <nb-checkbox></nb-checkbox> -->
+
+                    {{index + 1}}
+                    <!-- {{row?.index}} -->
+                </td>
+            </ng-container>
+
+
+            <ng-container [nbTreeGridColumnDef]="customColumn">
+                <th style="width: 300px;  height: 0;" nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn)"
+                    *nbTreeGridHeaderCellDef>
+
+                </th>
+                <td style="width: 300px" nbTreeGridCell *nbTreeGridCellDef="let row">
+                    <!-- <nb-fs-icon [kind]="row.data.kind" [expanded]="row.expanded"></nb-fs-icon> -->
+                    {{row.data[customColumn]}}
+                </td>
+            </ng-container>
+
+
+
+            <ng-container *ngFor="let column of defaultColumns; let index = index" [nbTreeGridColumnDef]="column"
+                [showOn]="getShowOn(index)">
+                <th style="height: 0;" nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column)"
+                    *nbTreeGridHeaderCellDef>
+
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column] || '-'}}</td>
+            </ng-container>
+
+
+
+            <ng-container nbTreeGridColumnDef="action">
+                <th style="height: 0" nbTreeGridHeaderCell *nbTreeGridHeaderCellDef>
+
+                </th>
+                <td nbTreeGridCell *nbTreeGridCellDef="let row; index as index">
+
+                    <nb-button-group shape="round" outline size="small" status="success">
+
+                        <button  (click)="exploreScans(row?.data?.uuid)" nbButton>
+                            <nb-icon icon="swap-outline"></nb-icon>
+                        </button>
+                        <!-- <button nbButton>
+                            <nb-icon icon="play-circle-outline"></nb-icon>
+                        </button> -->
+                        <button (click)="runScan(row?.data?.uuid)" nbButton>
+                            <nb-icon icon="arrow-right-outline"></nb-icon>
+                        </button>
+
+                    </nb-button-group>
+                </td>
+            </ng-container>
+
+        </table>
+
+    </nb-card-body>
+
+
+
+
+</nb-card>
+<!-- </div> -->

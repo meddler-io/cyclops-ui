@@ -1,0 +1,34 @@
+<ng-template #loadingView>
+
+    <div class="content" fxLayoutAlign="center center">
+        <div>
+
+            <div fxLayoutAlign="center center" class="lds-ripple">
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <!-- <div fxLayoutAlign="center center" class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div> -->
+
+</ng-template>
+
+<div class="content">
+    <ng-container *ngIf="selectedApp | async as selectedApp ; else loadingView">
+
+
+
+        <nb-route-tabset [activeLinkOptions]="{
+            'exact': false
+        }" [tabs]="tabs">
+
+
+        </nb-route-tabset>
+
+
+
+    </ng-container>
+</div>

@@ -1,0 +1,24 @@
+@import '../../../themes';
+
+
+nb-card.container {
+    background: nb-theme(background-basic-color-3);
+
+    nb-card-body {
+        margin    : 2rem;
+        background: nb-theme(background-basic-color-1);
+    }
+
+}
+
+
+
+nb-card.content {
+    background   : nb-theme(color-success-400);
+    border-radius: 1rem;
+
+    nb-card-body {
+        background: nb-theme(color-success-400);
+    }
+
+}

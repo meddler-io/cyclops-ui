@@ -1,0 +1,182 @@
+<ng-template #businessListDialog let-data let-ref="dialogRef">
+  <app-business-list [dialogRef]="ref"></app-business-list>
+</ng-template>
+
+<ng-template #projectListDialog let-data let-ref="dialogRef">
+  <app-project-list [dialogRef]="ref"></app-project-list>
+</ng-template>
+
+<ng-template #appListDialog let-data let-ref="dialogRef">
+
+  <app-list>
+  </app-list>
+
+</ng-template>
+
+<nb-layout>
+
+
+  <nb-layout-header *ngIf="false">
+
+
+    <ng-container *ngIf="selectedApp | async as selectedApp ">
+
+      <div fxFlex fxLayout="row">
+
+
+
+
+        <button fxLayoutAlign="start  center" class="sidebar-header" (click)="toggleMenu()" outline status="success"
+          nbButtonToggle>
+
+
+          <app-hamburger-icon [active]="isSidebarOpen | async  "></app-hamburger-icon>
+
+
+
+
+          <!-- <div fxLayout="column"> -->
+
+
+          <span fxHide.lt-sm fxShow (click)="toggleMenu()" class="title">
+            <!-- DevSec Ops -->
+            {{ ( selectedApp )?.application?.applicationName}}
+            {{ ' (' + selectedApp?.platformName + ') ' }}
+
+            <span class="caption-2"> </span>
+          </span>
+
+          <!-- <div fxHide.lt-sm fxShow class="subtitle">
+              {{ ( selectedApp )?.projectName}}
+            </div> -->
+
+          <!-- </div> -->
+
+
+        </button>
+
+
+
+        <div fxLayoutGap="1rem" fxLayoutAlign="start center">
+
+          <nb-icon status="danger" icon="chevron-right-outline">
+          </nb-icon>
+
+          <span fxHide.lt-sm fxShow (click)="toggleMenu()" class="title">
+            <!-- DevSec Ops -->
+            {{ ( selectedApp )?.application?.applicationName}}
+            {{ ' (' + selectedApp?.platformName + ') ' }}
+
+            <span class="caption-2"> </span>
+          </span>
+
+        </div>
+
+        <div fxLayoutGap="1rem" fxHide.lt-md fxShow fxLayoutGap="1rem" fxFlex fxLayoutAlign="end center">
+          <!-- <div fxLayoutAlign="end end"> -->
+
+          <!-- <button status="danger" nbButton (click)="retry()">Retry</button> -->
+
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+      <app-switch-workspace (click)="openAppListDialog( appListDialog )"></app-switch-workspace>
+      <!-- <app-switch-workspace (click)="openBusinessDialog( businessListDialog )"></app-switch-workspace> -->
+
+
+
+
+
+      <div *ngIf="false" style="overflow: hidden; " fxLayoutAlign="center center">
+
+
+
+        <button fxLayout="column" fxLayoutAlign="start start" style="overflow: hidden; " fxFlex
+          (click)="openBusinessDialog( businessListDialog )" outline status="basic" shape="semi-round"
+          style="padding: 0px ;  padding-left: 20px; padding-bottom: 10px; padding-top: 10px;" class="title" nbButton
+          size="small">
+
+          <div class="text-alternative" style="font-size: 15px; font-weight: 300; margin-bottom: 5px; ">
+            Business
+          </div>
+          <div style="font-size: 25px; font-weight: 500; ">
+            {{
+            (selectedBusiness | async)?.title
+            }}
+          </div>
+
+        </button>
+
+
+
+        <nb-icon icon="chevron-right-outline"></nb-icon>
+        <button fxLayout="column" fxLayoutAlign="start start" style="overflow: hidden; " fxFlex
+          (click)="openProjectDialog( projectListDialog )" outline status="basic" shape="semi-round"
+          style="padding: 0px ;  padding-left: 20px; padding-bottom: 10px; padding-top: 10px;" class="title" nbButton
+          size="small">
+
+          <div class="text-alternative" style="font-size: 15px; font-weight: 300; margin-bottom: 5px; ">
+            Project
+          </div>
+
+          <div style="font-size: 25px; font-weight: 500; ">
+            {{
+            (selectedProject | async)?.title
+            }}
+          </div>
+
+
+
+        </button>
+
+
+
+      </div>
+    </ng-container>
+
+
+  </nb-layout-header>
+
+  <nb-sidebar tag="menuSidebar" class="menuSidebar">
+
+    <router-outlet name="sidebar"></router-outlet>
+
+  </nb-sidebar>
+
+
+  <nb-sidebar tag="menuSidebar" *ngIf="false" tag="applist" right fixed [state]="SIDEBAR_DEFAULT_STATE">
+    <router-outlet name="appList">
+    </router-outlet>
+  </nb-sidebar>
+
+
+  <nb-sidebar tag="menuSidebar" *ngIf="false" tag="builds" state="expanded" right>
+
+    <app-build-list></app-build-list>
+
+  </nb-sidebar>
+
+
+  <!-- <nb-sidebar containerFixed  tag="builds">  </nb-sidebar> -->
+
+
+  <nb-layout-column>
+    <!-- <div fxFlex> -->
+
+    <!-- </div> -->
+    <router-outlet>
+
+    </router-outlet>
+  </nb-layout-column>
+
+
+
+
+</nb-layout>

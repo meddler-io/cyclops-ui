@@ -1,0 +1,224 @@
+<ng-container *ngIf="theme == 0">
+
+
+
+
+    <div
+    *ngIf="findingStats | async as findingStats"
+    
+    fxLayout="column">
+
+
+        <!-- <div class="select_heading">
+            Severity
+        </div> -->
+
+
+
+
+
+        <div [nbSpinner]="!!!findingStats" nbSpinnerStatus="danger" fxLayoutGap="5px" fxFlex id="bar-container">
+            <button (click)="toggle( 'info'  )" [appearance]=" info_status ? 'outline' : 'ghost' " fxLayout="column"
+                [disabled]="!!!findingStats || findingStats?.info == '0' " status="basic" nbButton size="small" fxFlex
+                id="bar-info">
+                <div class="field_name">
+
+                    Info
+                </div>
+                <div class="field_value">
+                    {{ findingStats?.info }}
+                </div>
+            </button>
+
+
+            <button (click)="toggle( 'low'  )" fxLayout="column"
+                [disabled]="!!!findingStats ||  findingStats?.low == '0' " status="info"
+                [appearance]=" low_status ? 'outline' : 'ghost' " nbButton size="small" fxFlex id="bar-low">
+                <div class="field_name">
+                    Low
+                </div>
+                <div class="field_value">
+                    {{ findingStats?.low }}
+                </div>
+            </button>
+            <button (click)="toggle( 'medium'  )" fxLayout="column"
+                [disabled]="!!!findingStats || findingStats?.medium == '0' " status="primary"
+                [appearance]=" medium_status ? 'outline' : 'ghost' " nbButton size="small" fxFlex id="bar-medium">
+                <div class="field_name">
+
+                    Medium
+                </div>
+                <div class="field_value">
+                    {{ findingStats?.medium }}
+                </div>
+            </button>
+            <button (click)="toggle( 'high'  )" fxLayout="column"
+                [disabled]="!!!findingStats || findingStats?.high == '0' " status="warning"
+                [appearance]=" high_status ? 'outline' : 'ghost' " nbButton size="small" fxFlex id="bar-high">
+                <div class="field_name">
+
+                    High
+                </div>
+                <div class="field_value">
+                    {{ findingStats?.high }}
+                </div>
+            </button>
+            <button (click)="toggle( 'critical'  )" fxLayout="column"
+                [disabled]="!!!findingStats || findingStats?.critical == '0' " status="danger"
+                [appearance]=" critical_status ? 'outline' : 'ghost' " nbButton size="small" fxFlex id="bar-critical">
+                <div class="field_name">
+
+                    Critical
+                </div>
+                <div class="field_value">
+                    {{ findingStats?.critical }}
+                </div>
+
+            </button>
+        </div>
+
+    </div>
+
+</ng-container>
+
+
+
+<ng-container *ngIf="theme == 1">
+
+    <div 
+    *ngIf="findingStats | async as findingStats"
+    style="justify-self: center;"
+    fxFlex="0 1 900px"
+    fxLayout="row-reverse ">
+        <div
+        
+        fxFlex.lt-lg="50" fxFlex="30" fxLayout="column">
+
+
+            <div fxFlex class="box box1">
+                <span fxFlex fxLayoutAlign="center center" class=" font-size: 30vmin;">
+                    {{ findingStats?.info }}
+
+                </span>
+            </div>
+
+            <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box1 ">
+                Info
+            </div>
+
+        </div>
+        <div fxFlex.lt-lg="50" fxFlex="30" fxLayout="column">
+
+            <div fxFlex class="box box2">
+                <span fxFlex fxLayoutAlign="center center" class=" font-size: 30vmin;">
+                    {{ findingStats?.low }}
+
+                </span>
+            </div>
+
+
+
+
+            <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box2">
+                Low
+            </div>
+        </div>
+
+        <div fxFlex.lt-lg="50" fxFlex="30" fxLayout="column">
+
+            <div fxFlex class="box box3">
+                <span fxFlex fxLayoutAlign="center center" class=" font-size: 30vmin;">
+                    {{ findingStats?.medium }}
+
+                </span>
+            </div>
+
+
+
+            <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box3">
+                Medium
+            </div>
+
+        </div>
+
+
+        <div fxFlex.lt-lg="50" fxFlex="30" fxLayout="column">
+
+            <div fxFlex class="box box4">
+                <span fxFlex fxLayoutAlign="center center" class=" font-size: 30vmin;">
+                    {{ findingStats?.high }}
+
+                </span>
+            </div>
+
+
+            <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box4">
+                High
+            </div>
+
+        </div>
+        <div fxFlex.lt-lg="50" fxFlex="30" fxLayout="column">
+
+            <div fxFlex class="box box5">
+                <span fxFlex fxLayoutAlign="center center" class=" font-size: 30vmin;">
+                    {{ findingStats?.critical }}
+
+                </span>
+            </div>
+
+            <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box5">
+                Critical
+            </div>
+
+            <!-- <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box5">
+                Critical
+            </div> -->
+
+        </div>
+    </div>
+
+
+
+    <div *ngIf="false" fxLayoutGap="20px">
+
+        <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box1">
+
+            <!-- <nb-icon icon="radio-button-on-outline"></nb-icon> -->
+            <span class="textMargin">
+                Info
+            </span>
+        </div>
+        <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box2">
+
+            <!-- <nb-icon icon="radio-button-on-outline"></nb-icon> -->
+            <span class="textMargin">
+                Low
+            </span>
+        </div>
+        <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box3">
+
+
+            <!-- <nb-icon icon="radio-button-on-outline"></nb-icon> -->
+            <span class="textMargin">
+                Medium
+            </span>
+        </div>
+        <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box4">
+
+
+            <!-- <nb-icon icon="radio-button-on-outline"></nb-icon> -->
+            <span class="textMargin">
+                High
+            </span>
+        </div>
+        <div fxLayoutAlign="center center" fxFlex class="textbox select_heading box5">
+
+
+            <!-- <nb-icon icon="radio-button-on-outline"></nb-icon> -->
+            <span class="textMargin">
+                Critical
+            </span>
+        </div>
+    </div>
+
+</ng-container>

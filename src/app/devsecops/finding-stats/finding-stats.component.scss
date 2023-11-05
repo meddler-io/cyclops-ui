@@ -1,0 +1,155 @@
+@import './../../../themes.scss';
+
+div {
+    text-transform: capitalize !important;
+}
+
+.field_name {
+    font-size    : 15px;
+    font-weight  : 400;
+    // margin-top: 5px;
+    margin-left  : 5px;
+    margin-right : 5px;
+
+}
+
+.field_value {
+    // margin-bottom: 5px;
+    margin-left : 5px;
+    margin-right: 5px;
+    font-size   : 13px;
+
+}
+
+#bar-container {
+    height          : 40px;
+    // background: #000;
+    background-color: var(--select-outline-basic-background-color);
+    border-color    : var(--select-outline-basic-border-color);
+    color           : var(--select-outline-basic-text-color);
+
+    border-style : var(--select-outline-border-style);
+    border-width : var(--select-outline-border-width);
+    border-radius: var(--select-rectangle-border-radius);
+
+
+}
+
+button {
+    min-width        : 50px;
+    padding-left     : 4px;
+    padding-right    : 4px;
+    // padding-bottom: 4px;
+
+}
+
+#bar-info {}
+
+#bar-low {}
+
+#bar-medium {}
+
+#bar-high {}
+
+#bar-critical {}
+
+.select_heading {
+    // font-size  : 1rem;
+    color         : nb-theme(color-primary-400) !important;
+    // margin-left: 1rem;
+    margin-top    : 0.5rem;
+    font-weight   : 450;
+    font-size     : 1.4rem;
+
+}
+
+.textMargin {
+    // margin-left: 20px;
+    font-size  : 1.6rem;
+    line-height: 2rem;
+
+}
+
+nb-select {
+    align-self: center;
+}
+
+
+// 
+
+.container {
+    // border   : 2px solid black;
+    // display  : flex;
+    // flex-wrap: wrap;
+}
+
+.box {
+    // flex         : 1 0 calc(20% - 100px);
+    // flex         : 0 1;
+    margin       : 5px;
+    background   : nb-theme(color-alternative-900);
+    border-radius: 5% !important;
+    border       : 2px solid rgba(0, 0, 0, 0.125);
+
+}
+
+.box:after {
+    content       : '';
+    display       : block;
+    padding-bottom: 100%;
+}
+
+.box1 {
+    border-color: nb-theme(color-basic-500) !important;
+    color       : nb-theme(color-basic-400) !important;
+    ;
+}
+
+.box2 {
+
+    border-color: nb-theme(color-primary-500) !important;
+    color       : nb-theme(color-primary-400) !important;
+    ;
+
+}
+
+.box3 {
+    border-color: nb-theme(color-warning-500) !important;
+    color       : nb-theme(color-warning-600) !important;
+    ;
+
+}
+
+.box4 {
+    border-color: nb-theme(color-danger-400) !important;
+    color       : nb-theme(color-danger-500) !important;
+
+    ;
+
+}
+
+.box5 {
+
+    border-color: nb-theme(color-danger-500) !important;
+    color       : nb-theme(color-danger-500) !important;
+
+
+
+}
+
+.textbox {
+    margin       : 0px !important;
+    margin-top   : 10px !important;
+    margin-bottom: 20px !important;
+}
+
+.box span {
+    font-size     : 10vmin !important;
+    // color      : nb-theme(color-text-basic-600) !important;
+    color         : nb-theme(text-color-basic);
+
+}
+
+:host {
+    justify-content: center;
+}

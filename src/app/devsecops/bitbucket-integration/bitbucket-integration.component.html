@@ -1,0 +1,121 @@
+<!-- <div fxFill style="padding: 2rem;" fxLayout="column" fxLayoutGap="2rem"> -->
+<div fxLayoutAlign="center">
+
+<nb-card fxFlex="1 1 900px">
+
+    <nb-card-header   fxLayoutAlign="center start">
+        <div fxFlex class="h5" fxLayoutAlign="start start">
+            Repositories Access Control
+        </div>
+
+   
+
+
+    </nb-card-header>
+
+ 
+
+    <nb-list>
+
+        <nb-list-item *ngFor="let project of projects | async">
+            <div fxFlex fxLayout="row">
+                <div fxFlex>
+                    {{project?.name }}
+                </div>
+
+                <div fxFlex>
+
+                    <ng-container [ngTemplateOutletContext]="{ data: project}" [ngTemplateOutlet]="businessList">
+
+                    </ng-container>
+
+
+                    <!-- <ng-container *ngTemplateOutlet="projectList">
+
+                    </ng-container> -->
+
+
+
+
+
+
+                </div>
+            </div>
+        </nb-list-item>
+
+    </nb-list>
+
+
+
+</nb-card>
+
+</div>
+
+<ng-template let-data="data" #businessList>
+
+    <button fullWidth status="success" *ngIf="data?.mapped_business?.businessId ; else noneSelected"
+        (click)="open(businessListDialog, data)" outline nbButton>
+
+
+        {{data?.mapped_business?.businessId?.name}}
+    </button>
+
+    <ng-template #noneSelected>
+
+        <button fullWidth (click)="open(businessListDialog, data)" outline nbButton>
+            None
+        </button>
+    </ng-template>
+
+    <!-- <nb-select fullWidth class="col-8" placeholder="Select Type" (selectedChange)="selectedChange()">
+
+        <nb-option *ngFor="let business of hawkiBusinesses | async" [value]="business?._id?.$oid">{{business?.name }}
+        </nb-option>
+    </nb-select> -->
+</ng-template>
+
+<ng-template let-ref="dialogRef" let-data #businessListDialog>
+
+    <nb-card size="medium">
+
+        <nb-card-header>
+            <h5>Select Business</h5>
+        </nb-card-header>
+        <nb-card-header style="padding: 0; margin: 0;">
+
+            <div class="search-input" fxLayoutAlign="center center" fxLayoutGap="1rem" fxLayout="row">
+
+                <input placeholder="Search" status="primary" nbInput  [(ngModel)]="query" id="search">
+
+            </div>
+        </nb-card-header>
+        <nb-list>
+            <nb-list-item style="padding: 0 ; margin: 0;">
+                <button (click)="saveBusiness(ref, data?.data?.uuid, null)" fxLayoutAlign="start center" ghost
+                    size="medium" nbButton fxFlex>
+                    None
+                </button>
+            </nb-list-item>
+            <nb-list-item style="padding: 0 ; margin: 0;" *ngFor="let business of hawkiBusinesses | async | searchBusiness: 'name':query ">
+                <button (click)="saveBusiness(ref, data?.data?.uuid, business?._id?.$oid)" fxLayoutAlign="start center"
+                    ghost size="medium" nbButton fxFlex>
+                    {{business?.name}} 
+                </button>
+            </nb-list-item>
+        </nb-list>
+    </nb-card>
+
+
+
+</ng-template>
+
+
+<ng-template #projectList>
+
+    <nb-select optionsPanelClass="optionsPanelClass" fullWidth class="col-8" placeholder="Select Type"
+>
+        <!-- <nb-option value="">--Select--</nb-option> -->
+        <nb-option *ngFor="let project of hawkiProjects | async" [value]="project?._id?.$oid">{{project?.name }}
+        </nb-option>
+    </nb-select>
+</ng-template>

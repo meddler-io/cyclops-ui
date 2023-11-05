@@ -1,0 +1,17 @@
+@import '../../../themes';
+
+
+
+
+button{
+    text-transform: capitalize !important;
+    font-weight: 500;
+}
+
+nb-card{
+    background: nb-theme(background-alternative-color-1);
+    border-radius: 1rem;
+}
+nb-card{
+    transition-duration: 0.3s;
+}

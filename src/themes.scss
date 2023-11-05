@@ -1,0 +1,185 @@
+// import Nebular Theme System and the default theme
+@forward '@nebular/theme/styles/theming';
+@use '@nebular/theme/styles/theming' as *;
+@use '@nebular/theme/styles/themes/default';
+@use '@nebular/theme/styles/themes/dark';
+// @import '~@nebular/theme/styles/themes/cosmic';
+
+$nb-enable-css-custom-properties: true; // <-- enable css custom properties
+
+
+
+
+$nb-themes: nb-register-theme((header-height: 3.6rem,
+        actions-divider-width: 0px,
+        layout-background-color: nb-theme(background-basic-color-1),
+        sidebar-padding: 0px,
+        toggle-width: 2.5em,
+        toggle-height: 1.5rem,
+        toggle-switcher-size: 1.4rem,
+        user-giant-name-text-font-size: 1.5rem,
+
+        input-large-text-font-size: 2rem,
+        input-large-placeholder-text-font-size :2rem,
+        input-large-placeholder-text-line-height: 3rem,
+        input-large-placeholder-text-font-weight: 300,
+        input-large-text-font-weight: 400,
+        input-large-text-line-height: 3rem,
+        //  
+
+        // 
+
+        route-tabset-tab-text-transform: capitalize,
+        route-tabset-tab-underline-width: 2px,
+
+        // route-tabset-tab-hover-underline-color: nb-theme(color-basic-600),
+        // route-tabset-tab-hover-text-color: nb-theme(color-basic-800),
+
+        route-tabset-divider-width: 1px,
+        route-tabset-scrollbar-width: 0em,
+        route-tabset-tab-padding: 0.5rem,
+        route-tabset-content-padding: 1rem,
+
+        route-tabset-content-text-line-height: 2rem,
+        route-tabset-tab-text-line-height: 2rem,
+
+
+
+        route-route-tabset-tab-text-font-size: 0.5rem,
+        route-route-tabset-tab-text-font-weight: 300,
+
+
+
+        // 
+
+        tabset-tab-text-transform: capitalize,
+        tabset-tab-underline-width: 2px,
+
+        // route-tabset-tab-hover-underline-color: nb-theme(color-basic-600),
+        // route-tabset-tab-hover-text-color: nb-theme(color-basic-800),
+
+        tabset-divider-width: 1px,
+        tabset-scrollbar-width: 0em,
+        tabset-tab-padding: 0.5rem,
+        tabset-content-padding: 1rem,
+
+        tabset-content-text-line-height: 2rem,
+        tabset-tab-text-line-height: 2rem,
+
+        // select-min-width: 350px,
+
+        // layout-padding: 0!important,
+
+
+        box-shadow: '0, 1rem, 2rem, 0, rgb(245, 244, 244)',
+
+        sidebar-width: 350px,
+        sidebar-height: calc(100% - nb-theme(header-height)),
+        header-padding: 0,
+
+        checkbox-width: 20px,
+        checkbox-height: 20px,
+
+
+
+
+        
+        
+        )
+        
+        , dark, dark);
+
+
+$nb-themes: nb-register-theme((header-height: 3.6rem,
+        actions-divider-width: 0px,
+
+        sidebar-padding: 0px,
+        toggle-width: 2.5em,
+        toggle-height: 1.5rem,
+        toggle-switcher-size: 1.4rem,
+        user-giant-name-text-font-size: 1.5rem,
+        checkbox-height: 2rem,
+        checkbox-width: 2rem,
+        input-large-text-font-size: 2rem,
+        input-large-placeholder-text-font-size :2rem,
+        input-large-placeholder-text-line-height: 3rem,
+        input-large-placeholder-text-font-weight: 300,
+        input-large-text-font-weight: 400,
+        input-large-text-line-height: 3rem,
+        // tabset-tab-padding: 1rem,
+
+
+        report-heading-outline:var(--card-header-primary-background-color),
+
+        // report-heading-outline:rgb(147, 147, 147),
+
+
+
+
+        report-component-outline:rgb(220, 218, 218),
+        report-heading-text-color: rgb(220, 218, 218),
+
+        menu-item-divider-width: 0,
+
+        menu-item-hover-background-color: #598bff,
+        menu-item-icon-hover-color: #fff,
+        menu-item-hover-text-color: #fff,
+        menu-item-border-radius: 0rem,
+        // menu-item-padding: 1rem,
+
+        menu-submenu-item-hover-background-color: #598bff,
+        menu-submenu-item-icon-hover-color: #fff,
+        menu-submenu-item-hover-text-color: #fff,
+        menu-submenu-item-border-radius: 1rem,
+        sidebar-header-height: 8rem,
+
+
+        // 
+
+        route-tabset-tab-text-transform: capitalize,
+        route-tabset-tab-underline-width: 2px,
+
+        // route-tabset-tab-hover-underline-color: nb-theme(color-basic-600),
+        // route-tabset-tab-hover-text-color: nb-theme(color-basic-800),
+
+        route-tabset-divider-width: 1px,
+        route-tabset-scrollbar-width: 0em,
+        route-tabset-tab-padding: 0.5rem,
+        route-tabset-content-padding: 1rem,
+
+        route-tabset-content-text-line-height: 2rem,
+        route-tabset-tab-text-line-height: 2rem,
+
+
+
+        route-route-tabset-tab-text-font-size: 0.5rem,
+        route-route-tabset-tab-text-font-weight: 300,
+
+
+
+        // 
+
+        tabset-tab-text-transform: capitalize,
+        tabset-tab-underline-width: 2px,
+
+        // route-tabset-tab-hover-underline-color: nb-theme(color-basic-600),
+        // route-tabset-tab-hover-text-color: nb-theme(color-basic-800),
+
+        tabset-divider-width: 1px,
+        tabset-scrollbar-width: 0em,
+        tabset-tab-padding: 0.5rem,
+        tabset-content-padding: 1rem,
+
+        tabset-content-text-line-height: 2rem,
+        tabset-tab-text-line-height: 2rem,
+
+        // select-min-width: 350px,
+
+        // 
+
+        // popover-background-color: #000,
+        // route-route-tabset-tab-text-font-size: 0.5rem,
+        // route-route-tabset-tab-text-font-weight: 300,
+
+
+    ), default, default);

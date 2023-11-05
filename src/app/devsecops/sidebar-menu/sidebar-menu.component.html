@@ -1,0 +1,43 @@
+<nb-card fxFill>
+
+    <nb-card-header style="margin-bottom: 10px;">
+        <div fxFlex>
+
+        
+            <span class="subtitle text-basic">
+                Ci/CD Operation Managements
+            </span>
+        </div>
+    </nb-card-header>
+
+    <!-- <nb-card-body> -->
+
+    <nb-list>
+
+        <nb-list-item *ngFor="let menuItem of menuItems">
+
+            <div class="list-item" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="start center" fxFlex>
+                <img class="icon" [src]=" menuItem?.icon" />
+                <div>
+
+                    {{
+                    menuItem?.title
+                    }}
+                </div>
+
+            </div>
+
+
+
+
+        </nb-list-item>
+
+    </nb-list>
+
+    <!-- </nb-card-body> -->
+
+    <nb-card-footer>
+
+    </nb-card-footer>
+
+</nb-card>

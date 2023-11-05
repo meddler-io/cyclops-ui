@@ -1,0 +1,57 @@
+<nb-layout>
+
+
+    <nb-layout-header fixed>
+
+        <div fxLayoutGap="1rem" fxLayout="row">
+
+            <div fxLayoutAlign="start center">
+                <button routerLink="/" nbButton ghost status="danger" size="large">
+                    <nb-icon icon="arrow-back-outline">
+                    </nb-icon>
+                </button>
+                <span fxHide.lt-sm fxShow routerLink="/" class="h6">
+                    Hawki
+                </span>
+
+            </div>
+            <div fxLayoutAlign="start center">
+
+                <nb-icon status="danger" icon="chevron-right-outline">
+                </nb-icon>
+
+                <span fxHide.lt-sm fxShow routerLink="/devsec" class="h6">
+                    Dashboard
+                    <span class="caption-2"> </span>
+                </span>
+
+            </div>
+
+
+
+        </div>
+
+
+    </nb-layout-header>
+
+    <nb-layout-column>
+
+
+
+        <div fxLayout="column">
+            {{
+                applicationIntUnIntStats | async | json
+            }}
+            <app-int-unint-apps>
+
+            </app-int-unint-apps>
+        </div>
+
+
+
+    </nb-layout-column>
+
+
+
+
+</nb-layout>
