@@ -142,7 +142,7 @@ import { RouterModule } from '@angular/router';
 
   ],
   providers: [
-    NbSidebarService,
+
     
     NbToastrService, ApiService , BranchValidatorService,
   
