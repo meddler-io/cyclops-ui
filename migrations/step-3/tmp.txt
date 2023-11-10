@@ -1,0 +1,145 @@
+report
+Report
+
+Dynamic Report
+Upload your assessment
+
+file
+attachments
+
+Title
+Defination
+title
+DEFINITION
+definition
+Defintion
+
+details
+Definition
+def
+DESC
+details
+Description
+desc
+dc
+df
+Description
+definition
+Definition
+dsc
+description
+Details
+des
+DESCRIPTION
+des
+Dscr
+dec
+DF
+
+mitigation
+Mitigation
+mit
+mtg
+Mtg
+MITIGATION
+MIT
+mitigation
+miti
+Mitigation
+Mitigations
+Mitigations
+mt
+
+Proof Of Concept(PoC)
+Proof of concept(PoC)
+Steps to reproduce
+steps to reproduce
+step
+Steps to Produce
+Steps To Produce
+steps to produce
+str
+Steps to reproduce
+steps to produce
+Step To Reproduce
+Steps To Produce 
+steps
+POC
+Steps to produce
+poc
+Steps tp produce
+stp
+PoC
+PROOF OF CONCEPT
+Proof of concept
+Proof Of Concept
+Proof of Concept
+STEPS TO PRODUCE
+Step To Produce
+proof of concept
+Steps to produce
+STEPS
+Steps To produce
+Steps to Produce
+Step to Reproduce
+proof of concept(Poc)
+sop
+Steps to Reproduce
+Proof Of Concept (PoC)
+Proof Of Concept 
+Step to reproduce
+Proof of concept (PoC)
+Poc(For GIRF)
+Poc(For Event)
+poc2
+poc1
+proof
+
+issues
+No issues found
+No Issue
+
+""
+
+categories
+xss type
+
+Impact
+Risk
+imp
+
+Remediation
+rmd
+rem
+
+ID
+
+Host Header Injection
+
+File Upload
+
+Infrastructure Scan Report
+
+Attachment
+
+information
+
+test
+
+in scope out of scope
+
+Revalidation Status
+
+Free Report
+
+Information
+
+FilePath Traversal
+
+Directory
+
+ip_addresses
+
+sql injection
+
+Additional Details

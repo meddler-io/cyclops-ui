@@ -1,0 +1,145 @@
+<nb-card fxFill>
+
+
+
+    <nb-card-header>
+
+        <!--  -->
+
+        <ng-container *ngIf="filteredControlOptions | async as business$">
+
+            <nb-form-field>
+                <input [formControl]="inputProjectFormControl" fxFlex ghost nbInput type="text"
+                    placeholder="Select project" [nbAutocomplete]="auto" />
+                <button nbPrefix nbButton ghost>
+                    <!-- Switch projects and business -->
+                    <nb-icon icon="at-outline" pack="eva"></nb-icon>
+
+                </button>
+            </nb-form-field>
+
+
+
+            <nb-autocomplete #auto [activeFirst]="true">
+                <!-- List ot projects -->
+
+                <nb-option-group [title]="business?.name" *ngFor="let business of  business$">
+                    <nb-option *ngFor="let project of  business?.projects" [value]=" project?._id?.$oid ">
+                        {{project?.name}}
+
+                    </nb-option>
+                </nb-option-group>
+
+
+            </nb-autocomplete>
+        </ng-container>
+
+        <!--  -->
+
+
+    </nb-card-header>
+
+
+
+
+
+    <nb-card-body>
+
+        <nb-list>
+
+            <!-- Risk Dashboard -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Business Wide Risk
+                </div>
+
+                <div>
+
+                </div>
+            </nb-list-item>
+
+            <!-- Web Applications -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Web Application
+                </div>
+
+                <button nbButton size="small" outline status="success"><nb-icon icon="plus"></nb-icon></button>
+
+
+            </nb-list-item>
+
+            <nb-list-item
+            (click)="manageApp(app?._id?.$oid)"
+            
+            *ngFor="let app of applications | async" [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]="[ {}, 'manage-apps'  ]" routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    {{app?.title}}
+                </div>
+            </nb-list-item>
+
+
+
+            <!--  -->
+            <!-- Web Service -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Web Service
+                </div>
+            </nb-list-item>
+
+            <nb-list-item
+            [routerLinkActiveOptions]="{ exact: false }"
+             [routerLink]="[   '../' ,  {      'outlets':    {     'primary': [ {},  'manage-apps' ,'appid' ] }      }     ]" 
+             routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Webservice I
+                </div>
+            </nb-list-item>
+
+            <!-- Android -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Android
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'manage-apps' ]"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Android App I
+                </div>
+            </nb-list-item>
+
+            <!-- iOS-->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    iOS Application
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'manage-apps' ]"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    iOS Application I
+
+                </div>
+            </nb-list-item>
+
+
+
+
+
+
+
+        </nb-list>
+
+
+
+    </nb-card-body>
+</nb-card>

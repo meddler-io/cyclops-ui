@@ -1,0 +1,431 @@
+<ng-template #lsRemoteDialog let-data let-ref="dialogRef">
+
+
+    <nb-card size="medium" fxFlex="0 1 500px">
+
+        <nb-card-header>
+            <h6 class="text-basic">
+
+
+                Information
+
+            </h6>
+        </nb-card-header>
+
+        <nb-card-body>
+
+            <ng-container *ngIf="data?.lsRemote | async as lsRemote  ; else loadingTemplate">
+                <ng-container *ngIf="lsRemote?.status_code >= -1 ; else invalidAccessTemplate">
+
+
+                    <div>
+
+                        <h6 style="line-height: 2rem; ">
+                            Website is reachable
+                        </h6>
+
+                        <h6 style="line-height: 2rem; ">
+                            Status Code
+                            <br>
+                            {{lsRemote?.status_code}}
+                        </h6>
+                    </div>
+
+                </ng-container>
+
+            </ng-container>
+
+        </nb-card-body>
+
+        <nb-card-footer fxLayoutGap="20px" fxLayoutAlign="end">
+
+            <button (click)="ref.close(true)" status="primary" size="medium" nbSuffix nbButton filled>
+                Save
+                <nb-icon icon="checkmark-outline">
+                </nb-icon>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+
+
+
+
+
+    <ng-template #loadingTemplate>
+
+        <div>
+            <h6 style="line-height: 2rem; ">
+                Checking connectivity to
+                <br>
+                {{data?.app_url}}
+            </h6>
+        </div>
+
+    </ng-template>
+
+
+
+</ng-template>
+
+<ng-template #repositorSaveyDialog let-data let-ref="dialogRef">
+
+
+
+    <ng-container *ngIf="data?.lsRemote | async as lsRemote  ; else loadingTemplate">
+
+
+        <ng-container *ngIf="lsRemote?.length == 0 ; else branchSelectorTemplate">
+
+            <nb-card fxFlex="0 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Access Denied
+                    </h5>
+                </nb-card-header>
+                <nb-card-body>
+
+                    <h6 style="line-height: 2rem; ">
+                        Invalid access / Invalid Repository
+                        <br>
+                        {{data?.git_url}}
+                    </h6>
+                </nb-card-body>
+
+            </nb-card>
+
+        </ng-container>
+
+        <ng-template #branchSelectorTemplate>
+
+
+            <nb-card fxFlex="1 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Select Branch
+                    </h5>
+
+                    <div fxLayoutAlign="end">
+                        {{ (lsRemote )?.length}} Branches
+                    </div>
+                </nb-card-header>
+
+                <nb-card-header style="padding: 0.3rem;">
+
+
+                    <div class="search-input" fxLayoutAlign="center center" fxLayoutGap="1rem" fxLayout="row">
+
+
+                        <input [formControl]="searchBranchFilter" focusOnce fullWidth placeholder="Search"
+                            status="basic" nbInput>
+
+
+
+                    </div>
+
+                </nb-card-header>
+
+
+                <!--  -->
+                <nb-list style="max-height: 500px;" fxLayout="column">
+                    <!-- style="  max-width: 500px; width: 100%; " -->
+
+
+
+                    <nb-list-item (click)="selectBranch(_branch)" [class.selected]="repositoryBranch?.value == _branch"
+                        *ngFor="let _branch of lsRemote  ">
+
+                        <div fxFlex>
+                            {{ _branch }}
+                        </div>
+
+                        <nb-icon class="loading-icon" *ngIf="gitBranchInputFormControl?.value == _branch"
+                            [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                        </nb-icon>
+
+
+                    </nb-list-item>
+                </nb-list>
+                <!--  -->
+                <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+                    <button status="basic" outline nbButton (click)="ref.close(false)">Cancel</button>
+                    <button (click)="ref.close(   repositoryBranch?.value  )" status="success" outline
+                        nbButton>Save</button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+
+    </ng-container>
+
+
+    <ng-template #loadingTemplate>
+
+        <nb-card fxFlex="0 1 500px" accent="primary">
+            <nb-card-header>
+                <h5 class="text-primary">
+
+                    <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                    </nb-icon>
+                    Validating Access
+                </h5>
+            </nb-card-header>
+            <nb-card-body>
+
+                <h6 style="line-height: 2rem; ">
+                    Validating access to
+                    <br>
+                    {{data?.git_url}}
+                </h6>
+            </nb-card-body>
+
+        </nb-card>
+
+    </ng-template>
+
+
+
+</ng-template>
+
+<nb-layout *ngIf="application | async as  application">
+
+    <nb-layout-header>
+
+        <div fxLayoutAlign="start" fxFlex>
+
+            <div class="buildListBtn" fxLayoutAlign="center center" fxLayout="row">
+
+
+                <div>
+                    Application Details
+                </div>
+            </div>
+
+            <div fxFlex fxLayoutAlign="end end">
+
+
+                <ng-container *ngFor="let tab of envs">
+
+                    <button [appearance]="rla?.isActive ?  'outline' : 'ghost' "
+                        [status]="rla?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                        [routerLink]=" [  '../' ,  tab?.route  ] " [routerLinkActiveOptions]="{ exact: false }"
+                        routerLinkActive #rla="routerLinkActive" nbButton>
+                        {{tab?.title}}
+                    </button>
+
+
+                </ng-container>
+
+
+
+            </div>
+
+        </div>
+
+    </nb-layout-header>
+
+  
+
+    <nb-layout-column *ngIf="application?.platform == 'webapp' ">
+
+
+        <nb-card size="=small">
+
+
+            <!-- Endpoint -->
+            <nb-card-body>
+
+
+
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div fxFlex fxLayout="row" style="font-size: 1rem; ;" class="text-hint ">
+
+                        <div fxFlex fxLayoutALign="start space-between ">
+
+                            Endpoint
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div fxFlex>
+
+                        <nb-form-field (click)="urlToggleEditMode()" fullWidth nbSpinnerStatus="danger">
+
+                            <span class="text-hint" nbPrefix>
+                                Url
+                            </span>
+
+
+                            <input (focusout)="urlFocusout()"
+                                (keyup.enter)="openDialog(lsRemoteDialog , application?._id?.$oid , url.value , application?.active_env  )"
+                                [readonly]="!urlEditEnabled" [status]=" ( url?.valid )   ?  'success' : 'basic' "
+                                [formControl]="url" status="primary" fullWidth type="text" nbInput fieldSize="giant"
+                                placeholder="https://example.your-website.com/">
+
+
+                        </nb-form-field>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </nb-card-body>
+
+
+            <!-- Code Repo -->
+            <nb-card-body>
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint " fxFlex>
+
+                        Code Repository
+                    </div>
+
+                    <div fxFlex fxLayoutAlign="center center">
+
+                        <nb-form-field (click)="repositoryToggleEditMode()" fxFlex nbSpinnerStatus="danger">
+
+                            <span class="text-hint" nbPrefix>
+                                ssh
+                            </span>
+
+                            <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+                            </nb-icon> -->
+
+                            <input (focusout)="repositoryFocusout()"
+                                (keyup.enter)="openDialogToSaveRepository(repositorSaveyDialog , application?._id?.$oid , repository.value , application?.active_env  )"
+                                [readonly]="!repositoryEditEnabled"
+                                [status]=" ( repository?.valid )   ?  'success' : 'basic' " [formControl]="repository"
+                                fullWidth type="text" nbInput fieldSize="giant"
+                                placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
+
+
+                        </nb-form-field>
+                    </div>
+
+                    <div *ngIf="repositoryBranch?.valid" fxLayoutAlign="end" style="font-size: 1.2rem;  "
+                        class="text-hint " fxFlex>
+
+                        <nb-icon icon="corner-up-right-outline"></nb-icon>
+                        <span style="font-size: 1.1rem; ; margin-right: 1rem; ">
+
+                            {{repositoryBranch?.value}}
+                        </span>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </nb-card-body>
+
+
+
+
+
+        </nb-card>
+
+
+
+
+
+
+    </nb-layout-column>
+
+    <nb-layout-column *ngIf="application?.platform != 'webapp' ">
+
+
+        <nb-card size="=small">
+
+
+
+
+            <!-- Binary File -->
+            <nb-card-body>
+
+
+
+                <input [accept]="  allowed_extensions_for_file_upload[application?.platform] " style="display: none"
+                    type="file" #file multiple nbInput fieldSize="medium"
+                    (change)="onFilesAdded( application?._id?.$oid , application?.platform , application?.active_env )" />
+
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint " fxFlex>
+                        Upload File ({{application?.platform}})
+
+                    
+
+                    </div>
+
+                    <div fxFlex fxLayoutAlign="center center">
+
+                        <nb-form-field (click)="uploadFile(    )" fxFlex nbSpinnerStatus="danger">
+
+                            <span class="text-hint" nbPrefix>
+                                File
+                            </span>
+
+                            <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+                            </nb-icon> -->
+
+                            <input [readonly]="true"
+                                [status]=" ( fileArtifact?.id?.length > 0 )   ?  'success' : 'basic' "
+                                [value]="fileArtifact?.filename" fullWidth type="text" nbInput fieldSize="giant"
+                                placeholder="Upload file">
+
+                       
+
+
+                        </nb-form-field>
+                    
+                    </div>
+
+                    <div
+                    *ngIf="fileArtifact?.filename?.length > 0"
+                    fxLayoutAlign="end"
+                    >
+                        <button nbButton size="small" nbSuffix (click)="download(  application?._id?.$oid  , application?.active_env )">
+                            Download
+                        </button>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+            </nb-card-body>
+
+
+
+        </nb-card>
+
+
+
+
+
+
+    </nb-layout-column>
+</nb-layout>

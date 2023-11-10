@@ -1,9 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
-import { BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
-import { delay, distinct, distinctUntilChanged, distinctUntilKeyChanged, filter, first, map, mergeMap, share, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable, of, pipe, Subject } from 'rxjs';
+import { catchError, delay, distinct, distinctUntilChanged, distinctUntilKeyChanged, filter, first, map, mergeMap, share, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TransitionState } from './build-item/build-item.component';
 
@@ -12,6 +12,162 @@ export const PUBLIC_SSH_KEY = `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bkdt4M4kJ
 
 @Injectable()
 export class ApiService {
+
+
+
+  // new API
+  getApplications(platform: any = undefined) {
+    return this.getRequest('api/v1/devsecops/apps').pipe(
+      map(_ => _?.data)
+    )
+  }
+  getApplicationById(id: string) {
+    return this.getRequest(`api/v1/devsecops/app/${id}`).pipe(
+      map(_ => _?.data)
+    )
+  }
+  updateApplicationById(id: string, env: string, data) {
+    return this.postRequest(`api/v1/devsecops/app/${env}/${id}`,
+      data
+
+    ).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  public upload(file: File, id: string, env: string) {
+
+    let fileId = 'fileId';
+    // this will be the our resulting map
+    // const status: { [key: string]: { progress: Observable<Object> } } = {};
+
+    // create a new multipart-form for every file
+    const formData: FormData = new FormData();
+    formData.append('files', file, file.name);
+    // formData.append('data', 'fileUploading');
+
+
+    // create a http-post request and pass the form
+    // tell it to report the upload progress
+
+    let headers = new HttpHeaders();
+
+    // headers = headers.append('content-type', "multipart/form-data");
+
+    let req = this.http.post(this.localUrl + '/api/v1/devsecops/upload', formData, {
+      reportProgress: true,
+      observe: 'events',
+
+    })
+
+    // create a new progress-subject for every file
+    // const progrxess = new Subject<any>();
+
+    // send the http-request and subscribe for progress-updates
+    return req.pipe(
+
+      map(
+
+        (event) => {
+
+          console.log('event.type', event.type);
+          if (event.type === HttpEventType.UploadProgress) {
+
+            // calculate the progress percentage
+            const percentDone = Math.round(100 * event.loaded / event.total);
+
+            // pass the percentage into the progress-stream
+
+            // progress.next({ "progress": percentDone, "id": fileId });
+            return of({ "progress": percentDone, "id": fileId, "completed": false });
+          } else if (event.type === HttpEventType.Response) {
+
+            // Close the progress-stream if we get an answer form the API
+            let url = environment.minio_url + event.body['files'][0]['presigned_url'];
+            let filedata = event.body['files'][0]['data'];
+            console.log('boommmeer', url);
+
+            return this.http.put(url, file, { withCredentials: true }).pipe(
+
+              map(res => {
+
+                return this.updateApplicationById(id, env,
+                  { 'file': filedata },
+                ).pipe(
+                  map(
+                    _ => {
+                      return { "progress": 100, "data": _, "id": fileId, "completed": true };
+
+                    }
+                  ));
+
+
+                return this.http.post(this.localUrl + '/api/v1/devsecops/upload_linker',
+                  filedata).pipe(
+                    map(data => {
+                      console.log(data);
+                      if (data["status"] == true) {
+                        // progress.next({ "progress": 100, "data": data['data'], "id": fileId })
+                        // progress.complete();
+                        return { "progress": 100, "data": data['data'], "id": fileId, "completed": true };
+
+
+                      }
+                      else {
+                        this.toastrService.danger("Error occurred while uploading file!!");
+                        return { "status": false }
+                      }
+
+                    })
+                  )
+
+              }
+
+              )
+
+              ,
+
+              mergeMap(_ => _)
+
+            )
+            // The upload is complete
+            // progress.next({ "progress": 100, "data": event.body, "id": fileId })
+            // progress.complete();
+          } else {
+            console.log('event.type');
+
+            return of({ "progress": 100, "completed": false });
+          }
+          // progress.next(123);
+          // 
+        }
+      )
+
+
+
+      // ,
+      // mergeMap(_ => progress)
+    )
+
+
+
+
+    // return the map of progress.observables
+    // return status;
+  }
+
+
+
+
+
+  businessMaping() {
+    return this.getRequest('api/v1/business/businessMaping', {
+    }).pipe(
+      map(_ => _.data)
+    )
+
+  }
+
   addAssetUrl(url, applicationId) {
 
     return this.putRequest('api/v1/business/assets/dns', {
@@ -32,8 +188,8 @@ export class ApiService {
     return this.getRequest('api/v1/business/assets/dns/' + applicationId).pipe(
       map(_ => {
         _?.data?.unshift({
-          domain:  'All',
-          _id:  {
+          domain: 'All',
+          _id: {
             '$oid': '*'
           }
 
@@ -541,6 +697,47 @@ export class ApiService {
       map(_ => _?.data)
     )
   }
+
+
+
+  getAssessmentsFindings(page_number: number = 1) {
+
+    return this.getRequest('api/v1/customer/assesment/beta_findings', {
+      // 'cursor_id': '652d14878eacec4be51de38d',
+      // 'type': 'OLD'
+      page: page_number,
+    }).pipe(
+
+      tap(
+        _ => {
+          console.log(_)
+        }
+      ),
+
+
+    )
+
+  }
+
+  getAssessments(page_number: number = 1) {
+
+    return this.getRequest('api/v1/customer/assesment/history', {
+      // 'cursor_id': '652d14878eacec4be51de38d',
+      // 'type': 'OLD'
+      page: page_number,
+    }).pipe(
+
+      tap(
+        _ => {
+          console.log(_)
+        }
+      ),
+
+
+    )
+
+  }
+
 
   getFindings(applicationId, buildId, severityFilter, sortBy, offset, limit) {
 
@@ -1363,6 +1560,38 @@ export class ApiService {
       map(_ => _?.data)
     )
   }
+
+  download(fileId, env) {
+
+
+    // window.location.href = `${this.localUrl}/api/v1/download/${fileId}`
+    // let headers = new HttpHeaders();
+    // headers = headers.append('businessName', businessName);
+    // headers = headers.append('projectName', projectName);
+
+
+
+    return this.getRequest(`api/v1/devsecops/download/${env}/${fileId}` )
+      .pipe(
+        map(data => {
+          if (data.status == true) {
+            let url = environment.minio_url + data.data["url"]
+            let filename = data.data["filename"]
+            console.log('minio_url', url)
+
+            window.open(url, '_blank')
+          }
+          else
+            this.toastrService.danger("Some error occured while downloading file!!");
+
+        }
+        )
+      )
+
+
+
+  }
+
 
 
 

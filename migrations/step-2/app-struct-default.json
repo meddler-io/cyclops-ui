@@ -1,0 +1,146 @@
+{
+    "businessId": {
+        "$oid": "5e0dbb0709caf2fedfd310f8"
+    },
+    "businessName": "Application and Security",
+    "projectId": {
+        "$oid": "5e2966b8557f3d8c94e42706"
+    },
+    "projectName": "Hawki Test",
+    "platformId": {
+        "$oid": "5e0dd2a6ae21f272971db085"
+    },
+    "platformName": "Web Application",
+    "application": {
+        "applicationId": {
+            "$oid": "5fd9d91331a6a8556c11b34a"
+        },
+        "applicationName": "Web Application",
+        "latest_build": {
+            "_id": {
+                "$oid": "620b3f7ce0b84ee0f51549c3"
+            },
+            "buildNo": "4251",
+            "jenkinsJob": "test_job",
+            "businessId": {
+                "$oid": "5e0dbb0709caf2fedfd310f8"
+            },
+            "businessName": "5e0dbb0709caf2fedfd310f8",
+            "projectId": {
+                "$oid": "5e2966b8557f3d8c94e42706"
+            },
+            "projectName": "5e2966b8557f3d8c94e42706",
+            "platformId": {
+                "$oid": "5e0dd2a6ae21f272971db085"
+            },
+            "platformName": "Web Application",
+            "applicationId": {
+                "$oid": "5fd9d91331a6a8556c11b34a"
+            },
+            "applicationName": "5fd9d91331a6a8556c11b34a",
+            "scan_data": {
+                "APP_URL": "",
+                "APP_TYPE": "web",
+                "LANG_NAME": "java",
+                "GIT_URL": "",
+                "DEP_TIME": "1000"
+            },
+            "tools_execution_config": {},
+            "state_requested": true,
+            "state_requested_ts": {
+                "$date": 1644904316157
+            },
+            "transition_state": 0,
+            "raw_request_sent_for_execution": {
+                "SUDO_GID": "16777216",
+                "LESSOPEN": "| /usr/bin/lesspipe %s",
+                "JENKINS_HOME": "/var/jenkins_home",
+                "MAIL": "/var/mail/root",
+                "USER": "root",
+                "RUN_CHANGES_DISPLAY_URL": "http://172.24.42.13:8080/job/test_job/4251/display/redirect?page=changes",
+                "NODE_LABELS": "hawki_minio_87 hawki_ui",
+                "HUDSON_URL": "http://172.24.42.13:8080/",
+                "SHLVL": "1",
+                "OLDPWD": "/home/vaishali.agarwal",
+                "HOME": "/root",
+                "BUILD_URL": "http://172.24.42.13:8080/job/test_job/4251/",
+                "HUDSON_COOKIE": "49b53e50-8c16-462d-be66-8cad84c62a2b",
+                "JENKINS_SERVER_COOKIE": "0215c26a2f1899d3",
+                "LC_CTYPE": "C.UTF-8",
+                "WORKSPACE": "/opt/docker/workspace/test_job",
+                "SUDO_UID": "16777216",
+                "LOGNAME": "root",
+                "NODE_NAME": "hawki_minio_87",
+                "_": "/usr/bin/nohup",
+                "RUN_ARTIFACTS_DISPLAY_URL": "http://172.24.42.13:8080/job/test_job/4251/display/redirect?page=artifacts",
+                "EXECUTOR_NUMBER": "0",
+                "TERM": "xterm-256color",
+                "USERNAME": "root",
+                "RUN_TESTS_DISPLAY_URL": "http://172.24.42.13:8080/job/test_job/4251/display/redirect?page=tests",
+                "BUILD_DISPLAY_NAME": "#4251",
+                "HUDSON_HOME": "/var/jenkins_home",
+                "JOB_BASE_NAME": "test_job",
+                "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
+                "BUILD_ID": "4251",
+                "BUILD_TAG": "jenkins-test_job-4251",
+                "LANG": "en_US.UTF-8",
+                "JENKINS_URL": "http://172.24.42.13:8080/",
+                "JOB_URL": "http://172.24.42.13:8080/job/test_job/",
+                "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:",
+                "SUDO_COMMAND": "/bin/su",
+                "BUILD_NUMBER": "4251",
+                "KRB5CCNAME": "FILE:/tmp/krb5cc_16777216",
+                "SHELL": "/bin/bash",
+                "RUN_DISPLAY_URL": "http://172.24.42.13:8080/job/test_job/4251/display/redirect",
+                "LESSCLOSE": "/usr/bin/lesspipe %s %s",
+                "SUDO_USER": "vaishali.agarwal",
+                "HUDSON_SERVER_COOKIE": "0215c26a2f1899d3",
+                "JOB_DISPLAY_URL": "http://172.24.42.13:8080/job/test_job/display/redirect",
+                "JOB_NAME": "test_job",
+                "PWD": "/opt/docker/workspace/test_job",
+                "WORKSPACE_TMP": "/opt/docker/workspace/test_job@tmp",
+                "APP_URL": "",
+                "APP_TYPE": "web",
+                "LANG_NAME": "java",
+                "GIT_URL": "",
+                "DEP_TIME": "1000",
+                "BSN_HIER": "5e0dbb0709caf2fedfd310f8/5e2966b8557f3d8c94e42706/Web_Application/5fd9d91331a6a8556c11b34a",
+                "BSN_NAME": "5e0dbb0709caf2fedfd310f8",
+                "PRO_NAME": "5e2966b8557f3d8c94e42706",
+                "PLAT_NAME": "Web Application",
+                "APPL_NAME": "5fd9d91331a6a8556c11b34a",
+                "HAWKI_WEBHOOK": "http://hawki-beta.indiatimes.com:9080/api/v1/devsecops/exposed_webhook"
+            },
+            "status": "FAIL",
+            "error_msg": "some error occured while getting status end point!!",
+            "state_download_raw": false,
+            "state_download_raw_ts": {
+                "$date": 1644904316350
+            },
+            "state_enqueued": false,
+            "state_enqueued_ts": {
+                "$date": 1644904316350
+            },
+            "state_parsing_completed": false,
+            "state_parsing_completed_ts": {
+                "$date": 1644904316350
+            },
+            "state_parsing_started": false,
+            "state_parsing_started_ts": {
+                "$date": 1644904316350
+            },
+            "state_pushed_to_parser": false,
+            "state_pushed_to_parser_ts": {
+                "$date": 1644904316350
+            }
+        },
+        "noOfBuilds": 569
+    },
+    "index": 1,
+    "config": {
+        "git_repo": "https://github.com/digininja/DVWA.git",
+        "git_branch": "master",
+        "app_url": "https://portal.gaana.com/",
+        "integrated": true
+    }
+}

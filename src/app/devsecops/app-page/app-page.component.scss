@@ -1,0 +1,42 @@
+@import '../../../themes';
+
+
+nb-layout-column {
+  padding: 0 !important;
+}
+
+button {
+  margin: 0.1rem;
+  text-transform: capitalize !important;
+}
+
+nb-list {
+  display   : block;
+  background: nb-theme(background-basic-color-4);
+  padding   : 1rem;
+  ;
+
+}
+
+nb-list-item {
+  background   : nb-theme(background-basic-color-3);
+  color        : nb-theme(text-basic-color);
+  border-radius: 5px;
+  font-weight  : 700;
+  transition   : 0.3s;
+
+  &.selected {
+      background: nb-theme(color-success-active);
+      color     : nb-theme(text-alternate-color);
+  }
+
+  &:hover {
+      // background: nb-theme(color-basic-100) !important;
+      background: nb-theme(color-success-hover);
+      color     : nb-theme(text-alternate-color);
+
+  }
+
+
+
+}

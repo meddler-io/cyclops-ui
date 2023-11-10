@@ -21,33 +21,7 @@
 
     </nb-card-header>
 
-    <nb-card-header>
 
-        <!--  -->
-
-
-        <nb-form-field>
-            <input fxFlex ghost nbInput type="text" placeholder="Enter value" [nbAutocomplete]="auto" />
-            <button nbPrefix nbButton ghost>
-                <!-- Switch projects and business -->
-                <nb-icon icon="at-outline" pack="eva"></nb-icon>
-
-            </button>
-        </nb-form-field>
-
-        <nb-autocomplete #auto [activeFirst]="true">
-            <!-- List ot projects -->
-
-            <nb-option value="1">Option 1</nb-option>
-            <nb-option value="2">Option 2</nb-option>
-            <nb-option value="3">Option 3</nb-option>
-            <nb-option value="4">Option 4</nb-option>
-
-        </nb-autocomplete>
-        <!--  -->
-
-
-    </nb-card-header>
 
     <nb-card-footer class="nb-card-footer" fxLayout="column" *ngIf="selectedApp | async as selectedApp">
 
@@ -136,13 +110,15 @@
 
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="manage-apps" routerLinkActive="active"
-                class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ { 'outlets': {'sidebar':  'manage-apps'  } } ]"
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
                     Manage
                 </div>
             </nb-list-item>
+
+ 
 
             <!-- VA/PT -->
             <nb-list-item class="subitem-header">
@@ -157,16 +133,16 @@
 
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="assesments" routerLinkActive="active"
-                class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'assesments' ] "
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
                     Assessments
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="builds" routerLinkActive="active"
-                class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'issues' ] "
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
                     Issues
@@ -191,9 +167,9 @@
             </nb-list-item>
 
 
-            
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="builds" routerLinkActive="active"
-                class="subitem">
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="  [{}, 'builds'] "
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
                     Scans
@@ -202,7 +178,7 @@
 
 
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="static_scans"
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'static_scans' ]"
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/color-glass/48/000000/code.png" />
@@ -211,7 +187,7 @@
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="dynamic_scans"
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'dynamic_scans' ] "
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
@@ -230,31 +206,31 @@
 
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="dns" routerLinkActive="active"
-                class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'dns']"
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
                     DNS
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="quick_scan" routerLinkActive="active"
-                class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'quick_scan']"
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
                     Findings
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="recon_jobs" routerLinkActive="active"
-                class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'recon_jobs']"
+                routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
                     Recon Jobs
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="quick_scan_admin"
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'quick_scan_admin']"
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
@@ -265,7 +241,7 @@
 
 
 
-            <!-- <nb-list-item [routerLinkActiveOptions]="{ exact: false }" routerLink="dns_discovered"
+            <!-- <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="dns_discovered"
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
@@ -287,7 +263,7 @@
 
 
             <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('view', 'active_protection') | async"
-                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'scans' ]"
+                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {} ,  'scans' ]"
                 [class.disabled]="false">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/shield.png" />
@@ -299,7 +275,7 @@
 
             <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('view', 'active_protection') | async"
                 routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
-                [routerLink]="[ 'active_protection' ]" [class.disabled]="false">
+                [routerLink]="[ {} ,  'active_protection' ]" [class.disabled]="false">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/shield.png" />
                     Configuration
@@ -316,7 +292,7 @@
 
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool_scans' ] "
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {} ,  'external_tool_scans' ] "
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
@@ -324,7 +300,7 @@
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool' ] "
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {} , 'external_tool' ] "
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
@@ -343,15 +319,15 @@
 
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool_scans_new' ] "
-                routerLinkActive="active" class="subitem">
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]="[ {} ,  'external_tool_scans_new' ] " routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
                     Scans
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ 'external_tool_new' ] "
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[  {} , 'external_tool_new' ] "
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />
@@ -396,7 +372,7 @@
 
             <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('modify', 'bitbucket') | async"
                 routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
-                [routerLink]="[ 'bitbucket', 'manage' ]" [class.disabled]="false">
+                [routerLink]="[ {} ,  'bitbucket', 'manage' ]" [class.disabled]="false">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/shield.png" />
                     Bitbucket Access Control
@@ -405,7 +381,7 @@
 
             <nb-list-item class="subitem" *ngIf="accessChecker.isGranted('modify', 'bitbucket') | async"
                 routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
-                [routerLink]="[ 'active_protection' ]" [class.disabled]="false">
+                [routerLink]="[ {} ,  'active_protection' ]" [class.disabled]="false">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/shield.png" />
                     Configuration

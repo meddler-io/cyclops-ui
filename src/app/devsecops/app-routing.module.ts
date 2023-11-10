@@ -30,6 +30,11 @@ import { AssetsDnsComponent } from "./assets-dns/assets-dns.component";
 import { AssetsDnsDiscoveredComponent } from "./assets-dns-discovered/assets-dns-discovered.component";
 import { QuickScanJobsComponent } from "./quick-scan-jobs/quick-scan-jobs.component";
 import { VaptFindingsComponent } from "./vapt-findings/vapt-findings.component";
+import { ManageAppsComponent } from "./manage-apps/manage-apps.component";
+import { ManageAppsSidebarComponent } from "./manage-apps-sidebar/manage-apps-sidebar.component";
+import { AssessmentsComponent } from "./assessments/assessments.component";
+import { IssuesComponent } from "./issues/issues.component";
+import { AppPageComponent } from "./app-page/app-page.component";
 
 
 
@@ -58,10 +63,6 @@ const appRoutes: Routes = [
     component: BootstrapComponent,
   },
 
-  {
-    path: ':app_id/dashboard',
-    component: BootstrapComponent,
-  },
 
   {
     path: 'configure/:app_id',
@@ -109,6 +110,7 @@ const appRoutes: Routes = [
   {
     path: ':app_id',
     component: BootstrapComponent,
+    outlet: 'primary',
 
     children: [
 
@@ -372,7 +374,13 @@ const appRoutes: Routes = [
 
 
       {
-        path: 'assesments', component: VaptFindingsComponent
+        path: 'assesments', component: AssessmentsComponent
+        // path: 'assesments', component: VaptFindingsComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'issues', component: IssuesComponent
+        // path: 'assesments', component: VaptFindingsComponent
         , pathMatch: 'full'
       },
       {
@@ -641,8 +649,29 @@ const appRoutes: Routes = [
 
       ,
 
+      {
+        path: 'manage-apps/:appid/:env',
+        component: AppPageComponent
+        , pathMatch: 'full',
 
+      },
+ 
+      {
+        path: 'manage-apps/:appid',
+        redirectTo: 'manage-apps/:appid/development'
+        , pathMatch: 'full',
 
+      },
+
+      {
+        path: 'manage-apps',
+        component: ManageAppsComponent
+        , pathMatch: 'full',
+
+      },
+
+    
+      
       {
         path: 'builds/nobuilds',
         component: NullBuildsComponent
@@ -908,6 +937,9 @@ const appRoutes: Routes = [
       },
 
       { path: '', component: SidebarComponent, outlet: 'sidebar' },
+      { path: 'manage-apps', component: ManageAppsSidebarComponent, outlet: 'sidebar' },
+      { path: '**', component: SidebarComponent, redirectTo: '',   outlet: 'sidebar' },
+
       {
         path: '**', redirectTo: 'configure',
         pathMatch: 'full'

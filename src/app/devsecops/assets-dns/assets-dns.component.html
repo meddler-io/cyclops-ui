@@ -1,71 +1,90 @@
-<nb-card fxFill>
-    <nb-card-header>
-        <div fxFlex class="h5" fxLayoutAlign="start start">
-            DNS Assets
-        </div>
+<nb-layout>
 
+    <nb-layout-header>
 
-        <button (click)="openDialog( addDomainDialog )" status="primary" size="small" nbButton hero>
-            Add
-            <nb-icon icon="plus-outline">
-            </nb-icon>
-        </button>
+        <div style="margin-left: 2rem;" fxLayoutAlign="space-between" fxFlex>
 
-    </nb-card-header>
+            <div class="buildListBtn" fxLayoutAlign="center center" fxLayout="row">
 
-
-
-    <nb-list>
-        <nb-list-item *ngFor="let url of assetUrls | async">
-
-            <div fxFlex fxLayout="column">
-
-                <div fxFlex fxLayoutAlign="space-between">
-
-                    <div fxFlex>
-                        {{ url?.domain }}
-                    </div>
-                    <div fxLayoutGap="0.4rem">
-
-
-                        <button (click)="openDialog( addDomainDialog )" status="success" size="tiny" nbButton outline>
-                            {{url?.total_subdomains}}
-                        </button>
-
-                        <button [routerLink]="url?._id?.$oid" status="secondary" size="tiny" nbButton control>
-                            Explore
-                        </button>
-
-
-                        <button (click)="removeUrl( url?._id?.$oid  )" status="danger" size="tiny" nbButton control>
-                            Delete
-                        </button>
-
-                        <button (click)="runQuickDynamicScan( url?.domain  )" status="primary" size="tiny" nbButton
-                            control>
-                            Scan
-                        </button>
-
-
-
-
-
-                        <button (click)="runScan( url?.domain  )" status="primary" size="tiny" nbButton control>
-                            Recon
-                        </button>
-
-
-
-                    </div>
-
-                </div>
-
+                DNS Assets
 
             </div>
 
-        </nb-list-item>
-    </nb-list>
-</nb-card>
+
+            <nb-form-field>
+                <input fxFlex ghost nbInput type="text" placeholder="Enter domain name"  />
+                <button nbPrefix nbButton ghost>
+                    <!-- Switch projects and business -->
+                    <nb-icon icon="at-outline" pack="eva"></nb-icon>
+    
+                </button>
+            </nb-form-field>
+
+        </div>
+
+    </nb-layout-header>
+
+
+
+
+    <nb-layout-column>
+        <nb-list class="body">
+            <nb-list-item *ngFor="let url of assetUrls | async">
+
+                <div fxFlex fxLayout="column">
+
+                    <div fxFlex fxLayoutAlign="space-between">
+
+                        <div fxFlex>
+                            {{ url?.domain }}
+                        </div>
+                        <div fxLayoutGap="0.4rem">
+
+
+                            <button (click)="openDialog( addDomainDialog )" status="success" size="tiny" nbButton
+                                outline>
+                                {{url?.total_subdomains}}
+                            </button>
+
+                            <button [routerLink]="url?._id?.$oid" status="secondary" size="tiny" nbButton control>
+                                Explore
+                            </button>
+
+
+                            <button (click)="removeUrl( url?._id?.$oid  )" status="danger" size="tiny" nbButton control>
+                                Delete
+                            </button>
+
+                            <button (click)="runQuickDynamicScan( url?.domain  )" status="primary" size="tiny" nbButton
+                                control>
+                                Scan
+                            </button>
+
+
+
+
+
+                            <button (click)="runScan( url?.domain  )" status="primary" size="tiny" nbButton control>
+                                Recon
+                            </button>
+
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </nb-list-item>
+        </nb-list>
+    </nb-layout-column>
+</nb-layout>
+
+
+
+
 
 <ng-template #addDomainDialog let-data let-ref="dialogRef">
 

@@ -21,7 +21,8 @@
     "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    // "fullTemplateTypeCheck": true,
+    // "strictInjectionParameters": true,
+    "enableIvy": false
   }
 }

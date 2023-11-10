@@ -104,6 +104,8 @@ export class BootstrapComponent implements OnInit, OnDestroy {
   )
 
   ngOnInit(): void {
+  
+
     this.themeService.changeTheme('dark');
     // this.apiService.init()
 

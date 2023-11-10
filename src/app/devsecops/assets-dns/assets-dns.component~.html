@@ -1,0 +1,163 @@
+<nb-layout>
+
+    <nb-layout-header>
+
+        <div style="margin-left: 2rem;" fxLayoutAlign="space-between" fxFlex>
+
+            <div class="buildListBtn" fxLayoutAlign="center center" fxLayout="row">
+
+                DNS Assets
+
+            </div>
+
+
+            <nb-form-field>
+                <input fxFlex ghost nbInput type="text" placeholder="Enter domain name"  />
+                <button nbPrefix nbButton ghost>
+                    <!-- Switch projects and business -->
+                    <nb-icon icon="at-outline" pack="eva"></nb-icon>
+    
+                </button>
+            </nb-form-field>
+
+        </div>
+
+    </nb-layout-header>
+
+
+
+
+    <nb-layout-column>
+        <nb-list class="body">
+            <nb-list-item *ngFor="let url of assetUrls | async">
+
+                <div fxFlex fxLayout="column">
+
+                    <div fxFlex fxLayoutAlign="space-between">
+
+                        <div fxFlex>
+                            {{ url?.domain }}
+                        </div>
+                        <div fxLayoutGap="0.4rem">
+
+
+                            <button (click)="openDialog( addDomainDialog )" status="success" size="tiny" nbButton
+                                outline>
+                                {{url?.total_subdomains}}
+                            </button>
+
+                            <button [routerLink]="url?._id?.$oid" status="secondary" size="tiny" nbButton control>
+                                Explore
+                            </button>
+
+
+                            <button (click)="removeUrl( url?._id?.$oid  )" status="danger" size="tiny" nbButton control>
+                                Delete
+                            </button>
+
+                            <button (click)="runQuickDynamicScan( url?.domain  )" status="primary" size="tiny" nbButton
+                                control>
+                                Scan
+                            </button>
+
+
+
+
+
+                            <button (click)="runScan( url?.domain  )" status="primary" size="tiny" nbButton control>
+                                Recon
+                            </button>
+
+
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </nb-list-item>
+        </nb-list>
+    </nb-layout-column>
+</nb-layout>
+
+
+
+
+
+<ng-template #addDomainDialog let-data let-ref="dialogRef">
+
+    <nb-card size="medium">
+
+
+        <nb-card-header fxLayoutAlign="center space-between">
+            <div fxFlex class="h5" fxLayoutAlign="start start">
+                Add Domain
+            </div>
+
+
+
+        </nb-card-header>
+
+        <nb-card-body fxFlex fxLayoutAlign="center center">
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                <div style="font-size: 1.2rem; ;" class="text-hint " fxFlex>
+
+                    Website Url
+                </div>
+
+
+
+                <div fxFlex fxLayoutAlign="center center">
+
+
+
+
+
+                    <nb-form-field fxFlex nbSpinnerStatus="danger">
+
+                        <span class="text-hint" nbPrefix>
+                            Url
+                        </span>
+
+                        <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+                    </nb-icon> -->
+
+                        <input [formControl]="urlFormField" status="primary" fullWidth type="text" nbInput
+                            fieldSize="giant" placeholder="https://example.your-website.com/">
+
+
+                    </nb-form-field>
+                </div>
+
+
+
+            </div>
+
+
+        </nb-card-body>
+
+
+
+        <nb-card-footer fxLayoutGap="20px" fxLayoutAlign="end">
+
+            <button (click)="ref.close()" status="danger" size="small" nbSuffix nbButton hero>
+                Cancel
+                <nb-icon icon="refresh-outline">
+                </nb-icon>
+            </button>
+
+            <button [disabled]="urlFormField?.invalid" (click)="addUrl( ref  )" status="primary" size="small" nbSuffix
+                nbButton filled>
+                Save
+                <nb-icon icon="checkmark-outline">
+                </nb-icon>
+            </button>
+        </nb-card-footer>
+    </nb-card>
+
+
+</ng-template>

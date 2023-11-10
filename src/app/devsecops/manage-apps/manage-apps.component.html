@@ -1,0 +1,36 @@
+<nb-layout>
+
+    <nb-layout-header>
+
+        <div style="margin-left: 2rem;" fxLayoutAlign="space-between" fxFlex>
+
+            <div class="buildListBtn" fxLayoutAlign="center center" fxLayout="row">
+
+                Manage Apps
+
+            </div>
+            
+
+
+            <nb-form-field>
+                <input fxFlex ghost nbInput type="text" placeholder="Application Name"  />
+                <button nbPrefix nbButton ghost>
+                    <nb-icon icon="at-outline" pack="eva"></nb-icon>
+    
+                </button>
+            </nb-form-field>
+
+        </div>
+
+    </nb-layout-header>
+
+
+
+
+    <nb-layout-column>
+ 
+        <app-list>
+
+        </app-list>
+    </nb-layout-column>
+</nb-layout>

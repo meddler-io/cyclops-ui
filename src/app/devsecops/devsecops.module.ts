@@ -73,16 +73,22 @@ import { QuickScanJobsComponent } from './quick-scan-jobs/quick-scan-jobs.compon
 import { QuickScanJobsAdminComponent } from './quick-scan-jobs-admin/quick-scan-jobs-admin.component';
 import { VaptFindingsComponent } from './vapt-findings/vapt-findings.component';
 import { RouterModule } from '@angular/router';
+import { ManageAppsComponent } from './manage-apps/manage-apps.component';
+import { ManageAppsSidebarComponent } from './manage-apps-sidebar/manage-apps-sidebar.component';
+import { AssessmentsComponent } from './assessments/assessments.component';
+import { StatePipe } from './state.pipe';
+import { IssuesComponent } from './issues/issues.component';
+import { AppPageComponent } from './app-page/app-page.component';
 
 
 
 
 
 @NgModule({
-  declarations: [FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent],
+  declarations: [FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent],
   imports: [
 
-    RouterModule,
+
     
     NbLayoutModule,
     CommonModule,
@@ -142,7 +148,7 @@ import { RouterModule } from '@angular/router';
 
   ],
   providers: [
-
+    NbSidebarService,
     
     NbToastrService, ApiService , BranchValidatorService,
   

@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NbAccessChecker } from '@nebular/security';
-import { EMPTY, filter, map, Observable, Subscription, switchMap, take, tap } from 'rxjs';
+import { EMPTY, filter, map, mergeMap, Observable, startWith, Subscription, switchMap, take, tap } from 'rxjs';
 import { ApiService } from '../api.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,7 +12,9 @@ import { ApiService } from '../api.service';
 })
 export class SidebarComponent implements OnInit, OnDestroy {
 
-  selectedApp : Observable<any> = EMPTY;
+  inputProjectFormControl: FormControl;
+
+  selectedApp: Observable<any> = EMPTY;
 
   routePrefix = [
     '/',
@@ -21,7 +24,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   // <img src="https://img.icons8.com/material-rounded/24/000000/home.png"/>
   // <img src="https://img.icons8.com/nolan/64/data-configuration.png"/>
   menu_items = [
-  
+
 
     // 
 
@@ -34,7 +37,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     //       'dashboard'
     //     ]
     // },
- 
+
     // {
     //   title: 'Builds',
     //   icon: 'https://img.icons8.com/nolan/64/package.png',
@@ -136,7 +139,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
-   public  accessChecker: NbAccessChecker
+    public accessChecker: NbAccessChecker
 
   ) { }
   ngOnDestroy(): void {
@@ -147,7 +150,68 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   build_count;;
 
+  businessMaping = this.apiService.businessMaping()
+
+  filteredControlOptions: Observable<any> = this.businessMaping;
+
+  private filter(value: any) {
+    const filterValue = value.toLowerCase();
+    return this.businessMaping
+      .pipe(
+
+        map((_: any) => {
+          // If business name matches
+          // return _.filter((optionValue: any) => optionValue?.name?.toLowerCase().includes(filterValue))
+
+          let searchedResults = []
+          _.forEach(element => {
+
+            if (element?.name?.toLowerCase().includes(filterValue)) {
+              searchedResults.push(element)
+            }
+            else {
+              let projects = [];
+              element?.projects?.forEach(element => {
+
+                if (element?.name?.toLowerCase().includes(filterValue)) {
+                  projects.push(element);
+                }
+
+              });
+
+              if (projects.length > 0) {
+                element.projects = projects;
+                searchedResults.push(element)
+
+              }
+
+
+            }
+          });
+          // If project name matches
+
+          return searchedResults
+        })
+
+      )
+
+  }
+
+
   ngOnInit(): void {
+
+    
+
+
+    this.inputProjectFormControl = new FormControl();
+    this.filteredControlOptions = this.inputProjectFormControl.valueChanges
+      .pipe(
+        startWith(''),
+        mergeMap(filterString => this.filter(filterString)),
+      );
+
+
+
 
     this.selectedApp = this.apiService.selectedApp.pipe(
       tap((application: any) => {

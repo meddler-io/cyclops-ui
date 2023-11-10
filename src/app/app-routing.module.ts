@@ -7,6 +7,7 @@ const routes: Routes = [
 
   
   {
+
     canActivate: [AuthGuard],
 
     path: 'devsec',
@@ -14,19 +15,23 @@ const routes: Routes = [
   },
 
   {
+
+
     path: 'app',
     loadChildren: () => import('./devsecops/devsecops.module').then(m => m.DevsecopsModule)
   },
 
   {
+
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.NgxAuthModule),
   },
 
   {
+
     path: '**',
 
-    redirectTo: 'app',
+    redirectTo: 'devsec',
   },
 ];
 
