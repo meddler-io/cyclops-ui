@@ -1,5 +1,142 @@
 import json
+import sys
 
+input_file_name = sys.argv[1]
+output_file_name = sys.argv[2]
+
+from bs4 import BeautifulSoup
+import html
+
+import json
+data = json.load(open("/Users/meddler/Workspace/hawki-til/meddler-api/meddler-genz-ui/migrations/step-4/files.db.json", "r"))
+
+files_db = {
+
+}
+
+for file in data:
+    if "path" in file:
+        if  "/opt/hawki/uploads/" in file["path"]:
+            file_path= file["path"].split("/opt/hawki/uploads/")[1]
+            bucket = file_path.split("/", 1)
+            if len(bucket) < 2:
+                path = ""
+            else:
+                path = bucket[1]
+            files_db[file["_id"]["$oid"]] ={
+                "bucket": bucket[0],
+                "path": path,
+            }
+
+# for id, file in files_db.items():
+    # print(id, file)
+
+
+def extract_urls(text):
+    # Check if the text contains HTML tags
+    if any(tag in text for tag in ['<', '>']):
+        # Use BeautifulSoup for HTML parsing
+        soup = BeautifulSoup(text, 'html.parser')
+        # Find all anchor tags and extract URLs from 'href' attribute
+        anchor_tags = soup.find_all('a', href=True)
+        urls = [tag['href'] for tag in anchor_tags]
+    else:
+        # Use regular expression for non-HTML content
+        url_pattern = re.compile(r"""
+            \b(?:https?|ftp):\/\/
+            (?:(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b
+            |(?:\d{1,3}\.){3}\d{1,3}\b)
+            (?:[-a-zA-Z0-9@:%_\+.~#?&//=]*)\b
+        """, re.VERBOSE)
+        urls = re.findall(url_pattern, text)
+
+    # Parse and normalize URLs using urlparse
+    parsed_urls = [urlparse(url) for url in urls]
+
+    # Extract hostnames or IPs from the parsed URLs
+    extracted_urls = [url.netloc for url in parsed_urls]
+
+    return extracted_urls
+
+
+def extract_links(text):
+    # return extract_urls(text)
+    links = []
+
+    # soup = BeautifulSoup(text, 'html.parser')
+    # for a_tag in soup.find_all('a', href=True):
+    #     links.append(a_tag['href'])
+    # return links
+
+    # If the text is HTML, use BeautifulSoup
+    # if '<html' in text.lower():
+    try:
+
+        soup = BeautifulSoup(text, 'html.parser')
+        text = text  + "\n" + soup.text
+        for a_tag in soup.find_all('a', href=True):
+            links.append(a_tag['href'])
+    
+    except:
+        pass
+
+    # If the text is ASCII, use html module to parse links
+    # else:
+    try:
+
+        # Parse HTML entities in ASCII text
+        text = html.unescape(text)
+
+        # Split the text into lines
+        lines = text.split('\n')
+
+        for line in lines:
+            # Extract links from href attributes
+            href_start = line.find('href="')
+            if href_start != -1:
+                href_end = line.find('"', href_start + 6)
+                if href_end != -1:
+                    links.append(line[href_start + 6:href_end])
+
+            # Extract links from plain URLs
+            words = line.split()
+            for word in words:
+                if word.startswith(('http://', 'https://', 'www.')):
+                    links.append(word)
+
+    except:
+        pass
+    return links
+
+
+
+def flatten_json(y):
+    out = {}
+    special_char = '.'
+ 
+    def flatten(x, name=''):
+ 
+        # If the Nested key-value
+        # pair is of dict type
+        if type(x) is dict:
+ 
+            for a in x:
+                flatten(x[a], name + a + special_char)
+ 
+        # If the Nested key-value
+        # pair is of list type
+        elif type(x) is list:
+ 
+            i = 0
+ 
+            for a in x:
+                flatten(a, name + str(i) + special_char)
+                i += 1
+        else:
+            out[name[:-1]] = x
+ 
+    flatten(y)
+    return out
 
 
 _print = print
@@ -246,8 +383,25 @@ def parseData(_ , data):
             elif type == 5:
                 # pass
                 for value in values:
-                    vals.append(f"File: [{value['name'] }]({value['value']})   ")
+                    # vals.append({
+                    #     "bucket": "bucket" + value['value'],
+                    #     "path": value['name']
+                    # })
+
+                    try:
+                        file_ref  =files_db[ value['value']]
+                        file_ref["filename"]  = value['name']
+                        print("except" , value)
+                        vals.append(file_ref)
+
+                    except:
+                        print("except" , value)
+                        # vals.append({"fucked": "up"})
+
+                    # vals.append(f"File: [{value['name'] }]({value['value']})   ")
+
                     
+
 
             else:
                 pass
@@ -280,7 +434,8 @@ def parseData(_ , data):
 FINDINGS  = []
 
 # with open("issues.json", "r") as f:
-with open("issues_with_app.json", "r") as f:
+# with open("issues_with_app.json", "r") as f:
+with open(input_file_name, "r") as f:
 
     _additional_attributes = {}
     content = json.load(f)
@@ -428,6 +583,11 @@ with open("issues_with_app.json", "r") as f:
 
         findings["assessment"] = under_parser(app["_id_"])
         findings["application"] = under_parser(app["application"])
+
+        findings["applicationName"] = app["application"]["name"]
+
+        findings["projectId"] = app["_id_"]["projectId"]["$oid"]
+
 
 
 
@@ -638,7 +798,15 @@ platform_id = {
 
 assessment_types = set()
 
+application_ids = set()
+application_sets = {}
+
+
 for _ in FINDINGS:
+
+    import os
+    print("FINDING", _)
+
 
 
     original_finding = _
@@ -648,6 +816,11 @@ for _ in FINDINGS:
 
     title = _["assessment"]["title"]
     _platform_id= _["platform_id"]["$oid"]
+
+    projectId = _["projectId"]
+
+
+
 
 
     if _platform_id in platform_id:
@@ -682,6 +855,20 @@ for _ in FINDINGS:
     attrs = []
     application_attrs = original_finding["application"]["details"]
 
+    application_name = original_finding["applicationName"]
+
+
+
+    application_id = original_finding["application"]["_id"]["$oid"] 
+    __print("application_attrs", application_id)
+    application_ids.add(application_id)
+
+    # application_sets["application_id"] = 
+    application_attr_for_placeholders ={
+        "refrences": []
+    }
+
+
     if len(details) == 0:
         continue
 
@@ -691,12 +878,18 @@ for _ in FINDINGS:
         ipa_file = None
         try:
             ipa_file = application_attrs[1][2]
+            
+            application_attr_for_placeholders["staging.file"]= ipa_file
         except:
             pass
 
         appstore_url = ""
         try:
             appstore_url = application_attrs[2][2]
+
+            _ex_ = extract_links( appstore_url ) 
+            if _ex_ > 0:
+                application_attr_for_placeholders["refrences"] =  ["Appstore Url"  ] + _ex_ 
         except:
             pass
         # __print("ipa_file" , ipa_file)
@@ -707,12 +900,20 @@ for _ in FINDINGS:
         apk_file = None
         try:
             apk_file = application_attrs[1][2]
+            application_attr_for_placeholders["staging.file"]= apk_file
         except:
             pass
 
         playstore_url = ""
         try:
             playstore_url = application_attrs[2][2]
+
+            # application_attr_for_placeholders["staging.endpoint"] = playstore_url
+            _ex_ = extract_links( playstore_url ) 
+            if _ex_ > 0:
+                application_attr_for_placeholders["refrences"] =  ["Playstore Url"  ]  + playstore_url
+
+
         except:
             pass
         # __print("apk_file" , apk_file)
@@ -725,11 +926,48 @@ for _ in FINDINGS:
         private_urls = ""
         try:
             public_urls = application_attrs[1][2]
+
+            
+            
+            
+            _ex_ = extract_links( public_urls ) 
+            application_attr_for_placeholders["production.endpoint"] = public_urls
+            # application_attr_for_placeholders["production.endpoint"] = str(_ex_)
+            
+            if len(_ex_) > 0:
+                if len(_ex_) == 1:
+                    application_attr_for_placeholders["production.endpoint"] = _ex_[0]
+                else:
+                    application_attr_for_placeholders["refrences"] +=  ["Producion Url"  ] + _ex_ 
+
+            # print("application_attrs",public_urls)
+
+            
+
+            
+
+
         except:
+            # import traceback
+            # traceback.print_exc()
+            # raise Exception("error")
             pass
 
         try:
             private_urls = application_attrs[2][2]
+
+
+            _ex_ = extract_links( private_urls ) 
+            if _ex_ > 0:
+                if len(_ex) == 1:
+                    application_attr_for_placeholders["staging.endpoint"] = _ex_[0]
+                else:
+                    application_attr_for_placeholders["refrences"] +=  ["Private Url"  ] + _ex_ 
+
+
+
+
+
         except:
             pass
 
@@ -742,11 +980,18 @@ for _ in FINDINGS:
         webservice_data = ""
         try:
             credentials = application_attrs[1][2]
+
+            application_attr_for_placeholders["refrences"] +=  ["Credentials" + credentials ]  
+
+
         except:
             pass
 
         try:
             webservice_data = application_attrs[2][2]
+            application_attr_for_placeholders["refrences"] +=  ["Webservice Data"  ] + webservice_data 
+
+
         except:
             pass
 
@@ -757,7 +1002,15 @@ for _ in FINDINGS:
         raise Exception("Error" + _platform_id)
     
 
+
     
+    application_attr_for_placeholders["projectId"] =  {"$oid": projectId} 
+    application_attr_for_placeholders["platform"] =  _platform_id
+    application_attr_for_placeholders["title"] =  application_name
+    application_sets[application_id] = application_attr_for_placeholders
+
+    
+
 
 
     if assessment_type == "pentest":
@@ -845,6 +1098,7 @@ for _ in FINDINGS:
 
 
 
+
         # __print( "** Url"   , preprod_url )  # pre prod 
 
 
@@ -859,3 +1113,18 @@ for (k,v) in _assessments.items():
     # __print()
     # break
 # json.dump( FINDINGS  , open("test_dumps.json", "w"))
+
+__print("application_attrs", "size", len(application_ids))
+
+with open(output_file_name , "w") as f:
+    for app in application_sets:
+
+        _app = application_sets[app]
+        _app["_id"] = { "$oid" : app}
+        __print(_app)
+        _app = json.dumps(  _app  )
+        f.write(_app + "\n")
+
+
+
+

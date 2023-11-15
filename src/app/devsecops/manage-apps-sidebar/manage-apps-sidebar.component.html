@@ -2,37 +2,72 @@
 
 
 
-    <nb-card-header>
+    <nb-card-header style="padding: 0;">
 
         <!--  -->
 
-        <ng-container *ngIf="filteredControlOptions | async as business$">
-
-            <nb-form-field>
-                <input [formControl]="inputProjectFormControl" fxFlex ghost nbInput type="text"
-                    placeholder="Select project" [nbAutocomplete]="auto" />
-                <button nbPrefix nbButton ghost>
-                    <!-- Switch projects and business -->
-                    <nb-icon icon="at-outline" pack="eva"></nb-icon>
-
-                </button>
-            </nb-form-field>
+        <!-- <ng-container *ngIf="filteredControlOptions | async as business$"> -->
 
 
+        <!-- <ng-container *ngIf="searchActive ; else searchDeactive"> -->
 
-            <nb-autocomplete #auto [activeFirst]="true">
-                <!-- List ot projects -->
+        <nb-form-field fullWidth>
 
-                <nb-option-group [title]="business?.name" *ngFor="let business of  business$">
-                    <nb-option *ngFor="let project of  business?.projects" [value]=" project?._id?.$oid ">
-                        {{project?.name}}
+            <input style="font-weight: 200;" fullWidth fxFlex ghost nbInput type="text"
+                [formControl]="inputProjectFormControl" placeholder="Select project" [nbAutocomplete]="auto" />
+            <button status="primary" [routerLink]=" [ '../' , '../' ] " nbPrefix nbButton ghost>
+                <!-- Switch projects and business -->
+                <nb-icon icon="arrow-ios-back-outline" pack="eva"></nb-icon>
 
-                    </nb-option>
-                </nb-option-group>
+            </button>
+        </nb-form-field>
+        <!-- </ng-container> -->
 
 
-            </nb-autocomplete>
-        </ng-container>
+        <ng-template #searchDeactive>
+
+            <button style="text-transform: capitalize; text-align: start; " size="small" ghost fxFlex nbButton
+                (click)="toggleSearchBar(true)">
+
+                {{searchActive}}
+
+                {{inputProjectFormControlFinalised || 'All Projects'}}
+            </button>
+
+
+        </ng-template>
+
+
+
+
+
+        <nb-autocomplete [handleDisplayFn]="searchViewHandle" (selectedChange)="onProjectChanged($event)" #auto>
+            <!-- List ot projects -->
+
+            <nb-option [value]=" { 'name': 'All Prpjects' } ">
+                All Projects
+
+            </nb-option>
+
+            <nb-option-group [title]="business?.name"
+                *ngFor="let business of  filteredControlOptions | async  ; trackBy: identify  ">
+
+                <nb-option style="font-weight: 400;" optionsListClass="businessSelected"
+                    [value]="{ 'name': business?.name ,   'businessId':  business?._id?.$oid } "
+                    *ngIf="business?.projects?.length > 0">
+                    {{business?.name}} (All)
+                </nb-option>
+
+                <nb-option style="font-weight: 200;" *ngFor="let project of  business?.projects   "
+                    [value]="  {  'name': project?.name ,   'projectId':  project?._id?.$oid }  ">
+                    {{project?.name}}
+
+                </nb-option>
+            </nb-option-group>
+
+
+        </nb-autocomplete>
+        <!-- </ng-container> -->
 
         <!--  -->
 
@@ -45,101 +80,148 @@
 
     <nb-card-body>
 
+        <!-- WebApplication -->
         <nb-list>
-
-            <!-- Risk Dashboard -->
-            <nb-list-item class="subitem-header">
+            <!-- Web Applications Header-->
+            <nb-list-item (click)="toggleWebAppList()" class="subitem-header">
                 <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
-                    Business Wide Risk
-                </div>
-
-                <div>
-
-                </div>
-            </nb-list-item>
-
-            <!-- Web Applications -->
-            <nb-list-item class="subitem-header">
-                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
-                    Web Application
+                    Web Application {{ ( (webApplications | async)?.length ) > 0 ? '(' + (webApplications | async
+                    )?.length + ' )' : '' }}
                 </div>
 
                 <button nbButton size="small" outline status="success"><nb-icon icon="plus"></nb-icon></button>
-
-
             </nb-list-item>
-
-            <nb-list-item
-            (click)="manageApp(app?._id?.$oid)"
-            
-            *ngFor="let app of applications | async" [routerLinkActiveOptions]="{ exact: false }"
-                [routerLink]="[ {}, 'manage-apps'  ]" routerLinkActive="active" class="subitem">
-                <div fxLayoutAlign="start center" fxFlex>
-                    <img src="https://img.icons8.com/nolan/64/package.png" />
-                    {{app?.title}}
-                </div>
-            </nb-list-item>
-
-
-
-            <!--  -->
-            <!-- Web Service -->
-            <nb-list-item class="subitem-header">
-                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
-                    Web Service
-                </div>
-            </nb-list-item>
-
-            <nb-list-item
-            [routerLinkActiveOptions]="{ exact: false }"
-             [routerLink]="[   '../' ,  {      'outlets':    {     'primary': [ {},  'manage-apps' ,'appid' ] }      }     ]" 
-             routerLinkActive="active" class="subitem">
-                <div fxLayoutAlign="start center" fxFlex>
-                    <img src="https://img.icons8.com/nolan/64/package.png" />
-                    Webservice I
-                </div>
-            </nb-list-item>
-
-            <!-- Android -->
-            <nb-list-item class="subitem-header">
-                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
-                    Android
-                </div>
-            </nb-list-item>
-
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'manage-apps' ]"
-                routerLinkActive="active" class="subitem">
-                <div fxLayoutAlign="start center" fxFlex>
-                    <img src="https://img.icons8.com/nolan/64/package.png" />
-                    Android App I
-                </div>
-            </nb-list-item>
-
-            <!-- iOS-->
-            <nb-list-item class="subitem-header">
-                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
-                    iOS Application
-                </div>
-            </nb-list-item>
-
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'manage-apps' ]"
-                routerLinkActive="active" class="subitem">
-                <div fxLayoutAlign="start center" fxFlex>
-                    <img src="https://img.icons8.com/nolan/64/package.png" />
-                    iOS Application I
-
-                </div>
-            </nb-list-item>
-
-
-
 
 
 
 
         </nb-list>
 
+        <ng-container *ngIf="webappsVisible">
+            <ng-container *ngIf="currentAppId | async as currentAppId">
+                
 
+                <nb-list>
+                    <nb-list-item (click)="manageApp(  currentAppId, app?._id?.$oid)"
+                        *ngFor="let app of webApplications | async" [routerLinkActiveOptions]="{ exact: false }"
+                        class="subitem" [class.active]=" currentAppId  ==  app?._id?.$oid " #rlActive="routerLinkActive"
+                        routerLinkActive appearance="outline" [status]="rlActive?.isActive ? 'success' : 'basic' "
+                        status="success">
+                        <div fxLayoutAlign="start center" fxFlex>
+                            <img src="https://img.icons8.com/nolan/64/package.png" />
+                            {{app?.title}}
+
+                        </div>
+                    </nb-list-item>
+
+                </nb-list>
+
+            </ng-container>
+
+
+
+            <!-- WebService Application -->
+            <nb-list>
+                <!-- Android Application Header-->
+                <nb-list-item (click)="toggleWebServiceList()" class="subitem-header">
+                    <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                        Web Service
+                    </div>
+                    <button nbButton size="small" outline status="success"><nb-icon icon="plus"></nb-icon></button>
+                </nb-list-item>
+
+
+
+            </nb-list>
+
+            <ng-container *ngIf="webserviceVisible">
+
+                <nb-list>
+                    <nb-list-item (click)="manageApp(app?._id?.$oid)" *ngFor="let app of webserviceApplications | async"
+                        [routerLinkActiveOptions]="{ exact: false }" class="subitem"
+                        [class.active]="  (currentAppId | async) == app?._id?.$oid " #rlActive="routerLinkActive"
+                        routerLinkActive appearance="outline" [status]="rlActive?.isActive ? 'success' : 'basic' "
+                        status="success">
+                        <div fxLayoutAlign="start center" fxFlex>
+                            <img src="https://img.icons8.com/nolan/64/package.png" />
+                            {{app?.title}}
+
+                        </div>
+                    </nb-list-item>
+
+                </nb-list>
+
+            </ng-container>
+
+            <!-- Android Application -->
+
+            <nb-list>
+                <!-- Android Application Header-->
+                <nb-list-item (click)="toggleAndroidList()" class="subitem-header">
+                    <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                        Android Application
+                    </div>
+                    <button nbButton size="small" outline status="success"><nb-icon icon="plus"></nb-icon></button>
+                </nb-list-item>
+
+
+
+            </nb-list>
+            <ng-container *ngIf="androidVisible">
+
+                <nb-list>
+                    <nb-list-item (click)="manageApp(app?._id?.$oid)" *ngFor="let app of androidApplications | async"
+                        [routerLinkActiveOptions]="{ exact: false }" class="subitem"
+                        [class.active]="  (currentAppId | async) == app?._id?.$oid " #rlActive="routerLinkActive"
+                        routerLinkActive appearance="outline" [status]="rlActive?.isActive ? 'success' : 'basic' "
+                        status="success">
+                        <div fxLayoutAlign="start center" fxFlex>
+                            <img src="https://img.icons8.com/nolan/64/package.png" />
+                            {{app?.title}}
+
+                        </div>
+                    </nb-list-item>
+
+                </nb-list>
+
+            </ng-container>
+
+
+            <!-- iOs Application -->
+            <nb-list>
+                <!-- Android Application Header-->
+                <nb-list-item (click)="toggleIosList()" class="subitem-header">
+                    <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                        iOS Application
+                    </div>
+                    <button nbButton size="small" outline status="success"><nb-icon icon="plus"></nb-icon></button>
+                </nb-list-item>
+
+
+
+            </nb-list>
+
+            <ng-container *ngIf="iosVisible">
+
+                <nb-list>
+                    <nb-list-item (click)="manageApp( currentAppId,  app?._id?.$oid)"
+                        *ngFor="let app of iosApplications | async" [routerLinkActiveOptions]="{ exact: false }"
+                        class="subitem" [class.active]="  (currentAppId | async) == app?._id?.$oid "
+                        #rlActive="routerLinkActive" routerLinkActive appearance="outline"
+                        [status]="rlActive?.isActive ? 'success' : 'basic' " status="success">
+                        <div fxLayoutAlign="start center" fxFlex>
+                            <img src="https://img.icons8.com/nolan/64/package.png" />
+                            {{app?.title}}
+
+                        </div>
+                    </nb-list-item>
+
+                </nb-list>
+
+            </ng-container>
+        </ng-container>
 
     </nb-card-body>
+
+
 </nb-card>

@@ -2,13 +2,10 @@
     "projectId": {
         "$oid": "5e2966b8557f3d8c94e42706"
     },
-    "platformId": {
-        "$oid": "5e0dd2a6ae21f272971db085"
-    },
     "_id": {
         "$oid": "5e0dd2a6ae21f272971db085"
     },
-    "platformName": "webapp|android|ios|webservice",
+    "platform": "webapp",
     "environments": {
         "staging": true,
         "development": true,
@@ -16,34 +13,34 @@
     },
     "config": {
         "development": {
-            "git_repo": "https://github.com/digininja/DVWA.git",
-            "git_branch": "master",
-
             "webapp": {
-                "endpoint": "https://portal.gaana.com/"
-
-            }
-            ,
-            "webservice": {
-                "endpoint": "https://api.gaana.com/",
-                "version": "2",
-                "format": "postman|swagger|documentation|other",
-                "type":  "upload|url",
-                "value": ""
-
+                "endpoint": "https://portal.gaana.com/",
+                "repository": {
+                    "branch": "beta",
+                    "remote": "git@bitbucket.org:times_internet/hawkeye-api.git"
+                }
             },
-
+            "webservice": {
+                "repository": {
+                    "branch": "beta",
+                    "remote": "git@bitbucket.org:times_internet/hawkeye-api.git"
+                },
+                "file": {
+                    "bucket": "hawkiv2",
+                    "path": "654eb41ef6fe9e4eaa0ff7f2",
+                    "filename": "domains-2(2).txt"
+                }
+            },
             "android": {
-                "type":  "upload|url",
+                "type": "upload|url",
                 "value": "",
-                "package_name": "com.example.test", 
+                "package_name": "com.example.test",
                 "version": "2"
-            }
-            ,
+            },
             "ios": {
-                "type":  "upload|url",
+                "type": "upload|url",
                 "value": "",
-                "package_name": "com.example.test", 
+                "package_name": "com.example.test",
                 "version": "2"
             }
         }

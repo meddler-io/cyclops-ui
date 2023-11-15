@@ -1,55 +1,43 @@
 <nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
-    <nb-card-header fxLayoutAlign="space-between" fxLayout="row">
-
-        <div fxLayoutAlign="start">
-
-            <div *ngIf="false" class="nb-select" fxLayout="column">
-
-                <div class="select_heading">
-                    Build No.
-                    <!-- {{selectedBuildId?.value}} -->
-                </div>
-
-                <!-- <ng-container *ngIf="builds | async as builds"> -->
 
 
-                <nb-select [nbSpinner]="!!!( builds | async )" fullWidth optionsListClass="nb-option"
-                    optionsPanelClass="nb-option" [formControl]="selectedBuildId" size="medium" placeholder="Build Id">
-                    <!-- <nb-option value="">All</nb-option> -->
-                    <nb-option (mouseover)="onMouseOver( build )" (mouseout)="onMouseOut()"
-                        [disabled]="build?.status == 'FAIL'" style="overflow: hidden;"
-                        *ngFor="let build of builds | async " [value]="build?._id?.$oid">
-                        <div fxLayout="row">
-                            <span [class.previousBuild]="previousBuildId == build?._id?.$oid"
-                                [class.currentBuild]="currentBuildId == build?._id?.$oid"
-                                class="dot  {{build?.status}}">&#183;</span>
-                            #{{build?.buildNo}}
+    <nb-card-header fxLayoutAlign="space-between center" fxLayout="row">
+
+
+        <div>
+            <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="small" class="left" status="basic"
+                nbButton ghost>
+
+                <nb-icon icon="arrow-back-outline"></nb-icon>
+                Issues
+            </button>
+        </div>
+
+        <div fxLayoutAlign="end center" fxLayout="row">
 
 
 
-                        </div>
-                    </nb-option>
+            <button appearance="ghost" status="basic" size="small" shape="round" (click)="goTo('assessment')"
+                [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive" nbButton>
+                Assessments
+            </button>
+            <button appearance="ghost" status="success" size="small" shape="round" (click)="goTo('issues'   )"
+                [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive" nbButton>
+                Issues
+            </button>
 
-                </nb-select>
 
-                <!-- </ng-container> -->
+            <button [routerLink]="[ '../settings' ]" fullWidth size="small" class="left" status="basic" nbButton ghost>
+                <nb-icon icon="settings-2-outline"></nb-icon>&nbsp;
+            </button>
 
-            </div>
-            <div style=" 
-  margin   : 0.5rem;
-            " fxLayout="column">
-
-                <app-finding-stats #findingStatsView [findingStats]="findingStats | async">
-
-                </app-finding-stats>
-            </div>
 
 
         </div>
-
-
     </nb-card-header>
+
+
 
     <nb-card-header style="margin-top: 0px; margin-bottom: 0px;;">
 
@@ -196,7 +184,7 @@
                     display: inline;
     line-break: anywhere;
                     ">
-                    
+
                         {{data?.issue?.name}}
                     </div>
 
@@ -217,7 +205,7 @@
 
                 <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
                     <div class="severity">
-                        {{ ( data?.issue?.severity )  }}
+                        {{ ( data?.issue?.severity ) }}
                     </div>
 
                 </div>
@@ -226,7 +214,7 @@
                     {{data?.doc?.$date}}
                 </div>
 
-           
+
 
 
                 <div *ngIf="false" class="item" class=" item " fxFlex>
@@ -243,7 +231,7 @@
                     <div>
 
                         <!-- {{data?.found_by}} -->
-                    {{data?.name}}
+                        {{data?.name}}
 
                     </div>
 
@@ -313,10 +301,7 @@
 
             <div *ngIf="true" fxFlex fxLayoutAlign="center center">
 
-                <nb-select
-                [selected]="currentPage"
-                (selectedChange)="goto($event)"
-                placeholder="Go to">
+                <nb-select [selected]="currentPage" (selectedChange)="goto($event)" placeholder="Go to">
 
                     <nb-select-label>
 
@@ -343,7 +328,9 @@
 
                     </nb-select-label>
 
-                    <nb-option *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index" [value]="i + 1">
+                    <nb-option
+                        *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
+                        [value]="i + 1">
                         <div>
                             Page
                             {{i + 1}}

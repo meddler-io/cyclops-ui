@@ -106,9 +106,10 @@ const appRoutes: Routes = [
 
 
 
-
   {
-    path: ':app_id',
+    // Deprecating app id
+    path: 'test-flight',
+    // path: 'configure',
     component: BootstrapComponent,
     outlet: 'primary',
 
@@ -650,15 +651,903 @@ const appRoutes: Routes = [
       ,
 
       {
-        path: 'manage-apps/:appid/:env',
+        path: 'manage-apps/:appid/assessment',
+        component: AssessmentsComponent
+        , pathMatch: 'full',
+
+      },
+
+      {
+        path: 'manage-apps/:appid/issues',
+        component: IssuesComponent
+        , pathMatch: 'full',
+
+      },
+      {
+        path: 'manage-apps/:appid/settings/:env',
         component: AppPageComponent
         , pathMatch: 'full',
 
       },
  
       {
-        path: 'manage-apps/:appid',
-        redirectTo: 'manage-apps/:appid/development'
+        path: 'manage-apps/:appid/settings',
+        redirectTo: 'manage-apps/:appid/settings/staging'
+        , pathMatch: 'full',
+
+      },
+
+      {
+        path: 'manage-apps',
+        component: ManageAppsComponent
+        , pathMatch: 'full',
+
+      },
+
+    
+      
+      {
+        path: 'builds/nobuilds',
+        component: NullBuildsComponent
+        , pathMatch: 'full',
+
+      },
+
+      {
+        path: 'bitbucket/manage',
+        component: BitbucketIntegrationComponent,
+
+      },
+
+      {
+        path: 'active_protection/:uuid',
+        component: BuildsComponent,
+        data: {
+          'active_protection': true
+        },
+
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+            data: {
+              'active_protection': true
+            },
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+              , data: {
+                'active_protection': true
+              },
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues', data: {
+                'active_protection': true
+              },
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full', data: {
+              'active_protection': true
+            },
+
+          }
+        ]
+
+      },
+      {
+        path: 'scans/:buildId',
+        component: BuildsComponent,
+        data: {
+          'active_protection': true
+        },
+
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+            data: {
+              'active_protection': true
+            },
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+              , data: {
+                'active_protection': true
+              },
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues', data: {
+                'active_protection': true
+              },
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full', data: {
+              'active_protection': true
+            },
+
+          }
+        ]
+
+      },
+
+
+
+      {
+        path: 'builds/:buildId',
+        component: BuildsComponent,
+        data: {
+          extra_filters: {
+            '$and': [
+              {
+                type_of_request: {
+                  '$ne': 'external_tools'
+                }
+              },
+              {
+                type_of_request: {
+                  '$ne': 'external_tools_new'
+                }
+              },
+              {
+                type_of_request: {
+                  '$ne': 'recon'
+                }
+              }
+            ]
+          }
+        },
+
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues'
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full'
+
+          }
+        ]
+
+      },
+
+
+
+
+      {
+        path: 'issues',
+        component: BuildsComponent,
+
+        children: [
+
+          {
+            path: '',
+            component: EmptyViewComponent
+            , pathMatch: 'full',
+
+          },
+
+
+          {
+            path: ':buildId',
+            component: FindingsComponent
+            , pathMatch: 'full'
+
+          }
+          ,
+          {
+            path: '**',
+            redirectTo: ''
+            , pathMatch: 'full'
+
+          }
+        ]
+
+      },
+
+
+
+
+
+
+
+      {
+        path: '', redirectTo: 'configure',
+        pathMatch: 'full'
+        , outlet: 'sidebar'
+
+      },
+
+      { path: '', component: SidebarComponent, outlet: 'sidebar' },
+      { path: 'manage-apps', component: ManageAppsSidebarComponent, outlet: 'sidebar' },
+      { path: '**', component: SidebarComponent, redirectTo: '',   outlet: 'sidebar' },
+
+      {
+        path: '**', redirectTo: 'configure',
+        pathMatch: 'full'
+        , outlet: 'sidebar'
+
+      },
+
+      {
+        path: '**', redirectTo: '',
+        pathMatch: 'full'
+
+
+      },
+
+      //   ]
+      // },
+
+
+      {
+        path: '**', redirectTo: '',
+        pathMatch: 'full'
+
+      },
+
+    ]
+  },
+
+  {
+    // Deprecating app id
+    path: ':app_id',
+    // path: 'configure',
+    component: BootstrapComponent,
+    outlet: 'primary',
+
+    children: [
+
+      {
+        path: '', redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+
+
+
+
+      {
+        path: 'active_protection', component: ActiveProtectionComponent
+        , pathMatch: 'full'
+      },
+
+
+      {
+        path: 'scans', component: BuildsComponent
+        , pathMatch: 'full',
+        data: {
+          'active_protection': true
+        },
+      },
+
+      {
+        path: 'external_tool_scans', component: BuildsComponent
+        , pathMatch: 'full',
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'external_tools'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'external_tool_scans_new', component: BuildsComponent
+        , pathMatch: 'full',
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'external_tools_new'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'external_tool_new', component: AddOnToolsRunnerComponent
+        , pathMatch: 'full',
+        data: {
+          view_only: ['external_tools']
+        },
+      },
+
+      {
+        path: 'external_tool', component: ExternalToolsRunnerComponent
+        , pathMatch: 'full',
+        data: {
+          view_only: ['external_tools']
+        },
+      },
+
+      {
+        path: 'external_tool_scans/:buildId', component: BuildsComponent,
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues'
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full'
+
+          }
+        ],
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'external_tools'
+            }
+          }
+        },
+      },
+
+
+      {
+        path: 'external_tool_scans_new/:buildId', component: BuildsComponent,
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues'
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full'
+
+          }
+        ],
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'external_tools_new'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'external_tool_new', component: AddOnToolsRunnerComponent
+        , pathMatch: 'full',
+        data: {
+          view_only: ['external_tools']
+        },
+      },
+
+
+
+
+
+
+      {
+        path: 'tools_configure', component: ToolsConfigComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'switch', component: SwitchAppViewerComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'create',
+        component: CreateAppComponent,
+        pathMatch: 'full'
+      },
+      {
+        path: 'dashboard', component: ApplicationDetailsComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'configure', component: ConfigComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'builds', component: BuildsComponent
+        , pathMatch: 'full',
+        data: {
+          extra_filters: {
+            '$and': [
+              {
+                type_of_request: {
+                  '$ne': 'external_tools'
+                }
+              },
+              {
+                type_of_request: {
+                  '$ne': 'external_tools_new'
+                }
+              },
+              {
+                type_of_request: {
+                  '$ne': 'recon'
+                }
+              }
+            ]
+          }
+        },
+      },
+      {
+        path: 'findings', component: FindingsComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'reports', component: ConfigComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'integration', component: IntegrationComponent
+        , pathMatch: 'full'
+      },
+
+      {
+        path: 'static_scans', component: StaticConfigComponent
+        , pathMatch: 'full'
+      },
+
+
+      {
+        path: 'dns', component: AssetsDnsComponent
+        , pathMatch: 'full'
+      },
+
+
+      {
+        path: 'assesments', component: AssessmentsComponent
+        // path: 'assesments', component: VaptFindingsComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'issues', component: IssuesComponent
+        // path: 'assesments', component: VaptFindingsComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'recon_jobs', component: BuildsComponent
+        , pathMatch: 'full',
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'recon'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'recon_jobs/:buildId', component: BuildsComponent,
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues'
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full'
+
+          }
+        ],
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'recon'
+            }
+          }
+        },
+      },
+
+      // 
+
+      {
+        path: 'quick_scan', component: QuickScanJobsComponent
+        , pathMatch: 'full',
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'quick_dynamic_scan'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'quick_scan/:buildId', component: QuickScanJobsComponent,
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues'
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full'
+
+          }
+        ],
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'quick_dynamic_scan'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'quick_scan_admin', component: QuickScanJobsComponent
+        , pathMatch: 'full',
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'quick_dynamic_scan'
+            }
+          }
+        },
+      },
+
+      {
+        path: 'quick_scan_admin/:buildId', component: QuickScanJobsComponent,
+        children: [
+
+          {
+            path: '',
+            redirectTo: 'details'
+            , pathMatch: 'full',
+
+          },
+
+          {
+            path: 'details',
+            component: BuildDetailViewComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'details'
+            }
+
+          },
+
+          {
+            path: 'logs',
+            component: LogStreamComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'logs'
+            }
+
+          },
+          {
+            path: 'issues',
+            component: FindingsComponent
+            , pathMatch: 'full',
+            data: {
+              'section': 'issues'
+            }
+
+          },
+
+          {
+            path: '**',
+            redirectTo: 'details'
+            , pathMatch: 'full'
+
+          }
+        ],
+        data: {
+          extra_filters: {
+            type_of_request: {
+              '$eq': 'quick_dynamic_scan'
+            }
+          }
+        },
+      },
+      // 
+
+      {
+        path: 'dns/:asset_id', component: AssetsDnsDiscoveredComponent
+        , pathMatch: 'full'
+      },
+
+
+      {
+        path: 'dns_discovered', component: AssetsDnsDiscoveredComponent
+        , pathMatch: 'full'
+      },
+      {
+        path: 'dynamic_scans', component: DynamicConfigComponent
+        , pathMatch: 'full'
+      },
+
+
+
+      {
+        path: 'configure',
+        component: ApplicationDetailsComponent
+        , pathMatch: 'full'
+
+      },
+
+      {
+        path: 'config',
+        component: ConfigComponent
+        , pathMatch: 'full'
+
+      }
+
+      ,
+
+      {
+        path: 'integration',
+        component: IntegrationComponent
+        , pathMatch: 'full'
+
+      }
+      ,
+
+
+      {
+        path: 'findings/:buildId',
+        component: FindingsComponent
+        , pathMatch: 'full'
+
+      },
+
+      {
+        path: 'findings',
+        component: FindingsComponent
+        , pathMatch: 'full'
+
+      }
+
+
+      ,
+
+      {
+        path: 'manage-apps/:appid/assessment',
+        component: AssessmentsComponent
+        , pathMatch: 'full',
+
+      },
+
+      {
+        path: 'manage-apps/:appid/issues',
+        component: IssuesComponent
+        , pathMatch: 'full',
+
+      },
+      {
+        path: 'manage-apps/:appid/settings/:env',
+        component: AppPageComponent
+        , pathMatch: 'full',
+
+      },
+ 
+      {
+        path: 'manage-apps/:appid/settings',
+        redirectTo: 'manage-apps/:appid/settings/staging'
         , pathMatch: 'full',
 
       },
@@ -969,7 +1858,7 @@ const appRoutes: Routes = [
 
 
   {
-    path: "**", redirectTo: "devsec/switch"
+    path: "**", redirectTo: "devsec/test"
 
   },
 

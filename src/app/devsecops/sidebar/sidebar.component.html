@@ -348,7 +348,8 @@
 
 
                 <nb-tag [routerLinkActiveOptions]="{ exact: false }" routerLinkActive [routerLink]="menu_item?.link"
-                    [status]="rlActive?.isActive ? 'alternative' : 'basic' " #rlActive="routerLinkActive"
+                    
+                [status]="rlActive?.isActive ? 'alternative' : 'basic' " #rlActive="routerLinkActive"
                     *ngIf="menu_item?.tag" appearance="outline" size="small" [text]="     menu_item?.tag"></nb-tag>
 
             </nb-list-item>

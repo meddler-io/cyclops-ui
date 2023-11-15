@@ -140,6 +140,23 @@ export class AppListItemComponent implements OnInit {
     console.log('routerselectapp', app)
     // return;
 
+
+    // test-flight
+
+    this.router.navigate(
+      [
+        '/devsec',
+        'test-flight'
+
+      ],
+      {
+        queryParams: {
+          'appid': app?.application?.applicationId?.$oid
+        }
+      }
+    )
+    return;
+
     this.router.navigate([
 
       // 'app_menu',

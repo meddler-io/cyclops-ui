@@ -16,8 +16,11 @@ export class ApiService {
 
 
   // new API
-  getApplications(platform: any = undefined) {
-    return this.getRequest('api/v1/devsecops/apps').pipe(
+  getApplications( businessId?: string ,  projectId?: string ,   platform?: string) {
+    return this.getRequest('api/v1/devsecops/apps' , {
+      projectId: projectId,
+      businessId: businessId,
+    }).pipe(
       map(_ => _?.data)
     )
   }
@@ -163,7 +166,11 @@ export class ApiService {
   businessMaping() {
     return this.getRequest('api/v1/business/businessMaping', {
     }).pipe(
-      map(_ => _.data)
+      map(_ => _.data),
+    // shareReplay(1)
+    shareReplay(1, 1)
+
+
     )
 
   }

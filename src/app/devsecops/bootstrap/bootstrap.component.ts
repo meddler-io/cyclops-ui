@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NbSearchService, NbSidebarService, NbThemeService, NbSidebarState, NbDialogService } from '@nebular/theme';
 
 import { BehaviorSubject, interval, of, Subscription } from 'rxjs';
-import { filter, map, share, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import { delay, filter, map, share, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -112,12 +112,12 @@ export class BootstrapComponent implements OnInit, OnDestroy {
 
     // 
 
-    let activeAppId = this.activatedRoute.paramMap.pipe(
+    let activeAppId = this.activatedRoute.queryParamMap.pipe(
 
 
       map(
         _ => {
-          return _.get('app_id')
+          return _.get('appid')
         }
       ),
       filter(_ => {
@@ -138,6 +138,9 @@ export class BootstrapComponent implements OnInit, OnDestroy {
         // this.apiService.selectApp(appId)
 
       })
+      ,
+
+      delay(5000)
       , tap(app => {
 
         console.log(

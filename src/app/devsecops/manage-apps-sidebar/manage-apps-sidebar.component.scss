@@ -1,6 +1,10 @@
 @import './../../../themes.scss';
 
 
+.businessSelected{
+    font-weight: 100 !important;
+}
+
 .expander {
     width : 20px;
     height: 20px;
@@ -49,129 +53,6 @@ nb-toggle {
         }
 
     }
-}
-
-nb-card {
-    // border-right         : 1px solid #7d2ae8;
-    // border-right-width: -1px;
-    // margin-right: 5px;
-
-    box-shadow: 10px 0 5px -2px #7d2ae8;
-
-
-    transition-duration: 0.1s;
-    background         : nb-theme(color-basic-1100);
-    // background: #1d2024;
-
-    margin: 0;
-
-    nb-card-header {
-        // border-right: 1px solid #7d2ae8;
-
-        // box-shadow: 10px 0 5px -2px #7d2ae8;
-        // nb-toggle>label>div {
-
-        // }
-
-     
-
-        // &:hover {
-        //     border-right: 2px solid nb-theme(color-success-400);
-        //     border-right: 2px solid #7d2ae8;
-
-        // }
-
-
-
-        padding     : 0;
-        padding-left: 20px;
-
-        .logo {
-            width : 70px;
-            height: 70px;
-        }
-
-        // background: #1a1d1e;
-        background: nb-theme(color-basic-1000);
-
-        border: 0;
-
-        div {
-            // height: 60px;
-        }
-
-    }
-
-
-    nb-card-body {
-
-        // border-right: 1px solid #7d2ae8;
-
-        // &:hover {
-        //     border-right: 2px solid nb-theme(color-success-400);
-        //     border-right: 2px solid #7d2ae8;
-
-        // }
-
-        padding    : 15px;
-        padding-top: 0;
-
-
-        nb-list {
-
-            nb-list-item {
-                // background: nb-theme(color-basic-900);
-                padding   : 8px;
-                margin-top: 10px;
-
-                border-radius: 10px;
-
-                &.active {
-                    background: nb-theme(color-basic-800);
-
-                    div {
-
-                        color      : nb-theme(text-success-color);
-                        font-weight: 550;
-
-
-
-
-                    }
-
-
-                }
-
-                &:hover {
-                    background: nb-theme(color-basic-800);
-
-                }
-
-                div {
-                    font-weight: 350;
-                    color      : nb-theme(text-hint-color);
-
-                    img {
-
-                        width       : 26px;
-                        height      : 26px;
-                        margin-right: 20px;
-                        margin-left : 10px;
-                    }
-
-                }
-
-                &.disabled{
-                    opacity: 0.5;
-                    // background: nb-theme(color-alternative-800);
-
-                }
-
-            }
-        }
-
-    }
-
 }
 
 
@@ -328,4 +209,128 @@ nb-card-footer {
 
 
     }
+}
+
+
+nb-card {
+    // border-right         : 1px solid #7d2ae8;
+    // border-right-width: -1px;
+    // margin-right: 5px;
+
+    box-shadow: 10px 0 5px -2px #7d2ae8;
+
+
+    transition-duration: 0.1s;
+    background         : nb-theme(color-basic-1100);
+    // background: #1d2024;
+
+    margin: 0;
+
+    nb-card-header {
+        // border-right: 1px solid #7d2ae8;
+
+        // box-shadow: 10px 0 5px -2px #7d2ae8;
+        // nb-toggle>label>div {
+
+        // }
+
+     
+
+        // &:hover {
+        //     border-right: 2px solid nb-theme(color-success-400);
+        //     border-right: 2px solid #7d2ae8;
+
+        // }
+
+
+
+        padding     : 0;
+        padding-left: 20px;
+
+        .logo {
+            width : 70px;
+            height: 70px;
+        }
+
+        // background: #1a1d1e;
+        background: nb-theme(color-basic-1000);
+
+        border: 0;
+
+        div {
+            // height: 60px;
+        }
+
+    }
+
+
+    nb-card-body {
+
+        // border-right: 1px solid #7d2ae8;
+
+        // &:hover {
+        //     border-right: 2px solid nb-theme(color-success-400);
+        //     border-right: 2px solid #7d2ae8;
+
+        // }
+
+        padding    : 15px;
+        padding-top: 0;
+
+
+        nb-list {
+
+            nb-list-item {
+                // background: nb-theme(color-basic-900);
+                padding   : 8px;
+                margin-top: 10px;
+
+                border-radius: 10px;
+
+                &.active {
+                    background: nb-theme(color-basic-800);
+
+                    div {
+
+                        color      : nb-theme(text-success-color);
+                        font-weight: 550;
+
+
+
+
+                    }
+
+
+                }
+
+                &:hover {
+                    background: nb-theme(color-basic-800);
+
+                }
+
+                div {
+                    font-weight: 350;
+                    color      : nb-theme(text-hint-color);
+
+                    img {
+
+                        width       : 26px;
+                        height      : 26px;
+                        margin-right: 20px;
+                        margin-left : 10px;
+                    }
+
+                }
+
+                &.disabled{
+                    opacity: 0.5;
+                    // background: nb-theme(color-alternative-800);
+
+                }
+
+            }
+        }
+
+    }
+
 }

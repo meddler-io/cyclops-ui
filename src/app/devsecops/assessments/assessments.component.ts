@@ -254,6 +254,10 @@ export class AssessmentsComponent {
 
   ) { }
 
+  goTo ( slug: string ){
+    this.router.navigate([  '../' ,  slug]  , {relativeTo: this.activatedRoute} ) 
+  }
+
   ngOnInit(): void {
     // TODO
     // this.nbSidebarService.collapse(

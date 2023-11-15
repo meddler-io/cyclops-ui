@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, share, startWith, switchMap, tap, scan, shareReplay, mergeMap, catchError } from 'rxjs/operators';
 import { NbDialogService } from '@nebular/theme';
 import { FormControl, Validators } from '@angular/forms';
@@ -179,52 +179,60 @@ export class AppPageComponent implements OnInit {
 
           let config = {};
 
-          if (app.active_env == 'staging') {
-            if ('staging' in app['config'])
-              config = app['config']['staging']
+          if ('config' in app)
 
-          } else if (app.active_env == 'development') {
-            if ('development' in app['config'])
-              config = app['config']['development']
+            if (app.active_env == 'staging') {
+              if ('staging' in app['config'])
+                config = app['config']['staging']
 
-          } else if (app.active_env == 'production') {
-            if ('production' in app['config'])
-              config = app['config']['production']
+            } else if (app.active_env == 'development') {
+              if ('development' in app['config'])
+                config = app['config']['development']
 
-          } else {
+            } else if (app.active_env == 'production') {
+              if ('production' in app['config'])
+                config = app['config']['production']
 
-          }
+            } else {
+
+            }
 
           let appRef = undefined;
+
+          console.log('repositoryBranch', config)
+
+
+
+
+          appRef = config;
+
+          if ('repository' in appRef) {
+
+            let repository = appRef.repository;
+
+            let remote = repository?.remote;
+            let branch = repository?.branch;
+            this.repository.setValue(remote)
+            this.repositoryBranch.setValue(branch);
+            console.log('repositoryBranch', branch)
+
+
+
+          }
 
           if (platform == 'webapp') {
 
 
-            if (platform in config) {
 
-              appRef = config[platform];
-              if ('endpoint' in appRef) {
-                let endpoint = appRef['endpoint'];
-                this.url.setValue(endpoint)
-              }
-
-              if ('repository' in appRef) {
-
-                let repository = appRef.repository;
-
-                let remote = repository?.remote;
-                let branch = repository?.branch;
-                this.repository.setValue(remote)
-                this.repositoryBranch.setValue(branch);
-                console.log('repositoryBranch', branch)
-
-
-
-              }
+            if ('endpoint' in appRef) {
+              let endpoint = appRef['endpoint'];
+              this.url.setValue(endpoint)
             }
+
+
+
           } else if (platform == 'webservice') {
 
-            appRef = config[platform];
             if (appRef)
               if ('file' in appRef) {
                 let file = appRef["file"];
@@ -238,7 +246,7 @@ export class AppPageComponent implements OnInit {
 
           } else if (platform == 'ios') {
 
-            appRef = config[platform];
+
             if (appRef)
               if ('file' in appRef) {
                 let file = appRef["file"];
@@ -250,7 +258,6 @@ export class AppPageComponent implements OnInit {
               }
           } else if (platform == 'android') {
 
-            appRef = config[platform];
             if (appRef)
               if ('file' in appRef) {
                 let file = appRef["file"];
@@ -264,6 +271,7 @@ export class AppPageComponent implements OnInit {
           } else {
 
           }
+
 
 
 
@@ -285,11 +293,21 @@ export class AppPageComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
-    private dialogService: NbDialogService
+    private dialogService: NbDialogService,
+    private router: Router,
+
 
 
 
   ) { }
+
+
+  goTo ( slug: string ){
+
+
+    this.router.navigate([  '../../' ,  slug]  , {relativeTo: this.activatedRoute} ) 
+  }
+
   ngOnInit(): void {
     this.setApplicationRef();
   }
