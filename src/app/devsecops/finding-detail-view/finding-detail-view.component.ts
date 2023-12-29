@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 
-import { EMPTY, map, of, shareReplay, tap } from 'rxjs';
+import { EMPTY, Subject, map, of, shareReplay, tap } from 'rxjs';
 
 import { ApiService } from '../api.service';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -15,6 +15,7 @@ import { NbDialogService, NbToastrService } from '@nebular/theme';
 export class FindingDetailViewComponent implements OnInit {
 
     @Input('finding_id') finding_id;
+    @Input('issues') issues = false;;
 
     finding_details = of(EMPTY);
 
@@ -30,10 +31,21 @@ export class FindingDetailViewComponent implements OnInit {
     ) { }
 
 
+
     refreshFinding() {
-        this.finding_details = this.apiService.getFindingById(this.finding_id).pipe(
-            map(data => data?.data),
-            tap(data => {
+
+        let finding_details: any  ;
+
+        if (this.issues) {
+            finding_details = this.apiService.getAssessmentsFindingsById(this.finding_id)
+        } else {
+            finding_details = this.apiService.getFindingById(this.finding_id)
+
+        }
+
+        this.finding_details = finding_details.pipe(
+            map( (data: any) => data?.data),
+            tap( (data: any)  => {
                 this.build_details = this.apiService.getBuildById(data?.buildId?.$oid).pipe(
                     shareReplay()
                 )

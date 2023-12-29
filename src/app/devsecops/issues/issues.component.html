@@ -2,17 +2,18 @@
 
 
 
-    <nb-card-header fxLayoutAlign="space-between center" fxLayout="row">
+    <nb-card-header *ngIf="false" fxLayoutAlign="space-between center" fxLayout="row">
 
 
         <div>
-            <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="small" class="left" status="basic"
-                nbButton ghost>
+            <!-- <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="small" class="left" status="basic"                nbButton ghost>                <nb-icon icon="arrow-back-outline"></nb-icon>                Issues            </button> -->
+            <app-a-p-selector (onchange)="onChange($event)"> </app-a-p-selector>
 
-                <nb-icon icon="arrow-back-outline"></nb-icon>
-                Issues
-            </button>
         </div>
+
+        <!-- <app-b-p-selector (onchange)="onChange($event)"></app-b-p-selector> -->
+
+
 
         <div fxLayoutAlign="end center" fxLayout="row">
 
@@ -28,7 +29,7 @@
             </button>
 
 
-            <button [routerLink]="[ '../settings' ]" fullWidth size="small" class="left" status="basic" nbButton ghost>
+            <button (click)="goTo('settings'   )" fullWidth size="small" class="left" status="basic" nbButton ghost>
                 <nb-icon icon="settings-2-outline"></nb-icon>&nbsp;
             </button>
 
@@ -78,7 +79,7 @@
                     <nb-icon *ngIf="sortFindingFilter?.active == 1" icon="arrow-up-outline"></nb-icon>
                     <nb-icon *ngIf="sortFindingFilter?.active == -1" icon="arrow-down-outline"></nb-icon>
 
-                    Status
+                    Statuss
                 </button>
             </div>
 
@@ -185,7 +186,7 @@
     line-break: anywhere;
                     ">
 
-                        {{data?.issue?.name}}
+                        {{data?.title}}
                     </div>
 
                     <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline" status="danger"
@@ -205,7 +206,7 @@
 
                 <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
                     <div class="severity">
-                        {{ ( data?.issue?.severity ) }}
+                        {{ ( data?.severity ) }}
                     </div>
 
                 </div>
@@ -231,7 +232,7 @@
                     <div>
 
                         <!-- {{data?.found_by}} -->
-                        {{data?.name}}
+                        {{data?.platform}}
 
                     </div>
 
@@ -265,7 +266,8 @@
                     <div style="
                             border          : 2px solid {{ data?.state | state : 'color' }} " class="severity">
 
-                        {{data?.state}}
+                        {{ ( data?.severity ) }}
+
                     </div>
 
                 </div>
@@ -289,7 +291,7 @@
         <div fxFlex fxLayoutAlign="space-between">
             <button style="margin-left:  1rem;" [disabled]="loadingFindings$
             ||
-            ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 )
+            ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 ) || 1
             " (click)="previousPage()" size="medium" status="success" nbButton ghost>
 
                 <nb-icon icon="arrow-left-outline"></nb-icon>
@@ -365,8 +367,7 @@
 <ng-template let-context="context" #editTmpl>
 
 
-
-    <app-finding-detail-view [finding_id]="context?.finding_id?.$oid">
+    <app-finding-detail-view [issues]="true" [finding_id]="context?.finding_id?.$oid">
 
     </app-finding-detail-view>
 

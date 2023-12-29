@@ -61,7 +61,7 @@ export class StatePipe implements PipeTransform {
 
     if (value == undefined)
       value = ''
-    console.log('color_severity', value, args)
+
 
     if (args.indexOf('color') >= 0) {
 

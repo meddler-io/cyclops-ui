@@ -10,7 +10,7 @@ import { FormControl, Validators } from '@angular/forms';
   templateUrl: './manage-apps-sidebar.component.html',
   styleUrls: ['./manage-apps-sidebar.component.scss']
 })
-export class ManageAppsSidebarComponent implements AfterContentChecked, OnInit, OnDestroy, AfterViewInit {
+export class ManageAppsSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // visible lists
 
@@ -57,7 +57,7 @@ export class ManageAppsSidebarComponent implements AfterContentChecked, OnInit, 
     shareReplay(),
     tap({
       next: (_) => {
-        console.log('loggerbithc', _[5])
+
       }
     })
   )
@@ -122,9 +122,7 @@ export class ManageAppsSidebarComponent implements AfterContentChecked, OnInit, 
     private changeDetector: ChangeDetectorRef,
 
   ) { }
-  ngAfterContentChecked(): void {
-    this.changeDetector.detectChanges();
-  }
+
   ngAfterViewInit(): void {
 
   }
@@ -145,20 +143,37 @@ export class ManageAppsSidebarComponent implements AfterContentChecked, OnInit, 
 
   }
 
+  onChange(event) {
+    console.log('event', event);
+
+  }
+
   currentAppId = this.activatedRoute.parent.firstChild.paramMap.pipe(
 
     map(_ => _.get('appid')),
     // shareReplay()
   )
 
-  manageApp(oldAppId, appId) {
+  manageApp(appId) {
 
+    console.log('pooop', appId, this.activatedRoute.snapshot.url)
+    // this.router.navigate([{ outlets: { sidebar: ['manage-apps', 'app'] } }]);
 
-    const newUrl = this.router.url.replace(oldAppId, appId);
-    console.log(
-      'newUrl', newUrl,
-      this.activatedRoute.snapshot.parent.children
-    )
+    this.router.navigate(['../manage-apps/app'], {
+      relativeTo: this.activatedRoute,
+
+      queryParams: {
+        'appid': appId
+      }
+    });
+
+    return;
+
+    // const newUrl = this.router.url.replace(oldAppId, appId);
+    // console.log(
+    //   'newUrl', newUrl,
+    //   this.activatedRoute.snapshot.parent.children
+    // )
 
 
     this.router.navigate(
@@ -203,12 +218,12 @@ export class ManageAppsSidebarComponent implements AfterContentChecked, OnInit, 
 
 
     })
-    
+
     this.filteredControlOptions = this.inputProjectFormControl.valueChanges
       .pipe(
         tap({
           next: (_) => {
-            console.log('loggerbithc', _)
+
           }
         })
         ,
@@ -252,9 +267,7 @@ export class ManageAppsSidebarComponent implements AfterContentChecked, OnInit, 
           // return _.filter((optionValue: any) => optionValue?.name?.toLowerCase().includes(filterValue))
 
           let searchedResults = [];
-          console.log(
-            'filtertest', _, filterValue$
-          )
+
           _.forEach(_element => {
 
             const element = { ..._element };

@@ -225,7 +225,7 @@ export class DynamicConfigComponent implements OnInit , OnDestroy {
         lsRemote: this.apiService.healthcheck(this.appUrlInputFormControl.value)
           .pipe(map(_ => {
 
-            return { status_code: _?.data }
+            return { status_code: _?.status_code }
 
           }
           ),

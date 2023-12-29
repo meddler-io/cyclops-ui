@@ -1,0 +1,50 @@
+<div fxFlex fxLayoutAlign="space-between">
+
+
+
+
+    <div fxFlex fxLayoutAlign="center center">
+
+        <nb-select [selected]="page_number" (selectedChange)="goto($event)" placeholder="Go to">
+
+            <nb-select-label>
+
+                <div>
+                    Page
+
+                    <span class="page" [class.page_no]="!loading">
+
+                        <!-- {{selectedItem}} -->
+                        <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
+
+                        {{page_number}}
+                    </span>
+
+                    of
+                    <span class="page" [class.page_no]="!loading">
+
+                        {{page_count}}
+
+                    </span>
+
+                </div>
+
+
+            </nb-select-label>
+
+            <nb-option *ngFor="let item of [].constructor(page_count); let i = index" [value]="i + 1">
+                <div>
+                    Page
+                    {{i + 1}}
+                </div>
+            </nb-option>
+
+
+        </nb-select>
+        <!-- {{lastFindingIdOffset}} -->
+        <!-- {{findingsListLimit}} -->
+
+    </div>
+
+
+</div>

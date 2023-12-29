@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService } from '@nebular/theme';
+import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule } from '@nebular/theme';
 import { ApiService } from './api.service';
 import { AppListComponent } from './app-list/app-list.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -79,17 +79,46 @@ import { AssessmentsComponent } from './assessments/assessments.component';
 import { StatePipe } from './state.pipe';
 import { IssuesComponent } from './issues/issues.component';
 import { AppPageComponent } from './app-page/app-page.component';
+import { LayoutBootstrapComponent } from './layout-bootstrap/layout-bootstrap.component';
+import { ManageAppSidebarComponent } from './manage-app-sidebar/manage-app-sidebar.component';
+import { BPSelectorComponent } from './b-p-selector/b-p-selector.component';
+import { APSelectorComponent } from './a-p-selector/a-p-selector.component';
+import { ManageTeamComponent } from './manage-team/manage-team.component';
+import { DebugWindowComponent } from './debug-window/debug-window.component';
+
+import { AppBriefDetailsComponent } from './app-brief-details/app-brief-details.component';
+import { AppsComponent } from './apps/apps.component';
+import { PaginatorComponent } from './paginator/paginator.component';
+import { CreateEngagementComponent } from './create-engagement/create-engagement.component';
+import { CreateDastComponent } from './create-dast/create-dast.component';
+import { CreateSastComponent } from './create-sast/create-sast.component';
+import { CreatePentestComponent } from './create-pentest/create-pentest.component';
+import { LayoutAppComponent } from './layout-app/layout-app.component';
+import { ManageAppDetailSidebarComponent } from './manage-app-detail-sidebar/manage-app-detail-sidebar.component';
+import { AppGeneralsettingsComponent } from './app-generalsettings/app-generalsettings.component';
+import { EngagementLayoutComponent } from './engagement-layout/engagement-layout.component';
+import { EngagementCreateFindingComponent } from './engagement-create-finding/engagement-create-finding.component';
+import { EngagementDetailsComponent } from './engagement-details/engagement-details.component';
+import { EngagementFindingsToRevalidateComponent } from './engagement-findings-to-revalidate/engagement-findings-to-revalidate.component';
+import { EngagementAssignToComponent } from './engagement-assign-to/engagement-assign-to.component';
+import { EngagementFindingsComponent } from './engagement-findings/engagement-findings.component';
+import { EngagementSelectFindingComponent } from './engagement-select-finding/engagement-select-finding.component';
+import { HighlightPipe } from './highlight.pipe';
+import { EngagementStepToReproduceComponent } from './engagement-step-to-reproduce/engagement-step-to-reproduce.component';
+import { AngularMarkdownEditorModule } from 'angular-markdown-editor';
+import { EngagementStepsToReproduceComponent } from './engagement-steps-to-reproduce/engagement-steps-to-reproduce.component';
 
 
 
 
 
 @NgModule({
-  declarations: [FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent],
+  declarations: [FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent, LayoutBootstrapComponent, ManageAppSidebarComponent, BPSelectorComponent, APSelectorComponent, ManageTeamComponent, DebugWindowComponent, AppsComponent, AppBriefDetailsComponent, PaginatorComponent, CreateEngagementComponent, CreateDastComponent, CreateSastComponent, CreatePentestComponent, LayoutAppComponent, ManageAppDetailSidebarComponent, AppGeneralsettingsComponent, EngagementLayoutComponent, EngagementCreateFindingComponent, EngagementDetailsComponent, EngagementFindingsToRevalidateComponent, EngagementAssignToComponent, EngagementFindingsComponent, EngagementSelectFindingComponent, HighlightPipe, EngagementStepToReproduceComponent, EngagementStepsToReproduceComponent],
   imports: [
 
 
     
+    AngularMarkdownEditorModule,
     NbLayoutModule,
     CommonModule,
     ClipboardModule,
@@ -104,6 +133,7 @@ import { AppPageComponent } from './app-page/app-page.component';
     NbInputModule,
     NbListModule,
     NbSelectModule,
+    NbBadgeModule,
     FormsModule,
     ReactiveFormsModule,
     NbInputModule,
@@ -115,6 +145,7 @@ import { AppPageComponent } from './app-page/app-page.component';
     NbContextMenuModule,
     NbPopoverModule,
     NbEvaIconsModule,
+    NbActionsModule,
 
 
     NbRouteTabsetModule,

@@ -371,7 +371,7 @@ export class ConfigComponent implements OnInit {
 
     this.apiService.healthcheck(appUrl).subscribe(_ => {
       this.website_healthcheck_loading = false;
-      this.website_healthcheck_message = 'Status Code:' + _?.data;
+      this.website_healthcheck_message = 'Status Code:' + _?.status_code;
 
     })
 

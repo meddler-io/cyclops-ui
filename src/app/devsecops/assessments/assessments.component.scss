@@ -939,3 +939,15 @@ body {
   left: 300px;
   top : 88px;
 }
+
+.grid-item {
+
+  // padding: 1rem;
+
+  border-left: 2px solid ;
+
+  box-sizing: border-box;
+  overflow: hidden;
+  /* Ensure the border doesn't add to the total width */
+  position: relative;
+}

@@ -9,6 +9,7 @@ import { ApiService } from '../api.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
 import { FindingStatsComponent } from '../finding-stats/finding-stats.component';
+import { StateManagerService } from '../state-manager.service';
 
 
 @Component({
@@ -240,7 +241,7 @@ export class AssessmentsComponent {
 
 
 
- 
+
 
   // findings = this.apiService.getFindings('', '')
 
@@ -250,65 +251,113 @@ export class AssessmentsComponent {
     private nbSidebarService: NbSidebarService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private stateManagerService: StateManagerService
 
 
   ) { }
 
-  goTo ( slug: string ){
-    this.router.navigate([  '../' ,  slug]  , {relativeTo: this.activatedRoute} ) 
+  goTo(slug: string) {
+    this.router.navigate(['../', slug], {
+
+      queryParamsHandling: 'merge',
+      relativeTo: this.activatedRoute
+    })
+    // this.router.navigate([  '../' ,  slug]  , {relativeTo: this.activatedRoute} ) 
   }
 
+
+
+  activeStateIds = this.stateManagerService.activeStateIds$
+
   ngOnInit(): void {
-    // TODO
-    // this.nbSidebarService.collapse(
-    //   'buildList'
-    // );
-
-    this.loadMoreFindings$.subscribe(page_number => {
-
-      this.assessments$ = this.apiService.getAssessments(page_number).pipe(
-
-        map(_ => {
-
-          this.totalFindings = _?.count;
-          this.currentPage = _?.page_number ;
-          let defaultPageSize = _?.defaultPageSize;
 
 
-          this.totalPages = this.math.ceil( this.totalFindings / defaultPageSize  )
+    this.activatedRoute.data.subscribe(data => {
 
-          return _.data
-        }),
+      let engagement = '';
+      if ('engagement' in data) {
+        engagement = data['engagement']
+      } else {
+        engagement = '';
+      }
 
-      )
+      if (engagement == 'sast') {
+        engagement = '/sast';
+
+
+      } else if (engagement == 'dast') {
+        engagement = '/dast';
+
+
+      } else if (engagement == 'pentest') {
+        engagement = '/pentest';
+
+
+      } else {
+        engagement = '';
+      }
+
+
+      this.assessments$ = this.stateManagerService.activeStateIds$
+
+        .pipe(
+          filter(_ => !!_)
+
+          ,
+          map((activeStateIds: any) => {
+
+            return this.loadMoreFindings$.pipe(
+              map(page_number => {
+
+                return this.apiService.getEngagement(engagement, activeStateIds.businessId, activeStateIds.projectId, activeStateIds.applicationId, page_number).pipe(
+
+
+                  map(_ => {
+
+
+                    this.totalFindings = _?.count || 0;
+                    this.currentPage = _?.page_number;
+                    let defaultPageSize = _?.defaultPageSize;
+
+
+                    this.totalPages = this.math.ceil(this.totalFindings / defaultPageSize)
+                    console.log('totalFindings', this.totalFindings, this.totalPages)
+
+                    return _.data
+                  }),
+
+
+
+                )
+
+
+              })
+              ,
+              switchMap(_ => _),
+
+            )
+          })
+
+          ,
+
+          switchMap(_ => _)
+
+
+
+        )
+
     })
 
 
 
-    this.activatedRoute.parent.paramMap.pipe(
 
-      tap(_ => {
 
-        console.log(
-          'logger2',
-          _
-        )
-      }),
 
-      map(_ => {
-        return _?.get('buildId')
-      }),
-      filter(_ => !!_),
-      tap(
-        _ => {
-          console.log('___', _);
-          this.selectedBuildId.setValue(_, {
-            emitModelToViewChange: true, emitEvent: false,
-            emitViewToModelChange: true
-          })
-        }
-      )
-    ).subscribe()
+
+
+
+
+
 
   }
 
@@ -324,7 +373,16 @@ export class AssessmentsComponent {
   }
 
   onClickFinding(finding) {
-    this.openDrawer(finding)
+
+
+    this.router.navigate(
+      [ 'devsec',  'engagement', finding?._id?.$oid],
+      {
+        relativeTo: this.activatedRoute.root
+      }
+    );
+    return
+    this.openDrawer(finding);
   }
   openDrawer(context, direction = 'left', size?, closeOnOutsideClick = true, template = this.editTmpl, isRoot = true, parentContainer?: any) {
     this.drawerMngr.create({

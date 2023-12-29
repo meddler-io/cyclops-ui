@@ -1,0 +1,43 @@
+<nb-card *ngIf="finding$  | async as finding$"  fxFill>
+
+    <nb-card-header fxLayoutAlign="space-between" >
+        <span class="subtitle-"> Steps to reproduce</span>
+
+        <button size="small" shape="round" nbButton (click)="addStep(  finding$?._id?.$oid  )">
+
+            Add Step
+        </button>
+
+
+    </nb-card-header>
+
+
+    <nb-list >
+
+
+        <nb-list-item [formGroup]="group" *ngFor="let step of finding$?.steps_to_reproduce; let i = index">
+
+
+            <app-engagement-step-to-reproduce
+            [finding_id]="finding$?._id?.$oid"
+            [step_id]="step?._id?.$oid"
+            fxFlex>
+
+            </app-engagement-step-to-reproduce>
+
+
+        </nb-list-item>
+
+    </nb-list>
+
+
+
+    <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+
+
+
+        <button size="small" nbButton disabled nbStepperNext>prev</button>
+        <button size="small" nbButton nbStepperNext>next</button>
+    </nb-card-footer>
+
+</nb-card>

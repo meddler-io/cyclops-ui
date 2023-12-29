@@ -30,7 +30,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    NbThemeModule.forRoot({ name: 'default' }),
+    NbThemeModule.forRoot({ name: 'dark' }),
 
     NbWindowModule.forRoot(),
     NbDialogModule.forRoot(),

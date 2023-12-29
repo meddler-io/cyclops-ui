@@ -1,0 +1,86 @@
+<div fxLayout="row">
+
+
+    <!-- (focusout)="repositoryFocusout()" -->
+
+    <nb-form-field fullWidth
+    [nbSpinner]="loading"
+    >
+
+        <input
+        style="font-weight: 200;" fullWidth fxFlex ghost nbInput type="text" [value]="value?.name"
+            (ngModelChange)="onModelChange($event)" placeholder="Select app" [nbAutocomplete]="auto" />
+        <button status="primary" nbPrefix nbButton ghost>
+            <!-- Switch projects and business -->
+            <nb-icon icon="arrow-ios-back-outline" pack="eva"></nb-icon>
+
+        </button>
+    </nb-form-field>
+    <nb-select placeholder="webapp" size="medium" status="info" appearance="outline">
+
+
+        <nb-option style="font-weight: 200; font-size: 0.7rem;" value="webapp">Webapp</nb-option>
+        <nb-option style="font-weight: 200; font-size: 0.7rem;" value="webservice">Webservice</nb-option>
+        <nb-option style="font-weight: 200; font-size: 0.7rem;" value="ios">iOS</nb-option>
+        <nb-option style="font-weight: 200; font-size: 0.7rem;" value="android">Android</nb-option>
+
+    </nb-select>
+</div>
+
+<nb-autocomplete [handleDisplayFn]="searchViewHandle" (selectedChange)="onProjectChanged($event)" #auto>
+    <!-- List ot projects -->
+
+    <nb-option [value]=" { 'name': 'All Prpjects' , 'appId': ''  } ">
+        All Applications
+
+        {{ ( applications | async )?.length}}
+
+    </nb-option>
+
+
+
+
+    <!-- Web apps -->
+    <nb-option-group title="Web Apps">
+
+        <nb-option [value]="{ 'name': app?.title ,   'appId':  app?._id?.$oid } "
+            *ngFor="let app of webApplications | async ; ; trackBy: identify  " style="font-weight: 400;"
+            optionsListClass="businessSelected">
+            {{app?.title}}
+        </nb-option>
+    </nb-option-group>
+
+
+    <!-- Web Service -->
+    <nb-option-group title="Web Service">
+
+        <nb-option [value]="{ 'name': app?.title ,   'appId':  app?._id?.$oid } "
+            *ngFor="let app of webserviceApplications | async; trackBy: identify " style="font-weight: 400;"
+            optionsListClass="businessSelected">
+            {{app?.title}}
+        </nb-option>
+    </nb-option-group>
+
+
+    <!-- Android -->
+    <nb-option-group title="Android">
+
+        <nb-option [value]="{ 'name': app?.title ,   'appId':  app?._id?.$oid } "
+            *ngFor="let app of androidApplications | async" style="font-weight: 400;"
+            optionsListClass="businessSelected">
+            {{app?.title}}
+        </nb-option>
+    </nb-option-group>
+
+
+    <!-- iOS -->
+    <nb-option-group title="iOS">
+
+        <nb-option [value]="{ 'name': app?.title ,   'appId':  app?._id?.$oid } "
+            *ngFor="let app of iosApplications | async" style="font-weight: 400;" optionsListClass="businessSelected">
+            {{app?.title}}
+        </nb-option>
+    </nb-option-group>
+
+
+</nb-autocomplete>

@@ -1,0 +1,72 @@
+<!-- {{value | json }} -->
+<!-- [hidden]="lockDisplay"  -->
+<!-- *ngIf="lockDisplay" -->
+<!-- (focusout)="focusoutEvent($event)" -->
+
+
+<nb-form-field
+
+
+ [nbSpinner]="loading" fullWidth>
+
+
+    <!-- [formControl]="inputProjectFormControl" -->
+    <input
+
+(focusout)="focus$(false)"
+(focus)="focus$(true)"
+(blur)="focus$(false)"
+
+    [status]="focussed$ ? 'info' : 'basic' "
+    #inputSearch appearance="filled" style="font-weight: 200;" fullWidth fxFlex nbInput type="text"
+       [ngModel]="value"  (ngModelChange)="onModelChange($event)" [placeholder]="value?.placeholder"
+        [nbAutocomplete]="auto" />
+
+    <button status="info" [routerLink]=" backRouterLink " nbPrefix nbButton ghost>
+        <!-- Switch projects and business -->
+        <nb-icon icon="arrow-ios-back-outline" pack="eva"></nb-icon>
+
+    </button>
+
+
+
+</nb-form-field>
+
+<nb-autocomplete [activeFirst]="false" [handleDisplayFn]="searchViewHandle"
+(selectedChange)="onProjectChanged($event)" #auto>
+<!-- List ot projects -->
+
+<nb-option [value]=" { 'name': '' , 'businessId': '' , projectId: '' , placeholder: 'All Projects'  } ">
+    All Projects
+
+</nb-option>
+
+<nb-option-group [title]="business?.name"
+    *ngFor="let business of  filteredControlOptions | async  ; trackBy : identify  ">
+
+    <nb-option [class.selected]="business?._id?.$oid == value?.appId" style="font-weight: 400;"
+        [value]="{ 'name': '' ,   'businessId':  business?._id?.$oid , placeholder: business?.name } "
+        *ngIf="business?.projects?.length > 0">
+        {{business?.name}} (All)
+    </nb-option>
+
+    <nb-option [class.selected]="project?._id?.$oid == value?.appId" style="font-weight: 200;"
+        *ngFor="let project of  business?.projects  ; trackBy : identify    "
+        [value]="  {  'name': '' ,   'projectId':  project?._id?.$oid , placeholder: project?.name}  ">
+        {{project?.name}}  
+
+    </nb-option>
+</nb-option-group>
+
+
+</nb-autocomplete>
+
+
+
+<!-- <nb-form-field fullWidth *ngIf="!lockDisplay" (click)="unlockDisplay()">
+    <input [readonly]="true" status="basic" appearance="outline" style="font-weight: 200;" fullWidth fxFlex ghost
+        nbInput type="text" [value]="value?.name" />
+    <button status="success" nbPrefix nbButton ghost>
+        <nb-icon icon="arrow-ios-back-outline" pack="eva"></nb-icon>
+    </button>
+</nb-form-field> -->

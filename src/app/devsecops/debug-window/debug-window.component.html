@@ -1,0 +1,11 @@
+<div fxFlex>
+    <code>
+       state: {{appId | async  | json}}
+
+          
+  bid:{{ (activeBusinessId | async ).id| json}}
+  projid:{{ (activeProjectId | async ).id| json}}
+  appid:{{ (activeApplicationId | async ).id| json}}
+
+    </code>
+</div>

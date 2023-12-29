@@ -32,31 +32,356 @@ import { QuickScanJobsComponent } from "./quick-scan-jobs/quick-scan-jobs.compon
 import { VaptFindingsComponent } from "./vapt-findings/vapt-findings.component";
 import { ManageAppsComponent } from "./manage-apps/manage-apps.component";
 import { ManageAppsSidebarComponent } from "./manage-apps-sidebar/manage-apps-sidebar.component";
-import { AssessmentsComponent } from "./assessments/assessments.component";
+
 import { IssuesComponent } from "./issues/issues.component";
 import { AppPageComponent } from "./app-page/app-page.component";
+import { LayoutBootstrapComponent } from "./layout-bootstrap/layout-bootstrap.component";
+import { ManageAppSidebarComponent } from "./manage-app-sidebar/manage-app-sidebar.component";
+import { ManageTeamComponent } from "./manage-team/manage-team.component";
+import { AssessmentsComponent } from "./assessments/assessments.component";
+import { AppsComponent } from "./apps/apps.component";
+import { LayoutAppComponent } from "./layout-app/layout-app.component";
+import { ManageAppDetailSidebarComponent } from "./manage-app-detail-sidebar/manage-app-detail-sidebar.component";
+import { AppGeneralsettingsComponent } from "./app-generalsettings/app-generalsettings.component";
+import { EngagementLayoutComponent } from "./engagement-layout/engagement-layout.component";
+import { EngagementCreateFindingComponent } from "./engagement-create-finding/engagement-create-finding.component";
+import { EngagementDetailsComponent } from "./engagement-details/engagement-details.component";
+import { EngagementFindingsToRevalidateComponent } from "./engagement-findings-to-revalidate/engagement-findings-to-revalidate.component";
+import { EngagementAssignToComponent } from "./engagement-assign-to/engagement-assign-to.component";
+import { EngagementFindingsComponent } from "./engagement-findings/engagement-findings.component";
+import { EngagementSelectFindingComponent } from "./engagement-select-finding/engagement-select-finding.component";
 
 
 
 
 const appRoutes: Routes = [
 
+  // Engagement specific route
   {
-    path: 'test',
-    component: CreateAppComponent,
+    path: 'engagement/:id'
+    ,
+    component: EngagementLayoutComponent,
+    children: [
+
+
+      {
+        path: 'select_finding/:finding_id', component: EngagementSelectFindingComponent,
+        // outlet: 'content',
+       
+      },
+
+
+      {
+        path: 'create', component: EngagementCreateFindingComponent,
+        // outlet: 'content',
+       
+      },
+
+      {
+        path: 'draft_review', component: EngagementFindingsToRevalidateComponent,
+        // outlet: 'content',
+       
+      },
+
+      {
+        path: 'assign_task', component: EngagementAssignToComponent,
+        // outlet: 'content',
+       
+      },
+      {
+        path: 'in_progress', component: EngagementFindingsComponent,
+        // outlet: 'content',
+       
+      },
+
+      {
+        path: 'details', component: EngagementDetailsComponent,
+        // outlet: 'content',
+       
+
+      },
+
+      {
+        path: 'manage', component: IssuesComponent,
+        // outlet: 'content'
+
+      },
+
+      { path: '', redirectTo: 'details', pathMatch: 'full' },
+      { path: '**', redirectTo: 'details', pathMatch: 'full' },
+
+    ]
   },
 
+  // App-specific route
   {
-    path: ''
+    path: 'application'
     ,
-    redirectTo: "switch"
+    component: LayoutAppComponent,
+    children: [
+
+
+      {
+        path: 'issues', component: IssuesComponent,
+        outlet: 'content'
+
+      },
+
+
+      {
+        path: 'assessment', component: AssessmentsComponent,
+        outlet: 'content',
+        data: {
+          'engagement': ''
+        }
+
+      },
+      {
+        path: 'assessment/sast', component: AssessmentsComponent,
+        outlet: 'content',
+        data: {
+          'engagement': 'sast'
+        }
+
+      },
+
+      {
+        path: 'assessment/dast', component: AssessmentsComponent,
+        outlet: 'content',
+        data: {
+          'engagement': 'dast'
+        }
+
+      },
+      {
+        path: 'assessment/pentest', component: AssessmentsComponent,
+        outlet: 'content',
+        data: {
+          'engagement': 'pentest'
+        }
+
+      },
+
+      {
+        path: 'settings/general', component: AppGeneralsettingsComponent,
+        outlet: 'content',
+
+      },
+
+      {
+        path: 'manage-apps/webservice', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'webservice'
+        }
+      },
+      {
+        path: 'manage-apps/android', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'android'
+        }
+      },
+      {
+        path: 'manage-apps/ios', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'ios'
+        }
+
+      },
+      {
+        path: 'manage-apps/webapp', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'webapp'
+        }
+      },
+
+
+
+      {
+        path: 'manage-apps', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': ''
+        }
+      },
+
+
+      {
+        path: 'settings/:env', component: AppPageComponent,
+        outlet: 'content'
+
+      },
+
+      {
+        path: 'settings', redirectTo: 'settings/staging'
+        , pathMatch: 'full',
+        outlet: 'content'
+
+
+      },
+
+
+      {
+        path: 'manage-apps', component: ManageAppDetailSidebarComponent,
+
+      },
+
+
+
+
+
+      {
+        path: '', redirectTo: 'assessment', pathMatch: 'full'
+        , outlet: 'content'
+
+      }
+
+      ,
+      {
+        path: '**', redirectTo: 'assessment', pathMatch: 'full'
+        , outlet: 'content'
+
+      },
+
+      { path: '', redirectTo: 'manage-apps', pathMatch: 'full' },
+      { path: '**', redirectTo: 'manage-apps', pathMatch: 'full' },
+
+
+
+
+
+    ]
+
+
+
+
+  },
+
+  // Landing route
+  {
+    path: 'home'
     ,
-    pathMatch: 'full',
+    component: LayoutBootstrapComponent,
+    children: [
+
+
+      {
+        path: 'issues', component: IssuesComponent,
+        outlet: 'content'
+
+      },
+
+
+      {
+        path: 'assessment', component: AssessmentsComponent,
+        outlet: 'content'
+
+      },
+
+      {
+        path: 'manage-team', component: ManageTeamComponent,
+        outlet: 'content',
+
+      },
+
+      {
+        path: 'manage-apps/webservice', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'webservice'
+        }
+      },
+      {
+        path: 'manage-apps/android', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'android'
+        }
+      },
+      {
+        path: 'manage-apps/ios', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'ios'
+        }
+
+      },
+      {
+        path: 'manage-apps/webapp', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': 'webapp'
+        }
+      },
+
+
+
+      {
+        path: 'manage-apps', component: AppsComponent,
+        outlet: 'content',
+        data: {
+          'filter': ''
+        }
+      },
+
+
+      {
+        path: 'settings/:env', component: AppPageComponent,
+        outlet: 'content'
+
+      },
+
+      {
+        path: 'settings', redirectTo: 'settings/staging'
+        , pathMatch: 'full',
+        outlet: 'content'
+
+
+      },
+
+
+      {
+        path: 'manage-apps', component: ManageAppSidebarComponent,
+
+      },
+      {
+        path: 'manage-apps/app', component: ManageAppSidebarComponent,
+      }
+
+      ,
+
+
+      {
+        path: '', redirectTo: 'issues', pathMatch: 'full'
+        , outlet: 'content'
+
+      }
+
+      ,
+      {
+        path: '**', redirectTo: 'issues', pathMatch: 'full'
+        , outlet: 'content'
+
+      },
+
+      { path: '', redirectTo: 'manage-apps', pathMatch: 'full' },
+      { path: '**', redirectTo: 'manage-apps', pathMatch: 'full' },
+
+
+
+
+
+    ]
+
 
   },
 
 
- 
+
+
 
   {
     path: 'dashboard',
@@ -82,18 +407,19 @@ const appRoutes: Routes = [
     ]
   }
   ,
-  {
-    path: '',
-    component: BusinessListComponent,
-    pathMatch: 'full'
-  }
-  ,
+
   {
     path: 'switch',
     component: AppSelectorComponent,
     pathMatch: 'full'
     , data: { no_app_selected: true }
   },
+
+  {
+
+    path: 'switch', component: ManageAppsSidebarComponent
+  },
+
 
 
 
@@ -669,7 +995,7 @@ const appRoutes: Routes = [
         , pathMatch: 'full',
 
       },
- 
+
       {
         path: 'manage-apps/:appid/settings',
         redirectTo: 'manage-apps/:appid/settings/staging'
@@ -684,8 +1010,8 @@ const appRoutes: Routes = [
 
       },
 
-    
-      
+
+
       {
         path: 'builds/nobuilds',
         component: NullBuildsComponent
@@ -952,7 +1278,7 @@ const appRoutes: Routes = [
 
       { path: '', component: SidebarComponent, outlet: 'sidebar' },
       { path: 'manage-apps', component: ManageAppsSidebarComponent, outlet: 'sidebar' },
-      { path: '**', component: SidebarComponent, redirectTo: '',   outlet: 'sidebar' },
+      { path: '**', component: SidebarComponent, redirectTo: '', outlet: 'sidebar' },
 
       {
         path: '**', redirectTo: 'configure',
@@ -983,7 +1309,7 @@ const appRoutes: Routes = [
 
   {
     // Deprecating app id
-    path: ':app_id',
+    path: 'app_id',
     // path: 'configure',
     component: BootstrapComponent,
     outlet: 'primary',
@@ -1544,7 +1870,7 @@ const appRoutes: Routes = [
         , pathMatch: 'full',
 
       },
- 
+
       {
         path: 'manage-apps/:appid/settings',
         redirectTo: 'manage-apps/:appid/settings/staging'
@@ -1559,8 +1885,8 @@ const appRoutes: Routes = [
 
       },
 
-    
-      
+
+
       {
         path: 'builds/nobuilds',
         component: NullBuildsComponent
@@ -1827,7 +2153,7 @@ const appRoutes: Routes = [
 
       { path: '', component: SidebarComponent, outlet: 'sidebar' },
       { path: 'manage-apps', component: ManageAppsSidebarComponent, outlet: 'sidebar' },
-      { path: '**', component: SidebarComponent, redirectTo: '',   outlet: 'sidebar' },
+      { path: '**', component: SidebarComponent, redirectTo: '', outlet: 'sidebar' },
 
       {
         path: '**', redirectTo: 'configure',
@@ -1858,9 +2184,14 @@ const appRoutes: Routes = [
 
 
   {
-    path: "**", redirectTo: "devsec/test"
+    path: "", redirectTo: "application", pathMatch: 'full'
 
   },
+  {
+    path: "**", redirectTo: "application", pathMatch: 'full'
+
+  },
+
 
 
 

@@ -2,41 +2,246 @@ import { HttpClient, HttpEventType, HttpHeaders, HttpResponse } from '@angular/c
 import { Injectable, NgZone } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
-import { BehaviorSubject, EMPTY, Observable, of, pipe, Subject } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of, pipe, Subject, throwError } from 'rxjs';
 import { catchError, delay, distinct, distinctUntilChanged, distinctUntilKeyChanged, filter, first, map, mergeMap, share, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TransitionState } from './build-item/build-item.component';
 
 export const PUBLIC_SSH_KEY = `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bkdt4M4kJ8K01EUxyY3c/pBCPj8ForBIQs7Up9VaWaKpJ6HqY8Z14k5KnN8T3tu2G0EOP2TQ3PIHDhQBJaU6xpEbqmYk4VCb30uRBUjfOz4xJSPqVl8DcpU7USupSSFqJMWXj4YLjVmMQTq1vA/MFAuVlpTuDOy86AnqIbq6mw4vrUpZoZegozg/jA4NzaXkQTEOYI92fWC6w1YznynFQNQtI+aXp33LhzgUGTYFLTDD7/ueINjlu5PAc2Rle8+tQ7cUxBC9xKUxzTC2+NI9PIlh6LJCiogESjLUXouNw5f7lmkIhmr9NdE3I/i1D2E6Oefgxnk9iAjbYIkl6GNv prakhar.agnihotri@prakharagnihotri.local`
 
+function generateColorCode(id: string): string {
+  // Simple hash function
+  let hash: number = 0;
+  for (let i: number = 0; i < id.length; i++) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  // Ensure the hash is a positive number
+  const positiveHash: number = Math.abs(hash);
+
+  // Convert hash to a 6-digit hexadecimal color code
+  const color: string = (positiveHash % 0x1000000).toString(16).padStart(6, '0');
+
+  return '#' + color;
+}
 
 @Injectable()
 export class ApiService {
 
 
 
+  assignResourcesToEngagement(engagement_id, resource_id, pull = false) {
+
+    if (pull)
+      return this.deleteRequest(`api/v1/devsecops/resources/${engagement_id}/${resource_id}`).pipe()
+
+    return this.putRequest(`api/v1/devsecops/resources/${engagement_id}/${resource_id}`).pipe(
+
+    )
+
+  }
+
+
+
+  getCWE(query: string) {
+
+    return this.getRequest(`api/v1/devsecops/cwe`, { query }).pipe(
+      // map(_ => _?.data)
+
+    )
+
+  }
+
+  getResourcesForEngagement(engagement_id) {
+
+    return this.getRequest(`api/v1/devsecops/resources/${engagement_id}`).pipe(
+      map(_ => _?.data)
+
+      ,
+      map((_: []) => {
+        return _.map((_: any) => {
+
+
+          _['primary_color'] = generateColorCode(_['email'])
+          return _;
+
+        })
+      })
+    )
+
+  }
+
+
+
+  getResources() {
+
+    return this.getRequest(`api/v1/devsecops/resources`).pipe(
+      map(_ => _?.data)
+
+      ,
+      map((_: []) => {
+        return _.map((_: any) => {
+
+
+          _['primary_color'] = generateColorCode(_['email'])
+          return _;
+
+        })
+      })
+    )
+
+  }
+
+  // Get Team Members
+  getTeamMembers(businessId) {
+
+    return this.getRequest(`api/v1/devsecops/team-members/${businessId}`).pipe(
+      map(_ => _?.data?.users)
+
+      ,
+      map((_: []) => {
+        return _.map((_: any) => {
+
+
+
+          return {
+            'primary_color': generateColorCode(_),
+            'email': _
+          };
+
+        })
+      })
+    )
+
+  }
+
   // new API
-  getApplications( businessId?: string ,  projectId?: string ,   platform?: string) {
-    return this.getRequest('api/v1/devsecops/apps' , {
+  getApplications(businessId?: string, projectId?: string, platform?: string) {
+
+
+    return this.getRequest('api/v1/devsecops/apps', {
       projectId: projectId,
       businessId: businessId,
+      platform: platform
     }).pipe(
+      map(_ => _?.data),
+
+
+      map((_: []) => {
+        return _.map((_: any) => {
+
+
+          _['primary_color'] = generateColorCode(_['business_id']['$oid']);
+
+          return _;
+
+        })
+      })
+
+
+    )
+  }
+
+
+  markIssueToBeverified(engagement_id: string, issue_id: string) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/${issue_id}`).pipe(
       map(_ => _?.data)
     )
   }
+
+  unmarkIssueToBeverified(engagement_id: string, issue_id: string) {
+
+    return this.deleteRequest(`api/v1/devsecops/engagement/${engagement_id}/${issue_id}`).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+
   getApplicationById(id: string) {
+
+    if (!id) {
+      return throwError(() => { new Error('Invalid Application') })
+    }
+
+
     return this.getRequest(`api/v1/devsecops/app/${id}`).pipe(
       map(_ => _?.data)
     )
   }
-  updateApplicationById(id: string, env: string, data) {
-    return this.postRequest(`api/v1/devsecops/app/${env}/${id}`,
-      data
+
+  getProjectById(id: string) {
+
+    if (!id) {
+      return throwError(() => { new Error('Invalid Application') })
+    }
+
+
+    return this.getRequest(`api/v1/devsecops/project/${id}`).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  createSastEngagement(application_id: string, tags?: string[], changelogs?: string) {
+    return this.postRequest(`api/v1/devsecops/engagement/sast`,
+      {
+        'application_id': application_id,
+        tags,
+        changelogs
+      }
 
     ).pipe(
       map(_ => _?.data)
     )
   }
+
+
+  createDastEngagement(application_id: string, tags?: string[], changelogs?: string) {
+    return this.postRequest(`api/v1/devsecops/engagement/dast`,
+      {
+        'application_id': application_id,
+        tags,
+        changelogs
+      }
+
+    ).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+
+  createPentestEngagement(application_id: string, tags?: string[], changelogs?: string) {
+    return this.postRequest(`api/v1/devsecops/engagement/pentest`,
+      {
+        'application_id': application_id,
+        tags,
+        changelogs
+      }
+
+    ).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  updateApplicationById(id: string, env: string, data) {
+    return this.postRequest(`api/v1/devsecops/app/${env}/${id}`,
+      data
+
+    ).pipe(
+      delay(2000),
+      map(_ => _?.data)
+    )
+  }
+
+
+  updateFindingStepToReproduce(finding_id: string, step_id: string, data) {
+
+    return this.updateStepToFinding(finding_id, step_id, data)
+
+
+
+  }
+
 
   public upload(file: File, id: string, env: string) {
 
@@ -99,6 +304,134 @@ export class ApiService {
                 ).pipe(
                   map(
                     _ => {
+                      console.log('updateApplicationById', id, env, filedata, _)
+
+                      return { "progress": 100, "data": _, "id": fileId, "completed": true };
+
+                    }
+                  ));
+
+
+                return this.http.post(this.localUrl + '/api/v1/devsecops/upload_linker',
+                  filedata).pipe(
+                    map(data => {
+                      console.log(data);
+                      if (data["status"] == true) {
+                        // progress.next({ "progress": 100, "data": data['data'], "id": fileId })
+                        // progress.complete();
+                        return { "progress": 100, "data": data['data'], "id": fileId, "completed": true };
+
+
+                      }
+                      else {
+                        this.toastrService.danger("Error occurred while uploading file!!");
+                        return { "status": false }
+                      }
+
+                    })
+                  )
+
+              }
+
+              )
+
+              ,
+
+              mergeMap(_ => _)
+
+            )
+            // The upload is complete
+            // progress.next({ "progress": 100, "data": event.body, "id": fileId })
+            // progress.complete();
+          } else {
+            console.log('event.type');
+
+            return of({ "progress": 100, "completed": false });
+          }
+          // progress.next(123);
+          // 
+        }
+      )
+
+
+
+      // ,
+      // mergeMap(_ => progress)
+    )
+
+
+
+
+    // return the map of progress.observables
+    // return status;
+  }
+
+
+  public uploadToFinding(file: File, finding_id: string, step_id: string, attr: string) {
+
+    let fileId = 'fileId';
+    // this will be the our resulting map
+    // const status: { [key: string]: { progress: Observable<Object> } } = {};
+
+    // create a new multipart-form for every file
+    const formData: FormData = new FormData();
+    formData.append('files', file, file.name);
+    // formData.append('data', 'fileUploading');
+
+
+    // create a http-post request and pass the form
+    // tell it to report the upload progress
+
+    let headers = new HttpHeaders();
+
+    // headers = headers.append('content-type', "multipart/form-data");
+
+    let req = this.http.post(this.localUrl + '/api/v1/devsecops/upload', formData, {
+      reportProgress: true,
+      observe: 'events',
+
+    })
+
+    // create a new progress-subject for every file
+    // const progrxess = new Subject<any>();
+
+    // send the http-request and subscribe for progress-updates
+    return req.pipe(
+
+      map(
+
+        (event) => {
+
+          console.log('event.type', event.type);
+          if (event.type === HttpEventType.UploadProgress) {
+
+            // calculate the progress percentage
+            const percentDone = Math.round(100 * event.loaded / event.total);
+
+            // pass the percentage into the progress-stream
+
+            // progress.next({ "progress": percentDone, "id": fileId });
+            return of({ "progress": percentDone, "id": fileId, "completed": false });
+          } else if (event.type === HttpEventType.Response) {
+
+            // Close the progress-stream if we get an answer form the API
+            let url = environment.minio_url + event.body['files'][0]['presigned_url'];
+            let filedata = event.body['files'][0]['data'];
+            console.log('boommmeer', url);
+
+            return this.http.put(url, file, { withCredentials: true }).pipe(
+
+              map(res => {
+
+                let data = {};
+                data[attr] = { 'file': filedata }
+
+                return this.updateFindingStepToReproduce(finding_id, step_id,
+                  data,
+                ).pipe(
+                  map(
+                    _ => {
+
                       return { "progress": 100, "data": _, "id": fileId, "completed": true };
 
                     }
@@ -161,16 +494,29 @@ export class ApiService {
 
 
 
-
-
   businessMaping() {
     return this.getRequest('api/v1/business/businessMaping', {
     }).pipe(
       map(_ => _.data),
-    // shareReplay(1)
-    shareReplay(1, 1)
 
+      map((_: []) => {
+        return _.map((_: any) => {
 
+          _['color'] = generateColorCode(_['_id']['$oid']);
+
+          _.projects.map(_ => {
+            _['color'] = generateColorCode(_['_id']['$oid']);
+            return _;
+          })
+
+          return _;
+
+        })
+      })
+
+      ,
+      // shareReplay(1)
+      shareReplay(1, 1)
     )
 
   }
@@ -669,6 +1015,48 @@ export class ApiService {
     return this.getRequest(`api/v1/devsecops/finding/fetch/${id}`)
   }
 
+  createFinding(id) {
+
+    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding`)
+
+  }
+
+
+  updateFinding(id, data) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${id}/finding`, data)
+
+  }
+
+  addStepToFinding(id) {
+
+    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding/step`,)
+
+  }
+
+
+  getStepToFinding(id, step_id) {
+
+    return this.getRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`).pipe(
+      map(_ => _?.data)
+
+
+    );
+
+  }
+
+  updateStepToFinding(id: string, step_id: string, data) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`,
+      data
+    ).pipe(
+      delay(2000)
+    )
+
+  }
+
+
+
 
   stopBuildScan(applicationId, buildId) {
 
@@ -706,13 +1094,18 @@ export class ApiService {
   }
 
 
+  getAssessmentsFindingsById(id) {
 
-  getAssessmentsFindings(page_number: number = 1) {
+    return this.getRequest(`api/v1/devsecops/beta_findings/${id}`)
+  }
 
-    return this.getRequest('api/v1/customer/assesment/beta_findings', {
+  getOpenFindingsByAssessment(filter: string, assessment_id?: string, page_number: number = 1) {
+
+    return this.getRequest(`api/v1/devsecops/engagement/findings/${filter}/${assessment_id}`, {
       // 'cursor_id': '652d14878eacec4be51de38d',
       // 'type': 'OLD'
       page: page_number,
+
     }).pipe(
 
       tap(
@@ -722,11 +1115,92 @@ export class ApiService {
       ),
 
 
+
     )
 
   }
 
-  getAssessments(page_number: number = 1) {
+  getAssessmentsFindings(business_id?: string, project_id?: string, application_id?: string, page_number: number = 1) {
+
+    return this.getRequest('api/v1/devsecops/beta_findings', {
+      // 'cursor_id': '652d14878eacec4be51de38d',
+      // 'type': 'OLD'
+      page: page_number,
+      business_id,
+      project_id,
+      application_id,
+
+    }).pipe(
+
+      tap(
+        _ => {
+          console.log(_)
+        }
+      ),
+
+
+
+    )
+
+  }
+  getEngagementDetailsById(engagement_id: string, business_id?: string, project_id?: string, application_id?: string, page_number: number = 1) {
+
+    return this.getRequest(`api/v1/devsecops/engagement/details/${engagement_id}`).pipe(
+
+      tap(
+        _ => {
+          console.log(_)
+        }
+      ),
+
+      map(_ => _?.data)
+
+
+    )
+
+  }
+
+
+
+  getEngagement(engagement: string, business_id?: string, project_id?: string, application_id?: string, page_number: number = 1) {
+
+    return this.getRequest(`api/v1/devsecops/engagement${engagement}`, {
+
+      page: page_number,
+      business_id,
+      project_id,
+      application_id,
+
+    }).pipe(
+
+      tap(
+        _ => {
+          console.log(_)
+        }
+      ),
+
+
+      map((_) => {
+        _['data'] = _['data'].map((_: any) => {
+
+
+          _['primary_color'] = generateColorCode(_['application_id']['$oid']);
+
+          return _;
+
+        });
+
+        return _;
+      })
+
+
+    )
+
+  }
+
+
+
+  getAssessments(application_id?: string, page_number: number = 1) {
 
     return this.getRequest('api/v1/customer/assesment/history', {
       // 'cursor_id': '652d14878eacec4be51de38d',
@@ -1493,7 +1967,18 @@ export class ApiService {
   }
 
   healthcheck(url) {
-    return this.postRequest('api/v1/devsecops/config/healthCheck', { 'url': url })
+    return this.postRequest('api/v1/devsecops/config/healthCheck', { 'url': url }).pipe(
+
+      map(_ => {
+
+        return {
+          status_code: _?.data,
+          status: _?.status,
+
+        }
+      }),
+      delay(2000)
+    )
   }
 
   runRecon(data) {
@@ -1561,14 +2046,24 @@ export class ApiService {
   downloadFile(file) {
 
     // let data = { "bucketName": "testbucket", "filename": file.name, "path": file.path }
-    let data = { "bucketName": file.bucket, "filename": file.name, "path": file.path }
+    let data = { "bucketName": file.bucket, "filename": file.filename, "path": file.path }
 
     return this.getRequest("api/v1/external_tools/getPresignedUrl", data).pipe(
       map(_ => _?.data)
     )
   }
 
-  download(fileId, env) {
+  downloadFileDirectly(file) {
+
+    // let data = { "bucketName": "testbucket", "filename": file.name, "path": file.path }
+    let data = { "bucket": file.bucket, "filename": file.filename, "path": file.path }
+
+    return this.getRequest("api/v1/devsecops/download", data).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  downloadAppArtifact(fileId, env) {
 
 
     // window.location.href = `${this.localUrl}/api/v1/download/${fileId}`
@@ -1578,7 +2073,7 @@ export class ApiService {
 
 
 
-    return this.getRequest(`api/v1/devsecops/download/${env}/${fileId}` )
+    return this.getRequest(`api/v1/devsecops/download/${env}/${fileId}`)
       .pipe(
         map(data => {
           if (data.status == true) {

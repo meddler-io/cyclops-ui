@@ -1,0 +1,22 @@
+<nb-layout>
+
+
+
+    <nb-layout-header fxFlex fxLayoutAlign="end">
+        <app-b-p-selector></app-b-p-selector>
+    </nb-layout-header>
+
+
+    <nb-sidebar tag="menuSidebar" class="menuSidebar">
+        <router-outlet></router-outlet>
+
+    </nb-sidebar>
+
+
+
+    <nb-layout-column>
+
+        <router-outlet name="content"></router-outlet>
+
+    </nb-layout-column>
+</nb-layout>

@@ -1,0 +1,178 @@
+<nb-layout *ngIf="engagementDetails | async as engagementDetails">
+    <nb-layout-header fixed>
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+            <!-- Back Buttons -->
+
+
+            <button [routerLink]=" [ '/' , 'devsec' , 'home' ] " nbButton appearance="ghost" status="primary">
+                <nb-icon icon="corner-left-up-outline">
+
+                </nb-icon>
+            </button>
+
+
+
+            <div fxLayout="column">
+                <div>
+                    {{engagementDetails?.application?.title}}
+                    (
+                    {{engagementDetails?.application?.platform}}
+
+                    )
+
+
+                </div>
+                <div>
+
+                    {{engagementDetails?.business?.name}}
+                    <nb-icon status="info" icon="chevron-right-outline"></nb-icon>
+
+                    {{engagementDetails?.project?.name}}
+
+
+
+                </div>
+
+            </div>
+
+            <nb-icon status="primary" icon="chevron-right-outline"></nb-icon>
+
+
+            <div fxLayoutAlign="center center" fxLayout="row">
+
+                {{engagementDetails?.engagement}}
+
+
+
+                {{engagementDetails?.state}}
+            </div>
+
+
+        </div>
+
+        <!--  -->
+        <div>
+
+            <div fxFlex fxLayoutAlign="end end">
+
+
+
+                <button [appearance]="rla_sf?.isActive ?  'ghost' : 'ghost' "
+                    [status]="rla_sf?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [  'select_finding' , '658c9421086a02a65aef6b6f'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
+                    #rla_sf="routerLinkActive" nbButton>
+                    Select Finding
+                </button>
+
+
+                <button [appearance]="rla_d?.isActive ?  'ghost' : 'ghost' "
+                    [status]="rla_d?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [  'details'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
+                    #rla_d="routerLinkActive" nbButton>
+                    Details
+                </button>
+
+                <button [appearance]="rla_c?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla_c?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [ './', 'create'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
+                    #rla_c="routerLinkActive" nbButton>
+                    Report Builder
+                </button>
+
+
+                <button [appearance]="rla_f?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla_f?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [ './', 'draft_review'] " [routerLinkActiveOptions]="{ exact: false }"
+                    routerLinkActive #rla_f="routerLinkActive" nbButton>
+                    Review Findings(d)
+                </button>
+
+                <button [appearance]="rla_ato?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla_ato?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [ './', 'assign_task'] " [routerLinkActiveOptions]="{ exact: false }"
+                    routerLinkActive #rla_ato="routerLinkActive" nbButton>
+                    Assign(o)
+                </button>
+
+                <button [appearance]="rla_ip?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla_ip?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [ './', 'in_progress'] " [routerLinkActiveOptions]="{ exact: false }"
+                    routerLinkActive #rla_ip="routerLinkActive" nbButton>
+                    In Progress(o)
+                </button>
+
+
+
+
+
+
+
+
+                <button [appearance]="rla_m?.isActive ?  'outline' : 'ghost' "
+                    [status]="rla_m?.isActive ?  'success' : 'basic' " size="small" shape="round"
+                    [routerLink]=" [  'manage'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
+                    #rla_m="routerLinkActive" nbButton>
+                    Manage
+                </button>
+
+
+
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </nb-layout-header>
+
+
+
+
+    <nb-sidebar>
+
+        <nb-sidebar-header style="margin: 0px">
+            <div fxFlex fxLayoutAlign="start center">
+
+                <nb-select selected="all" size="small">
+                    <nb-option value="all">
+                        All
+                    </nb-option>
+                    <nb-option value="new">
+                        New
+                    </nb-option>
+                    <nb-option value="verify">
+                        Verify
+                    </nb-option>
+                </nb-select>
+            </div>
+        </nb-sidebar-header>
+
+        <nb-list>
+            <nb-list-item *ngFor="let finding of findings$ | async" class="subitem-header">
+                {{finding?.title}}
+            </nb-list-item>
+
+
+
+        </nb-list>
+
+    </nb-sidebar>
+
+
+    <nb-layout-column>
+
+        <router-outlet>
+
+        </router-outlet>
+
+
+    </nb-layout-column>
+
+</nb-layout>

@@ -1,0 +1,30 @@
+{
+    "_id": {
+        "$oid": "6156ce10e2bbc54c3e24ff07"
+    },
+    "application_id": {
+        "$oid": "5f5093a3bfc851da59528f3c"
+    },
+    "title": "Reports",
+    "description": [
+        "Reports"
+    ],
+    "severity": "Info",
+    "assessment_id": {
+        "$oid": "5f5093a3bfc851da59528f3c"
+    },
+    "extra_info": [
+        "dynamic analysis report:this report will contain issues reported as per dynamic analysis and please fix them as per their criticality.",
+        {
+            "bucket": "mbrsl",
+            "path": "MBRSL Web Application/2021-11-05 09:28:57.937925Magicbricks-Owner_Role_Nov_2021_Security_Issues.pdf",
+            "filename": "Magicbricks-Owner_Role_Nov_2021 Security_Issues.pdf"
+        }
+    ],
+    "numerical_severity": "S0",
+    "cvssv3": 2.0,
+    "verified": true,
+    "steps_to_reproduce": [],
+    "mitigation": [],
+    "impact": []
+}

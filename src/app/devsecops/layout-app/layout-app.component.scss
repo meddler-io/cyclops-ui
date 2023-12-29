@@ -1,0 +1,27 @@
+nb-layout-column{
+    padding: 0 !important;
+}
+
+::ng-deep nb-sidebar {
+  
+    transition: width 0.1s;
+  
+    div {
+      transition: width 0.1s;
+      // top: 0 !important;
+    }
+  
+    &.menuSidebar div {
+      top: 0 !important;
+      height: 100%;
+    }
+  
+  }
+  
+
+  .content {
+    display: flex;
+
+    flex: 0 1 900px;
+
+}

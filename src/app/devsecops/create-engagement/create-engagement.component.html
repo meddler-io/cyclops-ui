@@ -1,0 +1,65 @@
+
+
+<div fxFlex fxLayoutGap="1rem" fxLayout="column">
+
+
+    <!-- Engagments Button -->
+    <div fxFlex fxLayout="column">
+
+        <div fxFlex fxLayoutGap="1rem" fxLayoutAlign="end" fxLayout="row">
+
+            <div>
+                <button (click)="open(  createDast )" size="small" fullWidth nbButton outline
+                    status="danger">DAST</button>
+            </div>
+            <div>
+
+                <button (click)="open(  createSast )" size="small" fullWidth nbButton outline
+                    status="warning">SAST</button>
+            </div>
+            <div>
+
+                <button (click)="open(  createPentest )" size="small" fullWidth nbButton outline
+                    status="info">Pentest</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!--  -->
+    <div fxFlex fxLayout="column">
+
+        <div fxFlex fxLayoutGap="1rem" fxLayoutAlign="end" fxLayout="row">
+            <div>
+                <button (click)="goto(  )" size="small" nbButton ghost status="info">View all</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<ng-template let-context="context" #createDast>
+
+    <app-create-dast [application_id]="application_id">
+
+    </app-create-dast>
+
+</ng-template>
+
+
+<ng-template let-context="context" #createPentest>
+
+    <app-create-pentest [application_id]="application_id">
+
+    </app-create-pentest>
+
+</ng-template>
+
+<ng-template let-context="context" #createSast>
+
+    <app-create-sast [application_id]="application_id">
+
+    </app-create-sast>
+
+</ng-template>

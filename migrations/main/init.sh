@@ -33,3 +33,6 @@ python ../step-5/main.py  all_apps.json
 # Transform all the issues to findings
 python ../step-6/script.py  issues_with_app.json
 
+
+# 
+python ../step-7/script.py

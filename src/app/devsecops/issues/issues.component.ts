@@ -9,6 +9,7 @@ import { ApiService } from '../api.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
 import { FindingStatsComponent } from '../finding-stats/finding-stats.component';
+import { StateManagerService } from '../state-manager.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { FindingStatsComponent } from '../finding-stats/finding-stats.component'
   templateUrl: './issues.component.html',
   styleUrls: ['./issues.component.scss']
 })
-export class IssuesComponent{
+export class IssuesComponent {
 
 
   math = Math
@@ -31,6 +32,7 @@ export class IssuesComponent{
 
   @ViewChild('findingStatsView', { static: true }) findingStatsView: FindingStatsComponent;
   @ViewChild('editTmpl', { static: false }) editTmpl: TemplateRef<any>;
+
 
 
 
@@ -240,7 +242,7 @@ export class IssuesComponent{
 
 
 
- 
+
 
   // findings = this.apiService.getFindings('', '')
 
@@ -250,65 +252,89 @@ export class IssuesComponent{
     private nbSidebarService: NbSidebarService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private stateManagerService: StateManagerService,
+
 
 
   ) { }
 
-  goTo ( slug: string ){
-    this.router.navigate([  '../' ,  slug]  , {relativeTo: this.activatedRoute} ) 
+  goTo(slug: string) {
+    this.router.navigate(['../', slug], {
+      queryParamsHandling: 'merge',
+
+      relativeTo: this.activatedRoute
+    })
+    // this.router.navigate([  {  outlets: { 'content': ['../assessment'] } }  ]  , {relativeTo: this.activatedRoute} ) 
+  }
+
+
+
+
+  onChange(event) {
+
+    console.log('event', event)
   }
 
   ngOnInit(): void {
+
+    this.assessments$ = this.stateManagerService.activeStateIds$
+
+      .pipe(
+        filter(_ => !!_)
+
+        ,
+        map((activeStateIds) => {
+
+          
+          return this.loadMoreFindings$.pipe(
+            map(page_number => {
+
+              return this.apiService.getAssessmentsFindings(activeStateIds.businessId , activeStateIds.projectId , activeStateIds.applicationId, page_number).pipe(
+
+                map(_ => {
+
+
+                  this.totalFindings = _?.count || 0;
+                  this.currentPage = _?.page_number;
+                  let defaultPageSize = _?.defaultPageSize;
+
+
+                  this.totalPages = this.math.ceil(this.totalFindings / defaultPageSize)
+                  console.log('totalFindings', this.totalFindings, this.totalPages)
+
+                  return _.data
+                }),
+
+              )
+
+
+            }),
+            switchMap(_ => _),
+
+          )
+        })
+
+        ,
+
+        switchMap(_ => _)
+
+
+
+
+
+      )
+
+
     // TODO
     // this.nbSidebarService.collapse(
     //   'buildList'
     // );
 
-    this.loadMoreFindings$.subscribe(page_number => {
-
-      this.assessments$ = this.apiService.getAssessmentsFindings(page_number).pipe(
-
-        map(_ => {
-
-          this.totalFindings = _?.count;
-          this.currentPage = _?.page_number ;
-          let defaultPageSize = _?.defaultPageSize;
-
-
-          this.totalPages = this.math.ceil( this.totalFindings / defaultPageSize  )
-
-          return _.data
-        }),
-
-      )
-    })
 
 
 
-    this.activatedRoute.parent.paramMap.pipe(
 
-      tap(_ => {
 
-        console.log(
-          'logger2',
-          _
-        )
-      }),
-
-      map(_ => {
-        return _?.get('buildId')
-      }),
-      filter(_ => !!_),
-      tap(
-        _ => {
-          console.log('___', _);
-          this.selectedBuildId.setValue(_, {
-            emitModelToViewChange: true, emitEvent: false,
-            emitViewToModelChange: true
-          })
-        }
-      )
-    ).subscribe()
 
   }
 
@@ -355,21 +381,6 @@ export class IssuesComponent{
 
   }
 
-  bottomThresholdTrigger(event) {
-
-    return
-    console.log('bottomThresholdTrigger', this.loadingFindings$, this.finishedLoadingFindings$);
-
-
-
-    if (this.loadingFindings$ == true)
-      return
-    if (this.finishedLoadingFindings$ == true)
-      return
-
-    console.log('bottomThresholdTrigger', this.lastFindingIdOffset);
-    this.loadMoreFindings$.next(this.lastFindingIdOffset);
-  }
 
 
   nextPage() {

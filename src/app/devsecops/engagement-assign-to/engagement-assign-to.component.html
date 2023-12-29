@@ -1,0 +1,74 @@
+<nb-card class="card" fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+    <nb-card-header fxLayout="row">
+
+        <div fxFlex fxLayoutAlign="space-between center">
+            <div fxLayout="row">
+
+                <button [routerLink]="[ '../settings' ]" size="small" class="left" status="basic" nbButton ghost>
+                    <nb-icon icon="plus-outline"></nb-icon>&nbsp;
+                </button>
+
+                <button fullWidth size="small" class="left" status="basic" nbButton ghost>
+                    Assign To
+                  
+                </button>
+
+            </div>
+
+          
+
+
+        </div>
+
+
+
+    </nb-card-header>
+
+    <nb-card-body >
+
+        <!-- grid.component.html -->
+        <div   fxLayoutAlign="space-between" fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column">
+            <div
+            [nbSpinner]="assignedResourcesLoading.has( member?._id?.$oid  )  "
+            class="card" fxFlex.gt-md="33%" fxFlex.gt-sm="50%" fxFlex="100%"
+            (click)="markSelect( member?._id?.$oid , member?.assigned )"
+                *ngFor="let member of teamMembers | async">
+
+                <div [style.border-left-color]="member?.primary_color" class="grid-item " [class.selected]=" member?.assigned " >
+                    <div fxLayoutAlign="space-between" fxLayout="row" class="grid-item-content">
+
+                        <div fxLayoutAlign="center center" fxLayout="column" >
+
+                            <div fxLayoutAlign="start start"  class="text-interactive">
+                                {{member?.email}}
+
+                            </div>
+                        </div>
+
+
+
+                        <div  [style.visibility]="member?.assigned ? '' : 'hidden' " fxLayout="column">
+
+                            <button shape="round" size="small" class="left" status="basic" nbButton ghost>
+
+                            <nb-icon [status]="member?.assigned ? 'success' : 'basic' " size="large"   filled icon="checkmark-outline"></nb-icon>
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </nb-card-body>
+
+ 
+
+</nb-card>

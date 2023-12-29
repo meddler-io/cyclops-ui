@@ -1,0 +1,125 @@
+<nb-card fxFill 
+*ngIf="finding$ | async as finding$"
+>
+
+
+
+
+    <nb-card-body>
+
+        <nb-stepper selectedIndex="1" linear="true" orientation="vertical">
+            <nb-step label="Select Weakness">
+
+                <nb-card fxFill>
+
+                    <nb-card-header>
+                        <nb-form-field>
+                            <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                            <input [formControl]="searchInput" fullWidth placeholder="Search CWE" type="text" nbInput>
+                        </nb-form-field>
+
+                    </nb-card-header>
+
+                    <nb-card-body [nbSpinner]="searching">
+
+                        <div fxFlex fxLayout="column">
+
+
+
+                            <div fxFlex fxLayout="row">
+
+                                <nb-list>
+                                    <nb-list-item (click)="selectCWE( finding$?._id?.$oid ,  finding )" [class.active]="finding$?.cwe == finding?.id"
+                                        *ngFor="let finding of findings$ | async"
+                                        [class.subitsemheader]="finding?.type == 'category' "
+                                        [class.text-hint]="finding?.type == 'category' "
+                                        [class.subitsem]="finding?.type == 'weakness' ">
+                                        <!-- CWE-{{finding?.id}} {{finding?.title}} {{finding?.type}} -->
+
+
+                                        CWE-{{finding?.id}} &nbsp;<div
+                                            [innerHTML]="finding.title | highlight: searchInput.value"></div>
+                                    </nb-list-item>
+
+
+
+
+                                </nb-list>
+
+                            </div>
+
+                        </div>
+
+                    </nb-card-body>
+
+                    <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+
+
+
+                        <button size="small" nbButton disabled nbStepperNext>prev</button>
+                        <button size="small" nbButton nbStepperNext>next</button>
+                    </nb-card-footer>
+
+                </nb-card>
+
+
+
+
+
+
+
+            </nb-step>
+            <nb-step label="Steps to reproduce">
+
+                <app-engagement-steps-to-reproduce>
+
+                </app-engagement-steps-to-reproduce>
+
+    
+
+            </nb-step>
+            <nb-step label="Third step">
+                <h4>Step content #3</h4>
+                <p class="lorem">
+                    Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum
+                    bibendum,
+                    sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar
+                    magna, quis
+                    viverra ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent metus turpis, commodo
+                    vel
+                    placerat quis, lobortis in ligula.
+                </p>
+                <p class="lorem">
+                    Curabitur luctus mattis risus nec condimentum. Donec at dui turpis. Sed vehicula fringilla rutrum.
+                    Nullam
+                    sed ornare magna. Mauris vitae laoreet diam. Mauris fermentum ligula at lacinia semper. Nulla
+                    placerat dui
+                    eu sapien pellentesque, eu placerat leo luctus. Cras pharetra blandit fermentum.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+            </nb-step>
+            <nb-step label="Fourth step">
+                <h4>Step content #4</h4>
+                <p class="lorem">
+                    Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum
+                    bibendum,
+                    sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar
+                    magna, quis
+                    viverra ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent metus turpis, commodo
+                    vel
+                    placerat quis, lobortis in ligula.
+                </p>
+                <p class="lorem">
+                    Curabitur luctus mattis risus nec condimentum. Donec at dui turpis. Sed vehicula fringilla rutrum.
+                    Nullam
+                    sed ornare magna. Mauris vitae laoreet diam. Mauris fermentum ligula at lacinia semper. Nulla
+                    placerat dui
+                    eu sapien pellentesque, eu placerat leo luctus. Cras pharetra blandit fermentum.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton disabled nbStepperNext>next</button>
+            </nb-step>
+        </nb-stepper>
+    </nb-card-body>
+</nb-card>

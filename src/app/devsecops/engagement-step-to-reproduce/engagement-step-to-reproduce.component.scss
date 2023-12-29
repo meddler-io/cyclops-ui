@@ -1,0 +1,26 @@
+@import '../../../themes';
+
+
+.thumbnail {
+    width: 100px; /* Set a fixed width for square thumbnails */
+    height: 100px; /* Set a fixed height for square thumbnails */
+    overflow: hidden;
+    border: 2px solid ;/* Add a border to the thumbnails */
+    border-radius: 5px;
+    margin: 8px;
+    cursor: pointer;
+    border-color:  nb-theme(text-hint-color) !important;
+
+    &:hover{
+        // background         : nb-theme(color-basic-100) !important;
+        transition         : 1s;
+        border-color: nb-theme(text-primary-color) !important;
+
+    }
+  }
+  
+  .thumbnail img {
+    width: 100%; /* Make the image fill the square container */
+    height: 100%; /* Make the image fill the square container */
+    object-fit: cover; /* Ensure the image covers the entire container */
+  }

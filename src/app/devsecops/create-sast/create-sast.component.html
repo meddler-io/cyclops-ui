@@ -1,0 +1,317 @@
+<nb-layout *ngIf="application | async as  application">
+
+    <nb-layout-header>
+        <div>
+            <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="small" class="left" status="basic"
+                nbButton ghost>
+
+                <nb-icon icon="arrow-back-outline"></nb-icon>
+                SAST Request
+            </button>
+        </div>
+    </nb-layout-header>
+
+    <nb-layout-footer style="background-color: transparent !important; padding: 0rem !important ;  ">
+        <div fxLayoutAlign="start" fxFlex>
+            <div fxFlex fxLayoutAlign="end end">
+
+
+                <ng-container>
+
+                    <button
+                    (click)="createEngagement()"
+                    outline status="basic" nbButton>
+                        Next
+                    </button>
+
+
+                </ng-container>
+
+
+
+            </div>
+
+        </div>
+
+    </nb-layout-footer>
+
+    <nb-layout-column>
+
+
+        <div fxLayout="column" style="padding: 1rem;" fxLayoutGap="1rem">
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                <div style="font-size: 1rem; ;" class="text-hint ">
+
+                    Environment
+                </div>
+
+                <div fxFlex>
+                    <nb-select disabled FxFlex placeholder="Environment" [(selected)]="environment">
+
+                        <nb-option value="development">Development</nb-option>
+                        <nb-option value="staging">Staging</nb-option>
+                        <nb-option value="production">Production</nb-option>
+
+                    </nb-select>
+                </div>
+
+
+
+
+
+            </div>
+
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                <div style="font-size: 1rem; ;" class="text-hint ">
+
+                    Code Repository
+                </div>
+
+                <div fxFlex>
+
+                    <nb-form-field fieldSize="small" (click)="repositoryToggleEditMode()" nbSpinnerStatus="danger">
+
+                        <span class="text-hint" nbPrefix>
+                            ssh
+                        </span>
+
+                        <!-- <nb-icon nbPrefix status="basic" icon="refresh-outline">
+                        </nb-icon> -->
+
+                        <input [class.disabled]=" !repositoryEditEnabled  " [formControl]="repository" fullWidth
+                            (focusout)="repositoryFocusout()"
+                            (keyup.enter)="openDialogToSaveRepository(repositorSaveyDialog , application?._id?.$oid , repository.value  )"
+                            [readonly]="!repositoryEditEnabled"
+                            [status]=" ( repository?.valid )   ?  'basic' : 'danger' " type="text" nbInput
+                            placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
+
+
+                    </nb-form-field>
+                </div>
+
+                <div (click)="openDialogToSaveRepository(repositorSaveyDialog , application?._id?.$oid , repository.value  )"
+                    *ngIf="repositoryBranch?.valid" fxLayoutAlign="end" style="font-size: 1.2rem;  " class="text-hint "
+                    fxFlex>
+
+                    <nb-icon icon="corner-up-right-outline"></nb-icon>
+                    <span class="branch" style="font-size: 1.1rem; ; margin-right: 1rem; ">
+
+                        {{repositoryBranch?.value}}
+                    </span>
+                </div>
+
+
+
+            </div>
+
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                <div style="font-size: 1rem; ;" class="text-hint ">
+
+                    Tags
+                </div>
+
+                <div fxFlex>
+
+
+
+                    <nb-form-field>
+                        <nb-tag-list (tagRemove)="onTagRemove($event)">
+                            <nb-tag status="basic" appearance="outline" info *ngFor="let tag of tags" [text]="tag"
+                                removable></nb-tag>
+                            <input status="basic" type="text" nbTagInput (tagAdd)="onTagAdd($event.value)"
+                                [nbAutocomplete]="autocomplete" fullWidth>
+                        </nb-tag-list>
+
+                        <nb-icon nbSuffix icon="search" pack="eva"></nb-icon>
+                    </nb-form-field>
+
+                    <nb-autocomplete #autocomplete (selectedChange)="onTagAdd($event)">
+                        <nb-option *ngFor="let option of options" [value]="option">{{ option }}</nb-option>
+                    </nb-autocomplete>
+                </div>
+
+
+
+
+            </div>
+
+
+                 <!-- Changelogs -->
+                 <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Comments
+
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+
+                            <input placeholder="Details (Optional)" nbInput [formControl]="changelogs" status="basic"
+                                type="text" fullWidth>
+
+                        </nb-form-field>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+        </div>
+
+
+
+    </nb-layout-column>
+
+
+
+
+
+
+</nb-layout>
+
+
+
+<ng-template #repositorSaveyDialog let-data let-ref="dialogRef">
+
+
+
+    <ng-container *ngIf="data?.lsRemote | async as lsRemote  ; else loadingTemplate">
+
+
+        <ng-container *ngIf="lsRemote ==  true ; else branchSelectorTemplate">
+
+            <nb-card fxFlex="0 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Access Denied
+                    </h5>
+                </nb-card-header>
+                <nb-card-body>
+
+                    <h6 style="line-height: 2rem; ">
+                        Invalid access / Invalid Repository
+                        <br>
+                        {{data?.git_url}}
+                        {{lsRemote | json }}
+                    </h6>
+                </nb-card-body>
+
+            </nb-card>
+
+        </ng-container>
+
+        <ng-template #branchSelectorTemplate>
+
+
+            <nb-card fxFlex="1 1 500px" accent="primary">
+                <nb-card-header>
+                    <h5 class="text-primary">
+
+                        <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                        </nb-icon>
+                        Select Branch
+                    </h5>
+
+                    <div fxLayoutAlign="end">
+                        {{ (lsRemote )?.length}} Branches
+                    </div>
+                </nb-card-header>
+
+                <nb-card-header style="padding: 0.3rem;">
+
+
+                    <div class="search-input" fxLayoutAlign="center center" fxLayoutGap="1rem" fxLayout="row">
+
+
+                        <input [formControl]="searchBranchFilter" focusOnce fullWidth placeholder="Search"
+                            status="basic" nbInput>
+
+
+
+                    </div>
+
+                </nb-card-header>
+
+
+                <!--  -->
+                <nb-list style="max-height: 500px;" fxLayout="column">
+                    <!-- style="  max-width: 500px; width: 100%; " -->
+
+
+
+                    <nb-list-item (click)="selectBranch(_branch)" [class.selected]="repositoryBranch?.value == _branch"
+                        *ngFor="let _branch of lsRemote  ">
+
+                        <div fxFlex>
+                            {{ _branch }}
+                        </div>
+
+                        <nb-icon class="loading-icon" *ngIf="gitBranchInputFormControl?.value == _branch"
+                            [icon]=" loadingGeneric ? 'refresh-outline' : 'checkmark-outline'">
+                        </nb-icon>
+
+
+                    </nb-list-item>
+                </nb-list>
+                <!--  -->
+                <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+                    <button status="basic" outline nbButton (click)="ref.close(false)">Cancel</button>
+                    <button [disabled]="!repositoryBranch?.value" (click)="ref.close(   repositoryBranch?.value  )"
+                        status="success" outline nbButton>Save</button>
+                </nb-card-footer>
+            </nb-card>
+        </ng-template>
+
+    </ng-container>
+
+
+    <ng-template #loadingTemplate>
+
+        <nb-card fxFlex="0 1 500px" accent="primary">
+            <nb-card-header>
+                <h5 class="text-primary">
+
+                    <nb-icon style="margin: 10px" icon="stop-circle-outline" status="primary">
+
+                    </nb-icon>
+                    Validating Access
+                </h5>
+            </nb-card-header>
+            <nb-card-body>
+
+                <h6 style="line-height: 2rem; ">
+                    Validating access to
+                    <br>
+                    {{data?.git_url}}
+                </h6>
+            </nb-card-body>
+
+        </nb-card>
+
+    </ng-template>
+
+
+
+</ng-template>

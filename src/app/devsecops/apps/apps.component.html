@@ -1,0 +1,84 @@
+<ng-template let-context="context" #appDetails>
+
+
+
+
+    <app-brief-details [application_id]="context?.application_id"> </app-brief-details>
+
+</ng-template>
+
+
+<nb-card fxFill class="outer">
+    <nb-card-header class="outer" fxLayoutAlign="space-between center" fxLayout="row">
+        <div>
+            <app-a-p-selector> </app-a-p-selector>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body class="outer">
+
+        <!-- grid.component.html -->
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column">
+            <div (click)="onClickApp( app?._id?.$oid )" class="card" fxFlex.gt-md="25%" fxFlex.gt-sm="50%" fxFlex="100%"
+                *ngFor="let app of applications | async">
+
+                <div [style.border-left-color]="app?.primary_color" class="grid-item">
+                    <div fxLayout="row" class="grid-item-content">
+
+                        <div fxLayout="column" fxFlex>
+
+                            <div class="text-interactive">
+                                {{app?.title}}
+
+                            </div>
+                            <div class="text-interactive platform">
+
+                                {{app?.platform}}
+                            </div>
+
+                            <div class="project text-interactive">
+
+                                {{app?.projectName}}
+                            </div>
+
+                            <div class="business text-interactive">
+
+                                {{app?.businessName}}
+                            </div>
+                        </div>
+
+                        <div fxLayout="column">
+
+                            <button
+                            (click)="goToApp(app,  $event)"
+                            shape="round" size="medium" class="left" status="basic" nbButton ghost>
+                                <nb-icon icon="diagonal-arrow-right-up-outline"></nb-icon>&nbsp;
+                            </button>
+
+
+                            <!-- <button shape="round" size="small" class="left" status="basic" nbButton ghost>
+                                <nb-icon icon="settings-2-outline"></nb-icon>&nbsp;
+                            </button> -->
+
+                          
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </nb-card-body>
+
+
+    <nb-card-footer class="outer" fxLayoutAlign="space-between center" fxLayout="row">
+
+        <app-paginator></app-paginator>
+
+    </nb-card-footer>
+
+
+
+</nb-card>

@@ -1,0 +1,73 @@
+@import './../../../themes';
+
+button {
+    text-transform: capitalize !important;
+}
+
+nb-layout-header{
+    background-color: nb-theme(background-basic-color-3);
+
+}
+nb-sidebar {
+
+    padding: 15px;
+    padding-top: 0;
+    background-color: nb-theme(background-basic-color-4);
+
+
+
+}
+
+nb-list {
+    // background-color: nb-theme(background-basic-color-2);
+
+    nb-list-item {
+        // background: nb-theme(color-basic-900);
+        padding: 8px;
+        margin-top: 10px;
+
+        border-radius: 10px;
+
+        &.active {
+            background: nb-theme(color-basic-800);
+
+            div {
+
+                color: nb-theme(text-success-color);
+                font-weight: 550;
+
+
+
+
+            }
+
+
+        }
+
+        &:hover {
+            background: nb-theme(color-basic-800);
+
+        }
+
+        div {
+            font-weight: 350;
+            color: nb-theme(text-hint-color);
+
+            img {
+
+                width: 26px;
+                height: 26px;
+                margin-right: 20px;
+                margin-left: 10px;
+            }
+
+        }
+
+        &.disabled {
+            opacity: 0.5;
+            // background: nb-theme(color-alternative-800);
+
+        }
+
+    }
+}

@@ -104,7 +104,7 @@ export class BootstrapComponent implements OnInit, OnDestroy {
   )
 
   ngOnInit(): void {
-  
+
 
     this.themeService.changeTheme('dark');
     // this.apiService.init()
@@ -138,9 +138,6 @@ export class BootstrapComponent implements OnInit, OnDestroy {
         // this.apiService.selectApp(appId)
 
       })
-      ,
-
-      delay(5000)
       , tap(app => {
 
         console.log(
@@ -157,7 +154,7 @@ export class BootstrapComponent implements OnInit, OnDestroy {
     )
       .subscribe(
 
-      )
+    )
   }
   ngOnDestroy(): void {
     this.themeService.changeTheme('default');

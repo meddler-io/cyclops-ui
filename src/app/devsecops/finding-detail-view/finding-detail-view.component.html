@@ -226,7 +226,7 @@
         </ng-container>
 
 
-        <ng-container *ngIf="finding_details?.description">
+        <ng-container *ngIf="finding_details?.mitigation">
             <div fxLayout="column">
                 <div class="field item">
                     Mitigation
@@ -333,7 +333,7 @@
         </ng-container>
 
 
-        <ng-container *ngIf="finding_details?.cwe">
+        <ng-container *ngIf="finding_details?.references">
             <div fxLayout="column">
                 <div class="field item">
                     Refrences
@@ -350,6 +350,26 @@
             </div>
 
         </ng-container>
+
+        <ng-container *ngIf="finding_details?.extra_info">
+            <div fxLayout="column">
+                <div class="field item">
+                    More Details
+                </div>
+
+                <div   *ngFor="let  _extra_info  of  finding_details?.extra_info" class="field_details item">
+                    {{  _extra_info  }}
+                </div>
+
+                <div fxFlex>
+
+                    <hr>
+                </div>
+            </div>
+
+        </ng-container>
+
+        
 
         <ng-container *ngIf="finding_details?.file_path">
             <div fxLayout="column">
@@ -408,6 +428,7 @@
 
             </ng-container>
         </ng-container>
+
 
         <!-- <ng-container *ngIf="build_details | async as build_details">
             <div fxLayout="column">

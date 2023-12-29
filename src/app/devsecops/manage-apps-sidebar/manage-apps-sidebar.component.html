@@ -4,12 +4,20 @@
 
     <nb-card-header style="padding: 0;">
 
+        <app-b-p-selector
+        (onchange)="onChange($event)"
+        >
+
+        </app-b-p-selector>
+
         <!--  -->
 
         <!-- <ng-container *ngIf="filteredControlOptions | async as business$"> -->
 
 
         <!-- <ng-container *ngIf="searchActive ; else searchDeactive"> -->
+
+        <ng-container *ngIf="false" >
 
         <nb-form-field fullWidth>
 
@@ -21,6 +29,8 @@
 
             </button>
         </nb-form-field>
+    </ng-container>
+
         <!-- </ng-container> -->
 
 
@@ -98,25 +108,31 @@
         </nb-list>
 
         <ng-container *ngIf="webappsVisible">
-            <ng-container *ngIf="currentAppId | async as currentAppId">
-                
 
-                <nb-list>
-                    <nb-list-item (click)="manageApp(  currentAppId, app?._id?.$oid)"
-                        *ngFor="let app of webApplications | async" [routerLinkActiveOptions]="{ exact: false }"
-                        class="subitem" [class.active]=" currentAppId  ==  app?._id?.$oid " #rlActive="routerLinkActive"
-                        routerLinkActive appearance="outline" [status]="rlActive?.isActive ? 'success' : 'basic' "
-                        status="success">
-                        <div fxLayoutAlign="start center" fxFlex>
-                            <img src="https://img.icons8.com/nolan/64/package.png" />
-                            {{app?.title}}
 
-                        </div>
-                    </nb-list-item>
+            <nb-list>
+                <nb-list-item (click)="manageApp(  app?._id?.$oid)" *ngFor="let app of webApplications | async"
+                    [routerLinkActiveOptions]="{ exact: false }" class="subitem" [class.active]=" false"
+                    #rlActive="routerLinkActive" routerLinkActive appearance="outline"
+                    [status]="rlActive?.isActive ? 'success' : 'basic' " status="success">
+                    <div fxLayoutAlign="start center" fxFlex>
+                        <img src="https://img.icons8.com/nolan/64/package.png" />
+                        {{app?.title}}
 
-                </nb-list>
+                    </div>
 
-            </ng-container>
+
+                    <div>
+
+                        <button nbButton size="small" ghost status="primary"><nb-icon
+                                icon="chevron-right-outline"></nb-icon></button>
+
+                    </div>
+                </nb-list-item>
+
+            </nb-list>
+
+
 
 
 
@@ -138,13 +154,20 @@
 
                 <nb-list>
                     <nb-list-item (click)="manageApp(app?._id?.$oid)" *ngFor="let app of webserviceApplications | async"
-                        [routerLinkActiveOptions]="{ exact: false }" class="subitem"
-                        [class.active]="  (currentAppId | async) == app?._id?.$oid " #rlActive="routerLinkActive"
-                        routerLinkActive appearance="outline" [status]="rlActive?.isActive ? 'success' : 'basic' "
-                        status="success">
+                        [routerLinkActiveOptions]="{ exact: false }" class="subitem" [class.active]="  false "
+                        #rlActive="routerLinkActive" routerLinkActive appearance="outline"
+                        [status]="rlActive?.isActive ? 'success' : 'basic' " status="success">
                         <div fxLayoutAlign="start center" fxFlex>
                             <img src="https://img.icons8.com/nolan/64/package.png" />
                             {{app?.title}}
+
+                        </div>
+
+
+                        <div>
+
+                            <button nbButton size="small" ghost status="primary"><nb-icon
+                                    icon="chevron-right-outline"></nb-icon></button>
 
                         </div>
                     </nb-list-item>
@@ -171,10 +194,9 @@
 
                 <nb-list>
                     <nb-list-item (click)="manageApp(app?._id?.$oid)" *ngFor="let app of androidApplications | async"
-                        [routerLinkActiveOptions]="{ exact: false }" class="subitem"
-                        [class.active]="  (currentAppId | async) == app?._id?.$oid " #rlActive="routerLinkActive"
-                        routerLinkActive appearance="outline" [status]="rlActive?.isActive ? 'success' : 'basic' "
-                        status="success">
+                        [routerLinkActiveOptions]="{ exact: false }" class="subitem" [class.active]="  false "
+                        #rlActive="routerLinkActive" routerLinkActive appearance="outline"
+                        [status]="rlActive?.isActive ? 'success' : 'basic' " status="success">
                         <div fxLayoutAlign="start center" fxFlex>
                             <img src="https://img.icons8.com/nolan/64/package.png" />
                             {{app?.title}}
@@ -204,9 +226,8 @@
             <ng-container *ngIf="iosVisible">
 
                 <nb-list>
-                    <nb-list-item (click)="manageApp( currentAppId,  app?._id?.$oid)"
-                        *ngFor="let app of iosApplications | async" [routerLinkActiveOptions]="{ exact: false }"
-                        class="subitem" [class.active]="  (currentAppId | async) == app?._id?.$oid "
+                    <nb-list-item (click)="manageApp(  app?._id?.$oid)" *ngFor="let app of iosApplications | async"
+                        [routerLinkActiveOptions]="{ exact: false }" class="subitem" [class.active]="  false "
                         #rlActive="routerLinkActive" routerLinkActive appearance="outline"
                         [status]="rlActive?.isActive ? 'success' : 'basic' " status="success">
                         <div fxLayoutAlign="start center" fxFlex>

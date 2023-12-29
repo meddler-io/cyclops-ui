@@ -1,15 +1,22 @@
+
 <nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
-    <nb-card-header fxLayoutAlign="space-between center" fxLayout="row">
+    <nb-card-header  
+    *ngIf="false"
+    fxLayoutAlign="space-between center" fxLayout="row">
+
+
+        Hello
+      
+    </nb-card-header>
+
+    <nb-card-header   *ngIf="false" fxLayoutAlign="space-between center" fxLayout="row">
 
 
         <div>
-            <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="small" class="left" status="basic"
-                nbButton ghost>
+            <!-- <button (click)="toggleSort( 'numerical_severity' )" fullWidth size="small" class="left" status="basic"                nbButton ghost>                <nb-icon icon="arrow-back-outline"></nb-icon>                Issues            </button> -->
+            <app-a-p-selector  > </app-a-p-selector>
 
-                <nb-icon icon="arrow-back-outline"></nb-icon>
-                Issues
-            </button>
         </div>
 
         <div fxLayoutAlign="end center" fxLayout="row">
@@ -135,7 +142,13 @@
             *ngFor="let data of assessments$ | async ; index as index ">
 
 
-            <div fxLayout="row" fxFlex>
+
+            <div
+            class="grid-item"
+
+            [style.border-left-color]="data?.primary_color"
+            
+            fxLayout="row" fxFlex>
 
                 <!-- {{data | json}} -->
                 <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
@@ -169,7 +182,10 @@
                     display: inline;
     line-break: anywhere;
                     ">
-                        {{data?.application?.name}}
+                        {{data?.application?.title}}
+                        ({{data?.project?.name}})
+                        ({{data?.business?.name}})
+
                     </div>
 
                     <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline" status="danger"
@@ -189,7 +205,7 @@
 
 
                 <div fxFlex="0 0 15rem" class="item  ">
-                    {{data?.doc?.$date}}
+                    {{data?.created_at?.$date}}
                 </div>
 
 
@@ -209,7 +225,9 @@
                     <div>
 
                         <!-- {{data?.found_by}} -->
-                        {{data?.assesment?.name}}
+                        {{data?.engagement}}
+
+                        ({{data?.application?.platform}})
 
                     </div>
 
@@ -306,8 +324,9 @@
 
                     </nb-select-label>
 
+
                     <nb-option
-                        *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
+                        *ngFor="let item of [].constructor(  totalPages ); let i = index"
                         [value]="i + 1">
                         <div>
                             Page

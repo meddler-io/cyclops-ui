@@ -30,12 +30,14 @@
               "src/assets"
             ],
             "styles": [
-     
-
-              "./src/styles.scss"
+              "./src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/bootstrap-markdown/css/bootstrap-markdown.min.css",
+              "node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": [
-
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/bootstrap-markdown/js/bootstrap-markdown.js"
             ]
           },
           "configurations": {
@@ -97,11 +99,14 @@
               "src/assets"
             ],
             "styles": [
-
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/bootstrap-markdown/css/bootstrap-markdown.min.css",
+              "node_modules/font-awesome/css/font-awesome.css"
             ],
             "scripts": [
-
+              "node_modules/jquery/dist/jquery.js",
+              "node_modules/bootstrap-markdown/js/bootstrap-markdown.js"
             ]
           }
         }

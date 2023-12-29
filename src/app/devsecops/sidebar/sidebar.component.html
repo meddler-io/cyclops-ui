@@ -23,7 +23,16 @@
 
 
 
-    <nb-card-footer class="nb-card-footer" fxLayout="column" *ngIf="selectedApp | async as selectedApp">
+    <nb-card-footer >
+
+        <app-debug-window>
+            
+        </app-debug-window>
+    </nb-card-footer>
+
+    <!-- *ngIf="selectedApp | async as selectedApp" -->
+    <nb-card-footer  *ngIf="false" class="nb-card-footer" fxLayout="column" 
+    >
 
         <div class="appName">
 
@@ -141,7 +150,7 @@
                 </div>
             </nb-list-item>
 
-            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'issues' ] "
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {  'outlets': {  'content': ['issues'] } }    ] "
                 routerLinkActive="active" class="subitem">
                 <div fxLayoutAlign="start center" fxFlex>
                     <img src="https://img.icons8.com/nolan/64/package.png" />

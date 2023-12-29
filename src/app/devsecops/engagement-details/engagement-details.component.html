@@ -1,0 +1,190 @@
+<nb-card fxFill *ngIf="engagementDetails | async as engagementDetails">
+    <nb-card-body>
+
+
+        <div style="padding: 1rem;" fxLayout="column" fxLayoutGap="1rem">
+
+            <!-- Severity -->
+
+
+
+            <div fxFlex fxLayoutGap="20px" fxLayoutAlign="end end" fxLayout="column">
+
+
+                <div fxLayoutGap="20px" fxLayout="column">
+
+
+                    <button outline nbButton size="small" status="primary">
+                        {{engagementDetails?.state}}
+                    </button>
+
+
+
+
+                </div>
+
+            </div>
+
+
+            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+
+
+                <!-- Severity -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Severity
+                    </div>
+
+                    <div fxFlex>
+                        <nb-select disabled FxFlex placeholder="Severity">
+
+                            <nb-option value="critical">Critical</nb-option>
+                            <nb-option value="high">High</nb-option>
+                            <nb-option value="medium">Medium</nb-option>
+                            <nb-option value="low">Low</nb-option>
+                            <nb-option value="info">Info</nb-option>
+
+                        </nb-select>
+                    </div>
+
+
+
+
+
+                </div>
+
+
+
+
+
+                <!-- Business -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Business
+
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+
+                            <input [placeholder]="engagementDetails?.business?.name" nbInput status="basic" type="text"
+                                fullWidth>
+
+                        </nb-form-field>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
+                <!-- Project -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Project
+
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+
+                            <input [placeholder]="engagementDetails?.project?.name" nbInput status="basic" type="text"
+                                fullWidth>
+
+                        </nb-form-field>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+                <!-- platform -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Platform
+
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+
+                            <input [placeholder]="engagementDetails?.application?.platform" nbInput status="basic"
+                                type="text" fullWidth>
+
+                        </nb-form-field>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
+                <!-- Application Name -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Application
+
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+
+                            <input [placeholder]="engagementDetails?.application?.title" nbInput status="basic"
+                                type="text" fullWidth>
+
+                        </nb-form-field>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+ 
+
+
+
+            </div>
+
+        </div>
+
+
+    </nb-card-body>
+</nb-card>

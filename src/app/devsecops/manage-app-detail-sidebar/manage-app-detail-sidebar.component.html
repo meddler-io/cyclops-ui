@@ -1,0 +1,179 @@
+<nb-card fxFill>
+
+    <nb-card-header style="padding: 0px">
+        <button [routerLink]=" [ '/' , 'devsec' , 'home' ] " nbButton appearance="ghost" status="primary">
+            <nb-icon icon="arrow-left-outline">
+
+            </nb-icon>
+        </button>
+    </nb-card-header>
+
+
+    <nb-card-footer>
+
+        <app-debug-window>
+
+        </app-debug-window>
+    </nb-card-footer>
+
+
+    <nb-card-body>
+
+        <nb-list>
+
+
+
+
+
+
+
+
+            <!-- Engagements -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Findings
+                </div>
+            </nb-list-item>
+
+
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]=" [  '/' , 'devsec' , 'engagement']  " [relativeTo]="activatedRoute.parent"
+                queryParamsHandling="preserve" routerLinkActive="active" class="subitem-header">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Test
+                </div>
+            </nb-list-item>
+
+
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]=" [   { outlets: { 'content': ['issues' ] } }]  " [relativeTo]="activatedRoute.parent"
+                queryParamsHandling="preserve" routerLinkActive="active" class="subitem-header">
+
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Findings
+                </div>
+            </nb-list-item>
+
+
+
+
+
+
+
+            <!-- CI CD Integration -->
+            <nb-list-item class="subitem-header">
+
+
+
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Configuration
+                </div>
+
+
+
+            </nb-list-item>
+
+
+
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]=" [   { outlets: { 'content': ['settings' , 'general' ] } }]  "
+                [relativeTo]="activatedRoute.parent" queryParamsHandling="preserve" routerLinkActive="active"
+                class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    General
+                </div>
+            </nb-list-item>
+
+
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'static_scans' ]"
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/color-glass/48/000000/code.png" />
+                    Details
+
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }" [routerLink]="[ {}, 'dynamic_scans' ] "
+                routerLinkActive="active" class="subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/inspect-code.png" />
+
+                    Integratiion
+
+                </div>
+            </nb-list-item>
+
+
+
+
+
+
+
+
+
+            <!-- Engagements -->
+            <nb-list-item class="subitem-header">
+                <div class="subitem-header" fxLayoutAlign="start center" fxFlex>
+                    Engagement
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: false }"
+                [routerLink]=" [   { outlets: { 'content': ['assessment' ] } }]  " [relativeTo]="activatedRoute.parent"
+                queryParamsHandling="preserve" routerLinkActive="active" class="subitem-header">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Engagements
+                </div>
+            </nb-list-item>
+
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: true }"
+                [routerLink]=" [   { outlets: { 'content': ['assessment' , 'sast' ] } }]  "
+                [relativeTo]="activatedRoute.parent" queryParamsHandling="preserve" routerLinkActive="active"
+                class="subitem-header subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    SAST
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: true }"
+                [routerLink]=" [   { outlets: { 'content': ['assessment', 'dast' ] } }]  "
+                [relativeTo]="activatedRoute.parent" queryParamsHandling="preserve" routerLinkActive="active"
+                class="subitem-header subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    DAST
+                </div>
+            </nb-list-item>
+
+            <nb-list-item [routerLinkActiveOptions]="{ exact: true }"
+                [routerLink]=" [   { outlets: { 'content': ['assessment', 'pentest' ] } }]  "
+                [relativeTo]="activatedRoute.parent" queryParamsHandling="preserve" routerLinkActive="active"
+                class="subitem-header subitem">
+                <div fxLayoutAlign="start center" fxFlex>
+                    <img src="https://img.icons8.com/nolan/64/package.png" />
+                    Pentest
+                </div>
+            </nb-list-item>
+
+
+
+
+
+
+        </nb-list>
+
+
+
+    </nb-card-body>
+</nb-card>

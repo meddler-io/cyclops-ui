@@ -1,0 +1,394 @@
+<nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+
+
+
+    <!-- {{iocs | async | json}} -->
+    <!-- {{dns_data | async | json}} -->
+
+
+    <!-- <nb-card-body > -->
+    <!-- <div fxFlex fxLayoutAlign="center start" fxLayout="row"> -->
+
+
+    <nb-card-header>
+
+
+        
+
+        <div fxFlex fxLayoutAlign="space-between center">
+
+            <div fxLayoutGap="2rem" fxLayout="row">
+
+                <button status="success" shape="round" (click)="create_finding(  )" size="small" nbButton
+                    [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  ">
+                    <nb-icon icon="plus-outline">
+
+                    </nb-icon>
+                    Add
+                </button>
+
+
+
+
+
+                <div fxLayoutGap="0.5rem">
+                    <button (click)="switch_finding_filter( 'all' )" size="small" nbButton
+                        [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
+                        [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All ({{all_count}})
+                    </button>
+                    <button (click)="switch_finding_filter( 'open' )" size="small" nbButton
+                        [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  "
+                        [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' ">Open
+                        ({{open_count}})</button>
+                    <button (click)="switch_finding_filter( 'under_review' )" size="small" nbButton
+                        [appearance]=" ( filter_finding_tab | async ) == 'under_review' ? 'outline' :  'ghost'  "
+                        [status]=" ( filter_finding_tab | async ) == 'under_review' ? 'warning' : 'basic' ">Under Review
+                        ({{under_review_count}})</button>
+
+                </div>
+
+
+            </div>
+
+
+            <div fxLayoutGap="1rem" fxLayout="row">
+                <button style="margin-left:  1rem;" [disabled]="loadingFindings$
+            ||
+            ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 ) || 1
+            " (click)="previousPage()" size="small" status="success" nbButton ghost>
+
+                    <nb-icon icon="arrow-left-outline"></nb-icon>
+
+                </button>
+
+
+
+                <div *ngIf="true">
+
+                    <nb-select [selected]="currentPage" (selectedChange)="goto($event)" placeholder="Go to">
+
+                        <nb-select-label>
+                            <div>
+                                Page {{currentPage}}
+                            </div>
+
+
+                            <div *ngIf="false">
+                                Page
+
+                                <span class="page" [class.page_no]="!loadingFindings$">
+
+                                    <!-- {{selectedItem}} -->
+                                    <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
+
+                                    {{currentPage}}
+                                </span>
+
+                                of
+                                <span class="page" [class.page_no]="!loadingFindings$">
+
+                                    {{totalPages}}
+
+                                </span>
+
+                            </div>
+
+
+                        </nb-select-label>
+
+                        <nb-option
+                            *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
+                            [value]="i + 1">
+                            <div>
+                                Page
+                                {{i + 1}}
+                            </div>
+                        </nb-option>
+
+
+                    </nb-select>
+                    <!-- {{lastFindingIdOffset}} -->
+                    <!-- {{findingsListLimit}} -->
+
+                </div>
+
+                <button style="margin-right:  1rem;"
+                    [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
+                    (click)="nextPage()" size="small" status="success" nbButton ghost>
+
+
+                    <nb-icon icon="arrow-right-outline"></nb-icon>
+
+                </button>
+
+
+            </div>
+
+
+
+
+        </div>
+
+    </nb-card-header>
+
+
+
+
+    <!-- </div> -->
+    <!-- <ng-template #findingView> -->
+
+
+
+
+
+    <nb-list fxFlex>
+
+
+        <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
+        <nb-list-item [class.inactive]="data?.active == false" (click)="onClickFinding(data)"
+            *ngFor="let data of findings$ | async ; index as index ">
+
+
+            <div fxLayout="row" fxFlex>
+
+                <!--  -->
+
+                
+
+                <!-- {{data | json}} -->
+                <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
+
+
+                <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+
+                    <div style="padding: 0;" fxFlex fxLayoutAlign="center center">
+
+                        {{ data?.index}}
+                    </div>
+
+                </div>
+
+
+
+
+                <div class="   item " fxFlex="1 0" fxLayoutALign="start">
+
+                    <!-- <span class="caption title"> -->
+
+                    <!-- <span class="chip">
+                            {{data?.component_name}}
+                        </span> -->
+
+
+
+
+
+                    <div style="
+                    display: inline;
+    line-break: anywhere;
+                    ">
+
+                        {{data?.title}}
+                    </div>
+
+                    <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline" status="danger"
+                        class="buildcount" size="tiny" text="Supressed">
+                    </nb-tag>
+                    <nb-tag *ngIf="data?.hawki_attributes?.accept_risk?.accepted" appearance="outline" status="danger"
+                        class="buildcount" size="tiny" text="Known Risk">
+                    </nb-tag>
+
+                    <!-- {{data?.title}} -->
+                    <!-- {{data?.title}} -->
+
+                    <!-- </span> -->
+
+                </div>
+
+
+                <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
+                    <div class="severity">
+                        {{ ( data?.severity ) }}
+                    </div>
+
+                </div>
+
+                <div fxFlex="0 0 10rem" class="item  ">
+                    {{data?.doc?.$date}}
+                </div>
+
+
+
+
+                <div *ngIf="false" class="item" class=" item " fxFlex>
+
+
+                    {{data?.description}}
+                    <!-- {{data?.refrence_ids | json}} -->
+
+                </div>
+
+
+                <div class="item  " fxFlex="0 0 10rem">
+
+                    <div>
+
+                        <!-- {{data?.found_by}} -->
+                        {{data?.platform}}
+
+                    </div>
+
+                    <div>
+                        <ng-container *ngIf="data?.component_name">
+
+                            <span class="chip">
+                                {{data?.component_name}}
+                            </span>
+                            <span class="sub_chip">
+                                <ng-container *ngIf="data?.component_version">
+                                    @{{data?.component_version}}</ng-container>
+                            </span>
+                        </ng-container>
+
+                    </div>
+
+                    <!-- <ng-container *ngIf="data?.component_name">
+
+                            in {{data?.component_name}}
+                            <ng-container *ngIf="data?.component_version">
+                                @{{data?.component_version}}</ng-container>
+                        </ng-container> -->
+
+
+                </div>
+
+
+                <div fxLayoutAlign="end start" class=" item " fxFlex="0 0 7rem">
+
+                    <button *ngIf="!data?.verifiable" (click)="markForVerification( data )"
+                        [disabled]="data?.verifiable" outline nbButton size="tiny" status="info">
+                        Verify
+                    </button>
+
+                    <button *ngIf="data?.verifiable" (click)="unmarkForVerification( data )" outline nbButton
+                        size="tiny" status="danger">
+                        Not Fixed
+                    </button>
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+        </nb-list-item>
+
+
+    </nb-list>
+
+
+
+    <!-- </ng-template> -->
+
+
+    <nb-card-footer *ngIf="false">
+
+        <div fxFlex fxLayoutAlign="space-between">
+            <button style="margin-left:  1rem;" [disabled]="loadingFindings$
+            ||
+            ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 ) || 1
+            " (click)="previousPage()" size="medium" status="success" nbButton ghost>
+
+                <nb-icon icon="arrow-left-outline"></nb-icon>
+                Prev
+
+            </button>
+
+
+
+            <div *ngIf="true" fxFlex fxLayoutAlign="center center">
+
+                <nb-select [selected]="currentPage" (selectedChange)="goto($event)" placeholder="Go to">
+
+                    <nb-select-label>
+
+                        <div>
+                            Page
+
+                            <span class="page" [class.page_no]="!loadingFindings$">
+
+                                <!-- {{selectedItem}} -->
+                                <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
+
+                                {{currentPage}}
+                            </span>
+
+                            of
+                            <span class="page" [class.page_no]="!loadingFindings$">
+
+                                {{totalPages}}
+
+                            </span>
+
+                        </div>
+
+
+                    </nb-select-label>
+
+                    <nb-option
+                        *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
+                        [value]="i + 1">
+                        <div>
+                            Page
+                            {{i + 1}}
+                        </div>
+                    </nb-option>
+
+
+                </nb-select>
+                <!-- {{lastFindingIdOffset}} -->
+                <!-- {{findingsListLimit}} -->
+
+            </div>
+
+            <button style="margin-right:  1rem;"
+                [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
+                (click)="nextPage()" size="medium" status="success" nbButton ghost>
+
+                Next
+                <nb-icon icon="arrow-right-outline"></nb-icon>
+
+            </button>
+        </div>
+
+    </nb-card-footer>
+
+    <!-- </nb-card-body> -->
+
+
+</nb-card>
+
+
+<ng-template let-context="context" #editTmpl>
+
+
+    <app-finding-detail-view [issues]="true" [finding_id]="context?.finding_id?.$oid">
+
+    </app-finding-detail-view>
+
+</ng-template>
+
+
+<ng-template let-context="context" #createFindingTmpl>
+
+
+ 
+
+    <app-engagement-create-finding>
+
+    </app-engagement-create-finding>
+
+</ng-template>

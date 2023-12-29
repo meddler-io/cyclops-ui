@@ -1,0 +1,331 @@
+@import './../../../themes.scss';
+
+
+.expander {
+    width : 20px;
+    height: 20px;
+
+    top     : 50%;
+    position: absolute;
+    right   : -10px;
+}
+
+.subitem-header {
+    color: nb-theme(color-success-400);
+
+}
+
+.subitem {
+    margin-left: 38px;
+}
+
+nb-toggle.unselected{
+    ::ng-deep{
+        .toggle{
+            background-color: nb-theme(color-basic-700) !important;
+    
+        }
+    }
+}
+
+
+nb-toggle {
+
+    label {
+
+        div {
+            background-color: #fff !important;
+        }
+    }
+
+
+    &.unselected {
+
+        label {
+
+            div {
+                background-color: #fff !important;
+            }
+        }
+
+    }
+}
+
+nb-card {
+    // border-right         : 1px solid #7d2ae8;
+    // border-right-width: -1px;
+    // margin-right: 5px;
+
+    box-shadow: 10px 0 5px -2px #7d2ae8;
+
+
+    transition-duration: 0.1s;
+    background         : nb-theme(color-basic-1100);
+    // background: #1d2024;
+
+    margin: 0;
+
+    nb-card-header {
+        // border-right: 1px solid #7d2ae8;
+
+        // box-shadow: 10px 0 5px -2px #7d2ae8;
+        // nb-toggle>label>div {
+
+        // }
+
+     
+
+        // &:hover {
+        //     border-right: 2px solid nb-theme(color-success-400);
+        //     border-right: 2px solid #7d2ae8;
+
+        // }
+
+
+
+        padding     : 0;
+        padding-left: 20px;
+
+        .logo {
+            width : 70px;
+            height: 70px;
+        }
+
+        // background: #1a1d1e;
+        background: nb-theme(color-basic-1000);
+
+        border: 0;
+
+        div {
+            // height: 60px;
+        }
+
+    }
+
+
+    nb-card-body {
+
+        // border-right: 1px solid #7d2ae8;
+
+        // &:hover {
+        //     border-right: 2px solid nb-theme(color-success-400);
+        //     border-right: 2px solid #7d2ae8;
+
+        // }
+
+        padding    : 15px;
+        padding-top: 0;
+
+
+        nb-list {
+
+            nb-list-item {
+                // background: nb-theme(color-basic-900);
+                padding   : 8px;
+                margin-top: 10px;
+
+                border-radius: 10px;
+
+                &.active {
+                    background: nb-theme(color-basic-800);
+
+                    div {
+
+                        color      : nb-theme(text-success-color);
+                        font-weight: 550;
+
+
+
+
+                    }
+
+
+                }
+
+                &:hover {
+                    background: nb-theme(color-basic-800);
+
+                }
+
+                div {
+                    font-weight: 350;
+                    color      : nb-theme(text-hint-color);
+
+                    img {
+
+                        width       : 26px;
+                        height      : 26px;
+                        margin-right: 20px;
+                        margin-left : 10px;
+                    }
+
+                }
+
+                &.disabled{
+                    opacity: 0.5;
+                    // background: nb-theme(color-alternative-800);
+
+                }
+
+            }
+        }
+
+    }
+
+}
+
+
+nb-card-footer {
+    cursor: pointer;
+}
+
+.nb-card-footer {
+    background   : nb-theme(color-basic-900);
+    padding-left : 5px;
+    padding-right: 5px;
+    padding      : 0;
+
+
+    border-top-left-radius : 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border                 : 0;
+
+
+    // box-shadow: 0px 0px 8px #7d2ae8;
+
+
+    // &:hover {
+    // box-shadow: 0px 0px 8px nb-theme(text-success-color);
+    // }
+
+
+    .appName {
+
+        margin-bottom: 10px;
+        margin-top   : 10px;
+
+        .button {
+            justify-content    : start;
+            // width: 140px;
+            // height: 45px;
+            font-family        : 'Roboto', sans-serif;
+            font-size          : 0.9rem;
+            text-transform     : capitalize;
+            margin-left        : 20px;
+            margin-right       : 20px;
+            // letter-spacing  : 2.5px;
+            font-weight        : 500;
+
+
+            background-color: #7d2ae8 !important;
+            color           : nb-theme(text-basic-color) !important;
+            box-shadow      : 0px 0px 8px #7d2ae8;
+
+
+            border             : none;
+            // border-radius   : 45px;
+            // box-shadow      : 0px 0px 2px nb-theme(color-alternative-400);
+            transition         : all 0.3s ease 0s;
+            cursor             : pointer;
+            outline            : none;
+            height             : calc(nb-theme(header-height) - 20px);
+            // box-shadow: 0px 1px 2px nb-theme(color-basic-400);
+
+        }
+
+        .button:hover {
+
+            background-color: nb-theme(color-success-500) !important;
+
+            box-shadow: 0px 0px 8px nb-theme(color-success-400);
+
+
+            color: nb-theme(text-alternative-color) !important;
+
+            // transform : translateX(1px);
+        }
+
+    }
+
+
+    .appName {
+        font-weight: 500;
+    }
+
+    .selectedApp {
+
+        border-radius   : 0.5rem;
+        // margin-top: 10px;
+        // margin-bottom: 2px;
+        margin          : 4px;
+        padding         : 5px;
+        padding-top     : 10px;
+        padding-bottom  : 10px;
+
+
+
+
+        transition-duration: 0.3s;
+
+        .texttitle {
+            color: nb-theme(text-primary-color);
+        }
+
+        .circle {
+
+            margin-left          : 10px;
+            margin-right         : 20px;
+            border               : 2px solid #7d2ae8;
+            height               : 3rem;
+            border-radius        : 50%;
+            -moz-border-radius   : 50%;
+            -webkit-border-radius: 50%;
+            width                : 3rem;
+
+            box-shadow: 0px 0px 8px #7d2ae8;
+
+
+            .text {
+                font-size     : 1.8rem;
+                line-height   : 1.8rem;
+                color         : #7d2ae8;
+                font-weight   : 400;
+                text-transform: capitalize;
+            }
+        }
+
+
+
+        &.hover {
+            background: nb-theme(color-basic-900);
+
+            // border-top   : 1px solid #7d2ae8; //nb-theme(text-success-color);
+            // box-shadow: 0px 0px 8px nb-theme(text-success-color);
+
+            // border-top: ;
+
+
+            .circle {
+                border          : 2px solid nb-theme(text-success-color);
+                background-color: nb-theme(text-success-color);
+
+                box-shadow: 0px 0px 8px nb-theme(text-success-color);
+
+
+
+            }
+
+
+            .text {
+                font-size     : 2.5rem;
+                line-height   : 2.5rem;
+                color         : #fff !important;
+                font-weight   : 400;
+                text-transform: capitalize;
+            }
+
+        }
+
+
+    }
+}

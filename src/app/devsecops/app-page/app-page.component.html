@@ -1,3 +1,5 @@
+
+
 <ng-template #lsRemoteDialog let-data let-ref="dialogRef">
 
 
@@ -193,7 +195,7 @@
                         </nb-icon> -->
 
                         <input [readonly]="true" [status]=" ( fileArtifact?.id?.length > 0 )   ?  'success' : 'basic' "
-                            [value]="fileArtifact?.filename" fullWidth type="text" nbInput fieldSize="giant"
+                            [value]="fileArtifact?.filename" fullWidth type="text" nbInput 
                             placeholder="Upload file">
 
 
@@ -369,8 +371,9 @@
 </ng-template>
 
 
+<!-- {{application_id}} -->
+<!-- {{application | async | json}} -->
 <ng-container *ngIf="application | async as  application">
-
 
     <nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
@@ -400,9 +403,8 @@
                 </button>
 
 
-                <button appearance="ghost" status="success" size="small" 
-                    [routerLink]=" [  {}  ,  'issues'  ] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
-                    #rla="routerLinkActive" nbButton>
+                <button appearance="ghost" status="success" size="small" [routerLink]=" [  {}  ,  'issues'  ] "
+                    [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive" nbButton>
 
                     <nb-icon icon="settings-2-outline"></nb-icon>&nbsp;
 
@@ -413,9 +415,7 @@
             </div>
         </nb-card-header>
 
-        <nb-card-header
-        style="background-color: transparent !important;"
-        >
+        <nb-card-header style="background-color: transparent !important;">
             <div fxLayoutAlign="start" fxFlex>
                 <div fxFlex fxLayoutAlign="end end">
 
@@ -442,17 +442,17 @@
 
 
         <!-- Code Repo -->
-        <nb-card-body>
-            <div fxFlex fxLayoutGap="20px" fxLayout="column">
+        <nb-card-body  fxLayoutGap="5rem" fxLayout="column">
+            <div   fxLayoutGap="20px" fxLayout="column">
 
-                <div style="font-size: 1rem; ;" class="text-hint "  >
+                <div style="font-size: 1rem; ;" class="text-hint ">
 
                     Code Repository
                 </div>
 
-                <div   fxLayoutAlign="center center">
+                <div fxLayoutAlign="center center">
 
-                    <nb-form-field  (click)="repositoryToggleEditMode()" fxFlex nbSpinnerStatus="danger">
+                    <nb-form-field (click)="repositoryToggleEditMode()" fxFlex nbSpinnerStatus="danger">
 
                         <span class="text-hint" nbPrefix>
                             ssh
@@ -465,7 +465,7 @@
                             (keyup.enter)="openDialogToSaveRepository(repositorSaveyDialog , application?._id?.$oid , repository.value , application?.active_env  )"
                             [readonly]="!repositoryEditEnabled"
                             [status]=" ( repository?.valid )   ?  'success' : 'basic' " [formControl]="repository"
-                            fullWidth type="text" nbInput fieldSize="giant"
+                            fullWidth type="text" nbInput 
                             placeholder="git@bitbucket.org:times_internet/hawkeye-api.git">
 
 
@@ -489,20 +489,14 @@
 
 
 
-        </nb-card-body>
+
+            <div   fxLayoutGap="20px" fxLayout="column">
+
+                <div
+                style="font-size: 1rem; ;" class="text-hint ">
 
 
-        <!-- Endpoint -->
-        <nb-card-body>
-
-
-
-            <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                <div style="font-size: 1rem; ;" class="text-hint "  >
-
-
-                        Endpoint
+                    Endpoint
 
 
 
@@ -547,7 +541,7 @@
 
 
 <!-- <nb-layout *ngIf="application | async as  application"> -->
-    <nb-layout *ngIf="false">
+<nb-layout *ngIf="false">
 
     <nb-layout-header>
 
@@ -577,8 +571,7 @@
 
 
                 <button appearance="ghost" status="primary" size="small" shape="round"
-                    [routerLink]=" [  {}  ,  'issues'  ] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
-                    #rla="routerLinkActive" nbButton>
+                    [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive" nbButton>
 
                     <nb-icon icon="settings-2-outline"></nb-icon>&nbsp;
 

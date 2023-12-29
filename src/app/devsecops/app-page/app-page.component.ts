@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, filter, share, startWith, switchMap, tap, scan, shareReplay, mergeMap, catchError } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { Platform } from 'src/environments/constants';
 import { EMPTY } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { StateManagerService } from '../state-manager.service';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app-page.component.scss']
 })
 export class AppPageComponent implements OnInit {
+
+  @Input('application_id') application_id;
 
   envs = [
     { route: 'development', title: 'Development' },
@@ -148,8 +151,34 @@ export class AppPageComponent implements OnInit {
   }
 
 
+
+
   setApplicationRef() {
-    this.application = this.curRoute.pipe(
+
+
+    if (this.application_id) {
+      this.application = this.apiService.getApplicationById(this.application_id)
+      this.apiService.getApplicationById(this.application_id).subscribe(_ => {
+
+        console.log('setApplicationRef', _);
+      })
+
+    } else {
+
+      this.application = this.stateManagerService.activeApplicationId
+        .pipe(
+          filter(_ => !!_)
+
+          ,
+          map((app: any) => {
+            return app?.app;
+          })
+
+        );
+    }
+    return;
+
+    this.application = this.activatedRoute.queryParamMap.pipe(
 
       map(_ => _.get('appid')),
 
@@ -295,6 +324,7 @@ export class AppPageComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialogService: NbDialogService,
     private router: Router,
+    private stateManagerService: StateManagerService,
 
 
 
@@ -302,10 +332,13 @@ export class AppPageComponent implements OnInit {
   ) { }
 
 
-  goTo ( slug: string ){
+  goTo(slug: string) {
 
 
-    this.router.navigate([  '../../' ,  slug]  , {relativeTo: this.activatedRoute} ) 
+    this.router.navigate(['/', slug], {
+      queryParamsHandling: 'merge',
+      relativeTo: this.activatedRoute
+    })
   }
 
   ngOnInit(): void {
@@ -333,7 +366,7 @@ export class AppPageComponent implements OnInit {
         lsRemote: this.apiService.healthcheck(this.url.value)
           .pipe(map(_ => {
 
-            return { status_code: _?.data }
+            return { status_code: _?.status_code }
 
           }
           ),
@@ -497,7 +530,7 @@ export class AppPageComponent implements OnInit {
 
   }
   download(id, env) {
-    this.apiService.download(id, env).subscribe(_ => {
+    this.apiService.downloadAppArtifact(id, env).subscribe(_ => {
 
 
 

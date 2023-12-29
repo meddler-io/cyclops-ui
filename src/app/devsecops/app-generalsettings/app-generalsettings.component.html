@@ -1,0 +1,213 @@
+<nb-layout center>
+
+    <nb-layout-header fxLayoutGap="1rem">
+
+        <div fxFlex fxLayoutAlign="space-between center ">
+
+            <div class="h6">
+                Application Settings
+            </div>
+
+        </div>
+
+    </nb-layout-header>
+
+    <nb-layout-column  *ngIf="application | async as application">
+
+        <nb-card>
+
+            <nb-card-header>
+
+                <div fxFlex fxLayoutAlign="space-between center ">
+
+                    <div class="h6">
+                        General Settings
+
+                    </div>
+                    
+                </div>
+
+
+            </nb-card-header>
+            <nb-card-body fxLayout="column" fxLayoutGap="1rem">
+
+
+
+                <div fxFlex fxLayoutGap="2rem" fxLayout="row">
+
+
+
+                    <!-- Business Name -->
+                    <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                        <div style="font-size: 1rem; ;" class="text-hint ">
+
+                            Business Name
+
+
+                        </div>
+
+                        <div fxLayoutGap="1rem" fxLayout="row">
+
+
+                            <div fxFlex>
+
+                                <nb-form-field>
+                                    <input fullWidth [placeholder]="application.business.name" [readonly]="true" nbInput
+                                        status="basic" type="text">
+
+                                </nb-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Project Name -->
+                    <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                        <div  style="font-size: 1rem; ;" class="text-hint ">
+
+                            Project Name
+
+
+                        </div>
+
+                        <div fxFlex fxLayoutGap="1rem" fxLayout="row">
+
+
+                            <div fxFlex>
+
+                                <nb-form-field>
+                                    <input fullWidth [placeholder]="application.project.name" [readonly]="true" nbInput
+                                        status="basic" type="text">
+
+                                </nb-form-field>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Name -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Name
+
+                    </div>
+
+                    <div fxFlex fxLayoutGap="1rem" fxLayout="row">
+
+                        <div>
+                            <nb-select [selected]="application.platform" disabled FxFlex placeholder="Platform">
+
+                                <nb-option value="webapp">Webapp</nb-option>
+                                <nb-option value="webservice">Webservice</nb-option>
+                                <nb-option value="ios">iOS</nb-option>
+                                <nb-option value="android">Android</nb-option>
+
+                            </nb-select>
+                        </div>
+
+                        <div fxFlex>
+
+                            <nb-form-field>
+                                <input [value]="application.title" placeholder="Name" nbInput status="basic"
+                                    type="text">
+
+                            </nb-form-field>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Details -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Details
+
+                    </div>
+
+                    <div fxFlex>
+
+                        <nb-form-field>
+                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
+
+                        </nb-form-field>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <!-- Tags -->
+
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Tags
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+                            <nb-tag-list (tagRemove)="onTagRemove($event)">
+                                <nb-tag status="basic" appearance="outline" info *ngFor="let tag of tags" [text]="tag"
+                                    removable></nb-tag>
+                                <input status="basic" type="text" nbTagInput (tagAdd)="onTagAdd($event.value)"
+                                    [nbAutocomplete]="autocomplete" fullWidth>
+                            </nb-tag-list>
+
+                            <nb-icon nbSuffix icon="search" pack="eva"></nb-icon>
+                        </nb-form-field>
+
+                        <nb-autocomplete #autocomplete (selectedChange)="onTagAdd($event)">
+                            <nb-option *ngFor="let option of options" [value]="option">{{ option }}</nb-option>
+                        </nb-autocomplete>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+
+                <!--  -->
+
+
+
+
+
+            </nb-card-body>
+
+            <nb-card-footer>
+
+                <div fxFlex fxLayoutAlign="end center ">
+ 
+                    <div class="h6">
+                        <button nbButton size="medium" shape="round" outline status="primary">
+                            Save
+                        </button>
+                    </div>
+                </div>
+
+
+            </nb-card-footer>
+
+        </nb-card>
+
+    </nb-layout-column>
+</nb-layout>
