@@ -1,4 +1,4 @@
-<nb-card class="card" fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+<nb-card  fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
     <nb-card-header fxLayout="row">
 
@@ -33,7 +33,7 @@
 
         <!-- grid.component.html -->
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column">
-            <div   class="card" fxFlex.gt-md="33%" fxFlex.gt-sm="50%" fxFlex="100%"
+            <div   class="_card" fxFlex.gt-md="33%" fxFlex.gt-sm="50%" fxFlex="100%"
                 *ngFor="let member of teamMembers | async">
 
                 <div [style.border-left-color]="member?.primary_color" class="grid-item">

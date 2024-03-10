@@ -19,15 +19,19 @@
 
 
                 <div fxLayoutGap="0.5rem">
-                    <button (click)="switch_finding_filter( 'all' )" size="small" nbButton 
-
-                    [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
-                      [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All ({{all_count}}) </button>
-                    <button (click)="switch_finding_filter( 'open' )" size="small" nbButton [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  " [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' " >Open ({{open_count}})</button>
-                    <button (click)="switch_finding_filter( 'under_review' )" size="small" nbButton 
-                    [appearance]=" ( filter_finding_tab | async ) == 'under_review' ? 'outline' :  'ghost'  "
-                
-                    [status]=" ( filter_finding_tab | async ) == 'under_review' ? 'warning' : 'basic' " >Under Review ({{under_review_count}})</button>
+                    <button class="tab-simulator" (click)="switch_finding_filter( 'all' )" size="medium" nbButton
+                        [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
+                        [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All ({{all_count}})
+                    </button>
+                    <button class="tab-simulator" (click)="switch_finding_filter( 'open' )" size="medium" nbButton
+                        [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  "
+                        [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' ">Open
+                        ({{open_count}})</button>
+                    <button class="tab-simulator" (click)="switch_finding_filter( 'under_review' )" size="medium"
+                        nbButton
+                        [appearance]=" ( filter_finding_tab | async ) == 'under_review' ? 'outline' :  'ghost'  "
+                        [status]=" ( filter_finding_tab | async ) == 'under_review' ? 'warning' : 'basic' ">Under Review
+                        ({{under_review_count}})</button>
 
                 </div>
 
@@ -120,37 +124,37 @@
 
 
 
-        <nb-list fxFlex>
+    <nb-list fxFlex>
 
 
-            <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
-            <nb-list-item [class.inactive]="data?.active == false" (click)="onClickFinding(data)"
-                *ngFor="let data of findings$ | async ; index as index ">
+        <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
+        <nb-list-item [class.inactive]="data?.active == false" (click)="onClickFinding(data)"
+            *ngFor="let data of findings$ | async ; index as index ">
 
 
-                <div fxLayout="row" fxFlex>
+            <div fxLayout="row" fxFlex>
 
-                    <!-- {{data | json}} -->
-                    <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
+                <!-- {{data | json}} -->
+                <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
 
-                    <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+                <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
 
-                        <div style="padding: 0;" fxFlex fxLayoutAlign="center center">
+                    <div style="padding: 0;" fxFlex fxLayoutAlign="center center">
 
-                            {{ data?.index}}
-                        </div>
-
+                        {{ data?.index}}
                     </div>
 
+                </div>
 
 
 
-                    <div class="   item " fxFlex="1 0" fxLayoutALign="start">
 
-                        <!-- <span class="caption title"> -->
+                <div class="   item " fxFlex="1 0" fxLayoutALign="start">
 
-                        <!-- <span class="chip">
+                    <!-- <span class="caption title"> -->
+
+                    <!-- <span class="chip">
                             {{data?.component_name}}
                         </span> -->
 
@@ -158,76 +162,76 @@
 
 
 
-                        <div style="
+                    <div style="
                     display: inline;
     line-break: anywhere;
                     ">
 
-                            {{data?.title}}
-                        </div>
+                        {{data?.title}}
+                    </div>
 
-                        <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline"
-                            status="danger" class="buildcount" size="tiny" text="Supressed">
-                        </nb-tag>
-                        <nb-tag *ngIf="data?.hawki_attributes?.accept_risk?.accepted" appearance="outline"
-                            status="danger" class="buildcount" size="tiny" text="Known Risk">
-                        </nb-tag>
+                    <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline" status="danger"
+                        class="buildcount" size="tiny" text="Supressed">
+                    </nb-tag>
+                    <nb-tag *ngIf="data?.hawki_attributes?.accept_risk?.accepted" appearance="outline" status="danger"
+                        class="buildcount" size="tiny" text="Known Risk">
+                    </nb-tag>
 
-                        <!-- {{data?.title}} -->
-                        <!-- {{data?.title}} -->
+                    <!-- {{data?.title}} -->
+                    <!-- {{data?.title}} -->
 
-                        <!-- </span> -->
+                    <!-- </span> -->
+
+                </div>
+
+
+                <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
+                    <div class="severity">
+                        {{ ( data?.severity ) }}
+                    </div>
+
+                </div>
+
+                <div fxFlex="0 0 10rem" class="item  ">
+                    {{data?.doc?.$date}}
+                </div>
+
+
+
+
+                <div *ngIf="false" class="item" class=" item " fxFlex>
+
+
+                    {{data?.description}}
+                    <!-- {{data?.refrence_ids | json}} -->
+
+                </div>
+
+
+                <div class="item  " fxFlex="0 0 10rem">
+
+                    <div>
+
+                        <!-- {{data?.found_by}} -->
+                        {{data?.platform}}
 
                     </div>
 
+                    <div>
+                        <ng-container *ngIf="data?.component_name">
 
-                    <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
-                        <div class="severity">
-                            {{ ( data?.severity ) }}
-                        </div>
-
-                    </div>
-
-                    <div fxFlex="0 0 10rem" class="item  ">
-                        {{data?.doc?.$date}}
-                    </div>
-
-
-
-
-                    <div *ngIf="false" class="item" class=" item " fxFlex>
-
-
-                        {{data?.description}}
-                        <!-- {{data?.refrence_ids | json}} -->
+                            <span class="chip">
+                                {{data?.component_name}}
+                            </span>
+                            <span class="sub_chip">
+                                <ng-container *ngIf="data?.component_version">
+                                    @{{data?.component_version}}</ng-container>
+                            </span>
+                        </ng-container>
 
                     </div>
 
-
-                    <div class="item  " fxFlex="0 0 10rem">
-
-                        <div>
-
-                            <!-- {{data?.found_by}} -->
-                            {{data?.platform}}
-
-                        </div>
-
-                        <div>
-                            <ng-container *ngIf="data?.component_name">
-
-                                <span class="chip">
-                                    {{data?.component_name}}
-                                </span>
-                                <span class="sub_chip">
-                                    <ng-container *ngIf="data?.component_version">
-                                        @{{data?.component_version}}</ng-container>
-                                </span>
-                            </ng-container>
-
-                        </div>
-
-                        <!-- <ng-container *ngIf="data?.component_name">
+                    <!-- <ng-container *ngIf="data?.component_name">
 
                             in {{data?.component_name}}
                             <ng-container *ngIf="data?.component_version">
@@ -235,34 +239,34 @@
                         </ng-container> -->
 
 
-                    </div>
+                </div>
 
 
-                    <div fxLayoutAlign="end start" class=" item " fxFlex="0 0 7rem">
+                <div fxLayoutAlign="end start" class=" item " fxFlex="0 0 7rem">
 
-                        <button *ngIf="!data?.verifiable" (click)="markForVerification( data )"
-                            [disabled]="data?.verifiable" outline nbButton size="tiny" status="info">
-                            Verify
-                        </button>
+                    <button *ngIf="!data?.verifiable" (click)="markForVerification( data )"
+                        [disabled]="data?.verifiable" outline nbButton size="tiny" status="info">
+                        Verify
+                    </button>
 
-                        <button *ngIf="data?.verifiable" (click)="unmarkForVerification( data )" outline nbButton
-                            size="tiny" status="danger">
-                            Not Fixed
-                        </button>
-
-
-                    </div>
-
-
+                    <button *ngIf="data?.verifiable" (click)="unmarkForVerification( data )" outline nbButton
+                        size="tiny" status="danger">
+                        Not Fixed
+                    </button>
 
 
                 </div>
 
 
-            </nb-list-item>
 
 
-        </nb-list>
+            </div>
+
+
+        </nb-list-item>
+
+
+    </nb-list>
 
 
 

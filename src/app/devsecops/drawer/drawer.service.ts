@@ -9,6 +9,8 @@ import { DrawerDirection } from './drawer-direction.enum';
 import { DrawerOptions } from './drawer-options.interface';
 import { InjectionRegistryService } from '../injection-registry/injection-registry.service';
 import { InjectionService } from '../injection/injection.service';
+import { NbWindowService } from '@nebular/theme';
+import { NewSidebarService } from 'src/app/new-sidebar.service';
 
 
 
@@ -31,12 +33,21 @@ export class DrawerService extends InjectionRegistryService<DrawerComponent> {
     readonly injectionService: InjectionService,
     private readonly overlayService: OverlayService,
     private readonly rendererFactory: RendererFactory2,
+    private windowService: NewSidebarService
+
   ) {
     super(injectionService);
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
   create(options: DrawerOptions) {
+
+    // const windowRef = this.windowService.open(options.template, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+
+    this.windowService.open(options.template);
+
+
+    return;
     
     const component = super.create(options);
     this.createSubscriptions(component, options.isRoot, options.parentContainer);

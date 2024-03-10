@@ -97,7 +97,7 @@ h5 {
   background-image: url(/assets/rocket.png);
 }
 
-.card {
+._card {
   padding: 0px;
 }
 
@@ -254,7 +254,7 @@ h3 {
 }
 
 
-nb-list-item{
+nb-list-item {
   padding: 0.4rem;
   background: nb-theme(background-basic-color-4) !important;
 
@@ -276,7 +276,7 @@ nb-list {
 
 }
 
-.subitem-header{
+.subitem-header {
   font-weight: 300;
 
 }
@@ -314,7 +314,7 @@ nb-card {
 
 nb-card-header {
   background: nb-theme(background-basic-color-3) !important;
-  margin: 10px;
+  // margin: 10px;
   padding: 4px;
   overflow: hidden;
 
@@ -343,7 +343,7 @@ nb-card-footer {
 }
 
 nb-card-body {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .left {
@@ -967,14 +967,14 @@ body {
 
 }
 
-.card {
+._card {
 
 
   .grid-item {
 
     padding: 1rem;
 
-    border-left: 2px solid ;
+    border-left: 1px solid;
 
     box-sizing: border-box;
     overflow: hidden;
@@ -992,6 +992,19 @@ body {
       background: nb-theme(background-basic-color-3) !important;
 
     }
+
+    &.selected {
+      background: nb-theme(background-basic-color-4) !important;
+      font-weight: 2500;
+      border-color: green;
+      border-left: 8px solid;
+
+
+
+
+
+    }
+
 
 
   }

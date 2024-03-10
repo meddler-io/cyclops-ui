@@ -55,14 +55,14 @@
         <!--  -->
         <div>
 
-            <div fxFlex fxLayoutAlign="end end">
+            <div fxFlex fxLayoutAlign="end center">
 
 
 
                 <button [appearance]="rla_sf?.isActive ?  'ghost' : 'ghost' "
                     [status]="rla_sf?.isActive ?  'success' : 'basic' " size="small" shape="round"
-                    [routerLink]=" [  'select_finding' , '658c9421086a02a65aef6b6f'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
-                    #rla_sf="routerLinkActive" nbButton>
+                    [routerLink]=" [  'select_finding' , '658c9421086a02a65aef6b6f'] "
+                    [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla_sf="routerLinkActive" nbButton>
                     Select Finding
                 </button>
 
@@ -126,6 +126,10 @@
 
 
 
+            <!--  -->
+            <button class="publish-button"   outline  size="medium" shape="round" nbButton>
+                Publish
+            </button>
         </div>
 
 

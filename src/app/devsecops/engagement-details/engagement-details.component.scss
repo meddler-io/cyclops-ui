@@ -1,5 +1,31 @@
 
+@import './../../../themes.scss';
+@import url(https://fonts.googleapis.com/css?family=Lato:700);
+
+
+
+
+nb-card {
+  // max-height: calc(100vh - 7rem);
+  margin       : 0;
+  // padding-top  : 60px;
+  border-radius: 0 !important;
+
+
+  // max-height: calc(100vh - 14rem);
+}
+
+
+nb-card-header {
+  background: nb-theme(background-basic-color-3) !important;
+  margin: 0px;
+  padding: 4px;
+  overflow: hidden;
+
+
+}
 
 button{
     text-transform: capitalize !important;
 }
+

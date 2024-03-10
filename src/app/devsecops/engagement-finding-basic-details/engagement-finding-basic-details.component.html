@@ -1,0 +1,72 @@
+<!-- [accept]="  allowed_extensions_for_file_upload[application?.platform] "  -->
+
+<ng-container *ngIf="findingDetails | async as findingDetails">
+
+
+    <div fxFlex [nbSpinner]="saving$" fxLayoutGap="1rem" fxLayout="column">
+
+
+
+        <div class="label">
+            Title
+
+
+        </div>
+
+        <div fxFlex fxLayout="row">
+
+
+
+            <nb-form-field fxFlex>
+                <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
+
+                <!-- (focusout)="titleFocusout()" -->
+                <input [value]="findingDetails?.title" #titleInp
+                    (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Add" type="text"
+                    nbInput>
+            </nb-form-field>
+
+
+        </div>
+
+
+
+        <!--  -->
+
+        <div class="label">
+            Description
+
+
+        </div>
+
+        <div fxFlex fxLayout="row">
+
+
+
+            <nb-form-field fxFlex>
+                <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
+
+                <!-- (focusout)="titleFocusout()" -->
+                <input [value]="findingDetails?.title" #descInp
+                    (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Add" type="text"
+                    nbInput>
+            </nb-form-field>
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+</ng-container>

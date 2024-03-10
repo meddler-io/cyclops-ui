@@ -28,7 +28,8 @@ export const environment = {
   // ioc_url: 'http://172.24.42.120/stargate/ioc_realtime/',
   ioc_url: 'http://172.24.42.94:8080/',
 
-  minio_url: 'http://hawki-minio.indiatimes.com:9000',
+  // minio_url: 'http://hawki-minio.indiatimes.com:9000',
+  minio_url: 'http://exthawki.indiatimes.com',
 
 
 };

@@ -1,8 +1,12 @@
 // this is our just created themes.scss file, make sure the path to the file is correct
 @import 'themes';
-
 // framework component styles
 @import '@nebular/theme/styles/globals';
+
+
+@import 'quill/dist/quill.core.css';
+@import 'quill/dist/quill.bubble.css';
+@import 'quill/dist/quill.snow.css';
 
 // install the framework styles
 @include nb-install() {
@@ -33,54 +37,54 @@
 }
 
 .heading {
-  font-size    : 1.7rem;
+  font-size: 1.7rem;
   margin-bottom: 1rem;
 
   line-height: 1.8;
   font-weight: 100;
-  color      : #686868;
+  color: #686868;
 
 }
 
 .subheading {
-  font-size    : 1.4rem;
-  margin-top   : 0.5rem;
-  font-weight  : 400;
+  font-size: 1.4rem;
+  margin-top: 0.5rem;
+  font-weight: 400;
   margin-bottom: 0.5rem;
-  line-height  : 1.6rem;
-  color        : #b6b6b6;
+  line-height: 1.6rem;
+  color: #b6b6b6;
 
 }
 
 .step-content {
   // height : 100%;
-  flex      : 1;
+  flex: 1;
   max-height: inherit;
 }
 
 .panelClass {
-  max-height   : 90vh;
+  max-height: 90vh;
   // width     : 500px;
-  overflow     : auto;
-  max-width    : 90vw;
+  overflow: auto;
+  max-width: 90vw;
 }
 
 
 .dialog-card {
   // max-height   : 90vh;
   // width        : 500px;
-  overflow : auto;
+  overflow: auto;
   max-width: 90vw;
 
 }
 
 nb-dialog-container {
-  overflow        : hidden scroll;
-  margin-right    : -5px;
+  overflow: hidden scroll;
+  margin-right: -5px;
   // max-height   : 90vh;
   // width     : 500px;
-  overflow        : auto;
-  max-width       : 90vw;
+  overflow: auto;
+  max-width: 90vw;
 }
 
 // * {
@@ -98,15 +102,15 @@ nb-dialog-container {
 
 
 .CONTENT {
-  display    : flex;
-  flex       : 1;
-  max-width  : 100%;
+  display: flex;
+  flex: 1;
+  max-width: 100%;
   align-items: flex-start // align-items: stretch;
 }
 
 .LEFT {
   // @extend .col-6  !optional;
-  flex             : 3;
+  flex: 3;
   // flex          : 0 0 3;   
   // width         : 70%;
   // max-width     : 70%;
@@ -117,13 +121,13 @@ nb-dialog-container {
 
 .RIGHT {
   // @extend .col-6 !optional;
-  flex        : 1;
+  flex: 1;
   // width    : 30%;
   // flex-grow: 1;
   // max-width: 30%;
 
   // flex       : 0 0 1;   
-  padding       : 1rem;
+  padding: 1rem;
   // flex-shrink: 0;
 }
 
@@ -132,7 +136,7 @@ nb-dialog-container {
   // overflow-y    : hidden;
   // height        : auto;
   // width         : 100%;
-  padding-bottom   : 1rem;
+  padding-bottom: 1rem;
   // overflow      : hidden;
 }
 
@@ -142,7 +146,7 @@ nb-dialog-container {
 
 .legend-labels {
   white-space: normal;
-  overflow-x : auto !important;
+  overflow-x: auto !important;
 }
 
 
@@ -166,7 +170,7 @@ nb-dialog-container {
 }
 
 .sidebarNextlDilog {
-  left    : nb-theme(sidebar-width);
+  left: nb-theme(sidebar-width);
   position: absolute !important;
 
   height: 100%;
@@ -175,7 +179,7 @@ nb-dialog-container {
 }
 
 .sidebarlDilog {
-  right   : 0px;
+  right: 0px;
   position: absolute !important;
 
   // top            : 0px;
@@ -184,16 +188,16 @@ nb-dialog-container {
 }
 
 .positionalDilog {
-  left           : 12px;
-  top            : 60px;
-  position       : absolute !important;
+  left: 12px;
+  top: 60px;
+  position: absolute !important;
   backdrop-filter: blur(10px);
 
 }
 
 .fullScreenDialog {
-  width          : 80vw;
-  height         : 80vh;
+  width: 80vw;
+  height: 80vh;
   justify-content: center;
 
   border-radius: 10px !important;
@@ -203,33 +207,36 @@ nb-dialog-container {
 .blurBackdrop {
 
   // backdrop-filter    : blur(10px);
-  background         : rgba(0, 0, 0, 0.8);
+  // background: rgba(0, 0, 0, 0.8);
+  background: nb-theme(background-basic-color-4);
+
   transition-duration: 0.4s;
+  opacity: 0.3;
 }
 
 
 // 
 
 .lds-ripple {
-  display  : inline-block;
-  position : relative;
+  display: inline-block;
+  position: relative;
   // width: 80px;
   // height: 80px;
 
 
-  width : var(--header-height);
+  width: var(--header-height);
   height: var(--header-height);
 
 }
 
 .lds-ripple div {
   position: absolute;
-  border  : 4px solid nb-theme(background-alternative-color-2);
+  border: 4px solid nb-theme(background-alternative-color-2);
 
 
-  opacity      : 1;
+  opacity: 1;
   border-radius: 50%;
-  animation    : lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }
 
 .lds-ripple div:nth-child(2) {
@@ -238,18 +245,18 @@ nb-dialog-container {
 
 @keyframes lds-ripple {
   0% {
-    top    : 36px;
-    left   : 36px;
-    width  : 0;
-    height : 0;
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
     opacity: 1;
   }
 
   100% {
-    top    : 0px;
-    left   : 0px;
-    width  : 72px;
-    height : 72px;
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
     opacity: 0;
   }
 }
@@ -261,13 +268,111 @@ body {
 nb-card.mainRemain {
   // width: 0 !important;
   max-height: calc(100vh - (2 * var(--header-height))) !important;
-  height    : calc(100vh - (2 * var(--header-height))) !important;
+  height: calc(100vh - (2 * var(--header-height))) !important;
 }
 
 .dialogClass {
   // transition: all .5s ease-in-out; /*make it smooth*/
-  transform : scale(1);
+  // transform: scale(1);
   /*scale it to a smaller size*/
   transition: all .5s ease-in-out;
   /*make it smooth*/
+
+
+}
+
+.tab-simulator {
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-top: 0px !important;
+  border-radius: 0px !important;
+}
+
+
+// 
+
+
+
+
+
+.ngx-drawer {
+  transform: unset !important; 
+  // display: block;
+
+  // min-width: 40rem;
+  max-width: 50vw;;
+  width: 50vw;;
+
+  overflow: scroll;
+
+  background: nb-theme(background-basic-color-1);
+  
+
+  // top: var(--header-height) ;
+  top: 0 !important;
+  right: 0 !important;
+  left: unset !important;
+  max-width: 50vw;
+
+  nb-card {
+    height: 100vh;
+
+    width: 100%;
+  }
+
+
+
+
+}
+
+// 
+/* Tell Quill not to scroll */
+#quill-container {
+  height: auto;
+  min-height: 100%;
+  padding: 50px;
+}
+#quill-container .ql-editor {
+  font-size: 18px;
+  overflow-y: visible; 
+}
+
+
+.ql-editor{
+  p{
+    // all: unset !important;
+    color: unset;
+  }
+}
+
+.ql-editor.ql-blank::before{
+
+  // color: red;
+  color           :var(--input-basic-placeholder-text-color);
+  font-size: var(--input-medium-placeholder-text-font-size);
+  font-weight: var(--input-medium-placeholder-text-font-weight);
+  line-height: var(--input-medium-placeholder-text-line-height);
+
+  font-style: unset;
+
+}
+
+
+
+/* Specify our own scrolling container */
+#scrolling-container {
+  width: 900px;
+  height: 800px;
+  min-height: 800px;
+  // overflow-y: auto;
+
+
+}
+
+#scrolling-container , #scrolling-container * * {
+  all: unset !important;
+}
+
+.sidebar-window{
+  max-width: 50vw;;
 }

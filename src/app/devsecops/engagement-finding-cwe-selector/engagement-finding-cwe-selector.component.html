@@ -1,0 +1,107 @@
+<div *ngIf="active_cwe | async as active_cwe" fxLayoutGap="1rem" fxLayout="column">
+
+
+    <div 
+    class="label">
+        CWE
+
+
+
+    </div>
+    <div (click)="openDialog(  chooseCWE )">
+        <nb-form-field>
+            <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+            <input [value]=" 'CWE-' +  active_cwe?.id + ' '  +  active_cwe?.title" [readonly]="true" fullWidth
+                placeholder="Search CWE" type="text" nbInput>
+        </nb-form-field>
+    </div>
+
+
+
+    <ng-template  #chooseCWE>
+
+        <nb-card
+        
+        class="nb-theme-default" fxFill>
+            <nb-card-header>
+                <div>
+                    <nb-form-field>
+                        <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                        <input [formControl]="searchInput" fullWidth placeholder="Select CWE" type="text" nbInput>
+                    </nb-form-field>
+                </div>
+            </nb-card-header>
+
+
+
+            <nb-card-body>
+
+
+
+
+
+
+                <nb-list>
+                    <nb-list-item (click)="selectCWE( finding_id ,  finding )"
+                        [class.active]="active_cwe?.id == finding?.id" *ngFor="let finding of cwe$ | async"
+                        [class.subitsemheader]="finding?.type == 'category' "
+                        [class.text-hint]="finding?.type == 'category' "
+                        [class.subitsem]="finding?.type == 'weakness' ">
+                        <!-- CWE-{{finding?.id}} {{finding?.title}} {{finding?.type}} -->
+
+
+
+                        CWE-{{finding?.id}} &nbsp;<div [innerHTML]="finding.title | highlight: searchInput.value"></div>
+                    </nb-list-item>
+
+
+
+
+                </nb-list>
+
+            </nb-card-body>
+        </nb-card>
+
+        <div *ngIf="false" class="cwe" fxFlex fxLayout="column">
+
+            <div>
+                <nb-form-field>
+                    <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                    <input [formControl]="searchInput" fullWidth placeholder="Search CWE" type="text" nbInput>
+                </nb-form-field>
+            </div>
+
+            <!--  -->
+
+            <div fxFlex fxLayout="column">
+
+
+
+                <div fxFlex fxLayout="row">
+
+                    <nb-list>
+                        <nb-list-item (click)="selectCWE( finding_id ,  finding )"
+                            [class.active]="finding$?.cwe == finding?.id" *ngFor="let finding of cwe$ | async"
+                            [class.subitsemheader]="finding?.type == 'category' "
+                            [class.text-hint]="finding?.type == 'category' "
+                            [class.subitsem]="finding?.type == 'weakness' ">
+                            <!-- CWE-{{finding?.id}} {{finding?.title}} {{finding?.type}} -->
+
+
+                            CWE-{{finding?.id}} &nbsp;<div [innerHTML]="finding.title | highlight: searchInput.value">
+                            </div>
+                        </nb-list-item>
+
+
+
+
+                    </nb-list>
+
+                </div>
+
+            </div>
+        </div>
+
+    </ng-template>
+
+</div>

@@ -8,6 +8,23 @@ nb-layout-header{
     background-color: nb-theme(background-basic-color-3);
 
 }
+
+.publish-button{
+    background: nb-theme(color-basic-900) !important; 
+    color: nb-theme(text-success-color) !important;
+
+    border-color:  nb-theme(color-success-600) !important;
+    font-weight : 500 ; 
+
+    &:hover {
+        border-color:  nb-theme(color-success-500) !important;
+        background: nb-theme(color-success-900) !important;
+
+
+
+    }
+
+}
 nb-sidebar {
 
     padding: 15px;
@@ -71,3 +88,4 @@ nb-list {
 
     }
 }
+

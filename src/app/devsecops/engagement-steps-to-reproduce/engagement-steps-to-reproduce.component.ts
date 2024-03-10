@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { filter, map, startWith, Subject, switchMap } from 'rxjs';
+import { combineLatest, filter, map, of, startWith, Subject, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
 
@@ -13,19 +13,16 @@ import { EngagementService } from '../engagement.service';
 export class EngagementStepsToReproduceComponent implements OnInit {
 
 
+  @Input('finding_id') finding_id;
+
 
   refreshFinding = new Subject();
   finding$;
 
-  dataForm = this.fb.group({
 
-    stepsToReproduce: this.fb.array([])
-  })
+  
 
-  get stepsToReproduce() {
-    return this.dataForm.get('stepsToReproduce') as FormArray;
-  }
-
+  
   constructor(
     private fb: FormBuilder,
     private engagementService: EngagementService,
@@ -36,47 +33,46 @@ export class EngagementStepsToReproduceComponent implements OnInit {
 
   }
 
-  addStep(  finding_id )  {
-    this.apiService.addStepToFinding(   finding_id ).subscribe()
+  addStep(finding_id) {
+    this.apiService.addStepToFinding(finding_id).subscribe()
   }
 
   ngOnInit(): void {
 
 
-    this.finding$ = this.activatedRoute.paramMap.pipe(
+
+    this.finding$ = combineLatest([of(this.finding_id), this.activatedRoute.paramMap.pipe(
 
       map(_ => {
         return _.get('finding_id')
 
-      })
-      ,
-      filter(_ => !!_)
-      ,
-      switchMap(finding_id => {
+      }))]).pipe(
 
-        return this.refreshFinding.pipe(
-          startWith(true),
-          switchMap(_ => {
-            return this.apiService.getAssessmentsFindingsById(finding_id).pipe(map(_ => _.data))
+        map(([value1, value2]) => {
+          // Use the latest non-null value from either observable
+          return value1 !== null ? value1 : value2;
+        })
+        ,
 
-          }));
+        filter(_ => !!_)
+        ,
+        switchMap(finding_id => {
+
+          return this.refreshFinding.pipe(
+            startWith(true),
+            switchMap(_ => {
+              return this.apiService.getAssessmentsFindingsById(finding_id).pipe(map(_ => _.data))
+
+            }));
 
 
-      }
-      )
-    );
-
-
-    for (let i = 0; i < 3; i++)
-
-      (this.dataForm.get('stepsToReproduce') as FormArray).push(this.fb.group(
-        {
-          title: new FormControl('Title of step'),
-          description: new FormControl('Description of Text'),
-          cURL: new FormControl('')
         }
+        )
+      );
 
-      ));
+
+
+      
   }
 
 

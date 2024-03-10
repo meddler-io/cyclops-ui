@@ -1,6 +1,5 @@
-<nb-card fxFill *ngIf="engagementDetails | async as engagementDetails">
+<nb-card  *ngIf="engagementDetails | async as engagementDetails">
     <nb-card-body>
-
 
         <div style="padding: 1rem;" fxLayout="column" fxLayoutGap="1rem">
 
@@ -30,31 +29,7 @@
 
 
 
-                <!-- Severity -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
 
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Severity
-                    </div>
-
-                    <div fxFlex>
-                        <nb-select disabled FxFlex placeholder="Severity">
-
-                            <nb-option value="critical">Critical</nb-option>
-                            <nb-option value="high">High</nb-option>
-                            <nb-option value="medium">Medium</nb-option>
-                            <nb-option value="low">Low</nb-option>
-                            <nb-option value="info">Info</nb-option>
-
-                        </nb-select>
-                    </div>
-
-
-
-
-
-                </div>
 
 
 
@@ -73,10 +48,10 @@
 
 
 
-                        <nb-form-field>
+                        <nb-form-field [readonly]="true">
 
-                            <input [placeholder]="engagementDetails?.business?.name" nbInput status="basic" type="text"
-                                fullWidth>
+                            <input [readonly]="true" [value]="engagementDetails?.business?.name" nbInput status="basic"
+                                type="text" fullWidth>
 
                         </nb-form-field>
 
@@ -104,7 +79,7 @@
 
                         <nb-form-field>
 
-                            <input [placeholder]="engagementDetails?.project?.name" nbInput status="basic" type="text"
+                            <input [value]="engagementDetails?.project?.name" nbInput status="basic" type="text"
                                 fullWidth>
 
                         </nb-form-field>
@@ -135,8 +110,8 @@
 
                         <nb-form-field>
 
-                            <input [placeholder]="engagementDetails?.application?.platform" nbInput status="basic"
-                                type="text" fullWidth>
+                            <input [value]="engagementDetails?.application?.platform" nbInput status="basic" type="text"
+                                fullWidth>
 
                         </nb-form-field>
 
@@ -164,8 +139,8 @@
 
                         <nb-form-field>
 
-                            <input [placeholder]="engagementDetails?.application?.title" nbInput status="basic"
-                                type="text" fullWidth>
+                            <input [value]="engagementDetails?.application?.title" nbInput status="basic" type="text"
+                                fullWidth>
 
                         </nb-form-field>
 
@@ -177,7 +152,62 @@
 
                 </div>
 
- 
+
+                <!-- Engagement -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Engagement
+
+                    </div>
+
+                    <div fxFlex>
+
+
+
+                        <nb-form-field>
+
+                            <input [value]="engagementDetails?.engagement" nbInput status="basic" type="text" fullWidth>
+
+                        </nb-form-field>
+
+
+                    </div>
+
+
+
+
+                </div>
+
+
+                <!-- Engagement Scope -->
+                <div fxFlex fxLayoutGap="20px" fxLayout="column">
+
+                    <div style="font-size: 1rem; ;" class="text-hint ">
+
+                        Scope
+
+                    </div>
+
+                    <div fxFlex>
+
+                        <nb-checkbox  [checked]="engagementDetails?.engagement_type?.new" status="info">New Features</nb-checkbox>
+
+                    </div>
+                    <div fxFlex>
+
+                        <nb-checkbox  [checked]="engagementDetails?.engagement_type?.revalidate" status="danger">Revalidation</nb-checkbox>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
 
 
 
@@ -186,5 +216,11 @@
         </div>
 
 
+    </nb-card-body>
+
+    <nb-card-body>
+        <app-findings-summary-bar-chart>
+
+        </app-findings-summary-bar-chart>
     </nb-card-body>
 </nb-card>

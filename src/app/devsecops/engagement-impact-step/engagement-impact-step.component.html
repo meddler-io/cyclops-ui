@@ -1,0 +1,198 @@
+<!-- [accept]="  allowed_extensions_for_file_upload[application?.platform] "  -->
+
+<ng-container *ngIf="stepDetails | async as stepDetails">
+
+
+    <div [nbSpinner]="saving$" fxLayoutGap="1rem" fxLayout="column">
+  
+  
+      <input #imageFileInp style="display: none" type="file" multiple nbInput fieldSize="medium"
+        (change)="onFilesAdded(imageFileInp , 'image'  )" />
+  
+      <input #attachmentFileInp style="display: none" type="file" multiple nbInput fieldSize="medium"
+        (change)="onFilesAdded( attachmentFileInp , 'attachment' )" />
+  
+      <div class="label">
+        Impact {{index}}
+  
+  
+      </div>
+  
+      <div fxFlex fxLayout="row">
+  
+  
+  
+        <nb-form-field fxFlex>
+          <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
+  
+          <!-- (focusout)="titleFocusout()" -->
+          <input [value]="stepDetails?.title" #titleInp (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )"
+            fullWidth placeholder="Add" type="text" nbInput>
+        </nb-form-field>
+  
+  
+      </div>
+  
+  
+      <!-- Button Actions -->
+      <div *ngIf="false"  fxLayoutAlign="end">
+        <nb-button-group #detailTab shape="round" status="info" appearance="outline" fxLayoutGap="0.4rem" size="small">
+          <button [pressed]="true" nbButtonToggle value="One">Details</button>
+          <button nbButtonToggle value="Two">Images</button>
+          <button nbButtonToggle value="Three">Attachments</button>
+          <button nbButtonToggle value="Three">cURL</button>
+        </nb-button-group>
+  
+  
+      </div>
+  
+      <!-- Textual Content -->
+      <div *ngIf="false" class="label">
+  
+        Description
+      </div>
+      <div *ngIf="false">
+  
+        <textarea [value]="stepDetails?.description" #descInp
+          (keyup.enter)="saveAttr( {'description' :  descInp.value }  )" nbInput fullWidth
+          placeholder="Detailed Step"></textarea>
+      </div>
+  
+      <!-- cURL -->
+  
+   
+      
+  
+      <nb-form-field fxFlex>
+        <nb-icon nbPrefix icon="code-outline" pack="eva"></nb-icon>
+  
+        <!-- (focusout)="titleFocusout()" -->
+        <input
+        class="custom-input" [value]="stepDetails?.curl" #curlInp (keyup.enter)="saveAttr(  { 'curl' :  curlInp.value }  )"
+          fullWidth placeholder="curl" type="text" nbInput>
+  
+  
+  
+          
+      </nb-form-field>
+  
+  
+      <!-- Images -->
+  
+      <div class="label">
+  
+        Images
+      </div>
+      <div  fxLayoutGap="0.4rem"  fxLayout="column wrap" fxLayoutAlign="start start">
+  
+        <!-- <div (click)="imageFileInp.click()" class="thumbnail " fxLayoutAlign="center center">
+          <div class="label h6">
+  
+            <nb-icon nbPrefix icon="plus-outline" pack="eva"></nb-icon>
+  
+          </div>
+        </div> -->
+  
+        <div (click)="imageFileInp.click()"  fxLayoutAlign="center center">
+          <nb-button-group size="small" outline shape="round">
+            <button nbButtonToggle>
+              <nb-icon nbPrefix icon="plus-outline" pack="eva"></nb-icon>
+  
+            </button>
+            <button style="text-transform: capitalize  !important ; " nbButtonToggle>
+  
+              Add
+            </button>
+  
+          </nb-button-group>
+        </div>
+  
+  
+        <div *ngFor="let image of  stepDetails?.images"  (click)="downloadFile( image?.file   )">
+          <!-- <img [src]="image.url" [alt]="image?.file?.filename"> -->
+  
+          <nb-button-group size="small" outline shape="round">
+            <button nbButtonToggle>
+              <nb-icon nbPrefix icon="edit-outline" pack="eva"></nb-icon>
+  
+            </button>
+            <button style="text-transform: capitalize ; " nbButtonToggle>
+              {{image?.file?.filename}}
+            </button>
+  
+            <button nbButtonToggle>
+              <nb-icon nbPrefix icon="download-outline" pack="eva"></nb-icon>
+  
+            </button>
+  
+          </nb-button-group>
+  
+        </div>
+      </div>
+  
+  
+      <!-- Attachments -->
+      <div class="label">
+  
+        Attachment
+      </div>
+      <div fxLayoutGap="0.4rem" fxLayout="column wrap" fxLayoutAlign="start start">
+  
+        <div (click)="attachmentFileInp.click()"  fxLayoutAlign="center center">
+          
+          
+          <nb-button-group size="small" outline shape="round">
+            <button nbButtonToggle>
+              <nb-icon nbPrefix icon="plus-outline" pack="eva"></nb-icon>
+  
+            </button>
+            <button style="text-transform: capitalize  !important ; " nbButtonToggle>
+  
+              Add
+            </button>
+  
+          </nb-button-group>
+  
+        </div>
+  
+  
+  
+        <div *ngFor="let attachment of  stepDetails?.attachments" (click)="downloadFile(attachment?.file)">
+  
+  
+          <nb-button-group size="small" outline shape="round">
+            <button nbButtonToggle>
+              <nb-icon nbPrefix icon="edit-outline" pack="eva"></nb-icon>
+  
+            </button>
+            <button style="text-transform: capitalize ; " nbButtonToggle>
+              {{attachment?.file?.filename}}
+            </button>
+  
+            <button nbButtonToggle>
+              <nb-icon nbPrefix icon="download-outline" pack="eva"></nb-icon>
+  
+            </button>
+  
+          </nb-button-group>
+  
+  
+          <!-- <img [src]="attachment.url" [alt]="attachment?.file?.filename"> -->
+        </div>
+      </div>
+  
+  
+  
+  
+      <!-- Add Button -->
+      <div fxLayoutAlign="space-around">
+        <button size="small" shape="round" nbButton outline>
+          Add Step
+        </button>
+  
+      </div>
+  
+  
+    </div>
+  
+  </ng-container>

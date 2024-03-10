@@ -19,7 +19,7 @@ export class HighlightPipe implements PipeTransform {
     const regex = new RegExp(`(${escapedKeywords.join('|')})`, 'gi');
     
     
-    let result =  value.replace(regex, '<span style="font-weight: 900 !important; " class="text-success highlight subtitle-2">$1</span>');
+    let result =  value.replace(regex, '<span style="font-weight: 900 !important; " class="text-primary highlight subtitle-2">$1</span>');
     
     console.log('regexp', regex, result)
     return result;

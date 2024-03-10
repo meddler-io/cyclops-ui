@@ -1,4 +1,4 @@
-<nb-card class="card" fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+<nb-card  fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
     <nb-card-header fxLayout="row">
 
@@ -31,7 +31,7 @@
         <div   fxLayoutAlign="space-between" fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column">
             <div
             [nbSpinner]="assignedResourcesLoading.has( member?._id?.$oid  )  "
-            class="card" fxFlex.gt-md="33%" fxFlex.gt-sm="50%" fxFlex="100%"
+            class="_card" fxFlex.gt-md="33%" fxFlex.gt-sm="50%" fxFlex="100%"
             (click)="markSelect( member?._id?.$oid , member?.assigned )"
                 *ngFor="let member of teamMembers | async">
 

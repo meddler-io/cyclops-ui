@@ -1,43 +1,65 @@
-<nb-card *ngIf="finding$  | async as finding$"  fxFill>
+<ng-container *ngIf="finding$  | async as finding$">
 
-    <nb-card-header fxLayoutAlign="space-between" >
-        <span class="subtitle-"> Steps to reproduce</span>
+    <div fxFlex [nbSpinner]="saving$" fxLayoutGap="1rem" fxLayout="column">
 
-        <button size="small" shape="round" nbButton (click)="addStep(  finding$?._id?.$oid  )">
+        <div fxLayoutAlign="space-between center">
 
-            Add Step
-        </button>
-
-
-    </nb-card-header>
+            <div class="label">
+                Steps to reproduce
+            </div>
 
 
-    <nb-list >
+            <nb-button-group size="small" outline shape="round">
+                <button (click)="addStep(  finding$?._id?.$oid  )" nbButtonToggle>
+                    <nb-icon nbPrefix icon="plus-outline" pack="eva"></nb-icon>
 
+                </button>
+                <button (click)="addStep(  finding$?._id?.$oid  )" style="text-transform: capitalize  !important ; "
+                    nbButtonToggle>
 
-        <nb-list-item [formGroup]="group" *ngFor="let step of finding$?.steps_to_reproduce; let i = index">
+                    Add
+                </button>
 
-
-            <app-engagement-step-to-reproduce
-            [finding_id]="finding$?._id?.$oid"
-            [step_id]="step?._id?.$oid"
-            fxFlex>
-
-            </app-engagement-step-to-reproduce>
-
-
-        </nb-list-item>
-
-    </nb-list>
+            </nb-button-group>
 
 
 
-    <nb-card-footer fxLayoutAlign="end" fxLayoutGap="1rem">
+        </div>
+
+
+        <nb-list>
+
+
+            <nb-list-item *ngFor="let step of finding$?.steps_to_reproduce; let i = index">
 
 
 
-        <button size="small" nbButton disabled nbStepperNext>prev</button>
-        <button size="small" nbButton nbStepperNext>next</button>
-    </nb-card-footer>
+                <app-engagement-step-to-reproduce [title]="step?.title" [finding_id]="finding$?._id?.$oid"
+                    [step_id]="step?._id?.$oid" [index]="i+1" fxFlex>
 
-</nb-card>
+                </app-engagement-step-to-reproduce>
+
+
+            </nb-list-item>
+            <nb-list-item>
+
+                <div fxFlex fxLayoutAlign="center center">
+
+                    <button outline shape="round" (click)="addStep(  finding$?._id?.$oid  )" style="text-transform: capitalize  !important ; "
+                        nbButton status="success">
+
+                        Add
+                    </button>
+                </div>
+            </nb-list-item>
+
+
+        </nb-list>
+
+    </div>
+
+
+
+
+
+</ng-container>

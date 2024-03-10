@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule } from '@nebular/theme';
+import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule, NbWindowModule, NbOverlayModule } from '@nebular/theme';
 import { ApiService } from './api.service';
 import { AppListComponent } from './app-list/app-list.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -107,15 +107,38 @@ import { HighlightPipe } from './highlight.pipe';
 import { EngagementStepToReproduceComponent } from './engagement-step-to-reproduce/engagement-step-to-reproduce.component';
 import { AngularMarkdownEditorModule } from 'angular-markdown-editor';
 import { EngagementStepsToReproduceComponent } from './engagement-steps-to-reproduce/engagement-steps-to-reproduce.component';
+import { EngagementImpactComponent } from './engagement-impact/engagement-impact.component';
+import { EngagementImpactStepComponent } from './engagement-impact-step/engagement-impact-step.component';
+import { EngagementFindingBasicDetailsComponent } from './engagement-finding-basic-details/engagement-finding-basic-details.component';
+import { EngagementFindingCweSelectorComponent } from './engagement-finding-cwe-selector/engagement-finding-cwe-selector.component';
+import { VerticalComponentLabelComponent } from './vertical-component-label/vertical-component-label.component';
+import { PerformanceDebugComponent } from '../performance-debug/performance-debug.component';
+import { QuillModule } from 'ngx-quill';
+import { SlideInAnimationDirective } from '../slide-in-animation.directive';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FindingsSummaryBarChartComponent } from './findings-summary-bar-chart/findings-summary-bar-chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 
 
 
 @NgModule({
-  declarations: [FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent, LayoutBootstrapComponent, ManageAppSidebarComponent, BPSelectorComponent, APSelectorComponent, ManageTeamComponent, DebugWindowComponent, AppsComponent, AppBriefDetailsComponent, PaginatorComponent, CreateEngagementComponent, CreateDastComponent, CreateSastComponent, CreatePentestComponent, LayoutAppComponent, ManageAppDetailSidebarComponent, AppGeneralsettingsComponent, EngagementLayoutComponent, EngagementCreateFindingComponent, EngagementDetailsComponent, EngagementFindingsToRevalidateComponent, EngagementAssignToComponent, EngagementFindingsComponent, EngagementSelectFindingComponent, HighlightPipe, EngagementStepToReproduceComponent, EngagementStepsToReproduceComponent],
+  declarations:  [  
+    
+
+    PerformanceDebugComponent,
+
+    FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent, LayoutBootstrapComponent, ManageAppSidebarComponent, BPSelectorComponent, APSelectorComponent, ManageTeamComponent, DebugWindowComponent, AppsComponent, AppBriefDetailsComponent, PaginatorComponent, CreateEngagementComponent, CreateDastComponent, CreateSastComponent, CreatePentestComponent, LayoutAppComponent, ManageAppDetailSidebarComponent, AppGeneralsettingsComponent, EngagementLayoutComponent, EngagementCreateFindingComponent, EngagementDetailsComponent, EngagementFindingsToRevalidateComponent, EngagementAssignToComponent, EngagementFindingsComponent, EngagementSelectFindingComponent, HighlightPipe, EngagementStepToReproduceComponent, EngagementStepsToReproduceComponent, EngagementImpactComponent, EngagementImpactStepComponent, EngagementFindingBasicDetailsComponent, EngagementFindingCweSelectorComponent, VerticalComponentLabelComponent, FindingsSummaryBarChartComponent],
   imports: [
 
+    NgxChartsModule,
+
+    QuillModule.forRoot(),
+
+
+    NbWindowModule.forChild(),
+    NbOverlayModule,
 
     
     AngularMarkdownEditorModule,

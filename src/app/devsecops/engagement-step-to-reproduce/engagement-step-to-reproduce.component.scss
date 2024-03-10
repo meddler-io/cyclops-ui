@@ -2,25 +2,95 @@
 
 
 .thumbnail {
-    width: 100px; /* Set a fixed width for square thumbnails */
-    height: 100px; /* Set a fixed height for square thumbnails */
-    overflow: hidden;
-    border: 2px solid ;/* Add a border to the thumbnails */
-    border-radius: 5px;
-    margin: 8px;
-    cursor: pointer;
-    border-color:  nb-theme(text-hint-color) !important;
+  width: 100px;
+  /* Set a fixed width for square thumbnails */
+  height: 100px;
+  /* Set a fixed height for square thumbnails */
+  overflow: hidden;
+  border: 2px solid;
+  /* Add a border to the thumbnails */
+  border-radius: 5px;
+  margin: 8px;
+  cursor: pointer;
+  border-color: nb-theme(text-hint-color) !important;
 
-    &:hover{
-        // background         : nb-theme(color-basic-100) !important;
-        transition         : 1s;
-        border-color: nb-theme(text-primary-color) !important;
+  &:hover {
+    // background         : nb-theme(color-basic-100) !important;
+    transition: 1s;
+    border-color: nb-theme(text-primary-color) !important;
 
-    }
   }
+}
+
+.thumbnail img {
+  width: 100%;
+  /* Make the image fill the square container */
+  height: 100%;
+  /* Make the image fill the square container */
+  object-fit: cover;
+  /* Ensure the image covers the entire container */
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+.one-liner {
+  // height: 20px; /* Set your desired one-liner height */
+}
+
+.custom-input {
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editor_container {
+
+
+  // background: nb-theme(background-alternative-color-1) !important;
+
+}
+
+
+quill-editor {
+  // position: fixed;
   
-  .thumbnail img {
-    width: 100%; /* Make the image fill the square container */
-    height: 100%; /* Make the image fill the square container */
-    object-fit: cover; /* Ensure the image covers the entire container */
+}
+
+.editor_container {
+
+  :host {
+    /* Reset or set default styles for the component */
+    /* Add more styles as needed */
+
+    
+    .ql-editor{
+
+      p{
+        // all: unset !important;
+        color: unset;
+      }
+    }
+
+
   }
+}
+
+.header{
+  height: 2rem;
+}
+
+button{
+  text-transform: capitalize !important;
+}
+
+nb-card-footer{
+  padding: 0;
+}
+
+nb-card{
+  margin: 0 !important;
+}

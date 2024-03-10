@@ -29,6 +29,8 @@ function generateColorCode(id: string): string {
 export class ApiService {
 
 
+  //  mockDelay = 2000;
+   mockDelay = 0;
 
   assignResourcesToEngagement(engagement_id, resource_id, pull = false) {
 
@@ -46,6 +48,15 @@ export class ApiService {
   getCWE(query: string) {
 
     return this.getRequest(`api/v1/devsecops/cwe`, { query }).pipe(
+      // map(_ => _?.data)
+
+    )
+
+  }
+
+  getCWEById(id: number) {
+
+    return this.getRequest(`api/v1/devsecops/cwe/${id}`, {  }).pipe(
       // map(_ => _?.data)
 
     )
@@ -228,19 +239,27 @@ export class ApiService {
       data
 
     ).pipe(
-      delay(2000),
+      delay(this.mockDelay),
       map(_ => _?.data)
     )
   }
 
 
-  updateFindingStepToReproduce(finding_id: string, step_id: string, data) {
+  updateFindingPush(finding_id: string, step_id: string, type: string, data) {
 
-    return this.updateStepToFinding(finding_id, step_id, data)
+    if (type == 'step') {
+      return this.updateStepToFinding(finding_id, step_id, data)
 
+    }
 
+    // Impact
+
+    return this.updateImpactToFinding(finding_id, step_id, data)
 
   }
+
+
+
 
 
   public upload(file: File, id: string, env: string) {
@@ -367,7 +386,7 @@ export class ApiService {
   }
 
 
-  public uploadToFinding(file: File, finding_id: string, step_id: string, attr: string) {
+  public uploadToFinding(file: File, finding_id: string, step_id: string, attr: string, type: string) {
 
     let fileId = 'fileId';
     // this will be the our resulting map
@@ -426,7 +445,8 @@ export class ApiService {
                 let data = {};
                 data[attr] = { 'file': filedata }
 
-                return this.updateFindingStepToReproduce(finding_id, step_id,
+                return this.updateFindingPush(finding_id, step_id,
+                  type,
                   data,
                 ).pipe(
                   map(
@@ -1034,10 +1054,26 @@ export class ApiService {
 
   }
 
+  addImpactToFinding(id) {
+
+    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding/impact`,)
+
+  }
+
 
   getStepToFinding(id, step_id) {
 
     return this.getRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`).pipe(
+      map(_ => _?.data)
+
+
+    );
+
+  }
+
+  getImpactById(id, impact_id) {
+
+    return this.getRequest(`api/v1/devsecops/engagement/${id}/finding/impact/${impact_id}`).pipe(
       map(_ => _?.data)
 
 
@@ -1050,13 +1086,22 @@ export class ApiService {
     return this.putRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`,
       data
     ).pipe(
-      delay(2000)
+      delay(this.mockDelay)
     )
 
   }
 
 
 
+  updateImpactToFinding(id: string, step_id: string, data) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${id}/finding/impact/${step_id}`,
+      data
+    ).pipe(
+      delay(this.mockDelay)
+    )
+
+  }
 
   stopBuildScan(applicationId, buildId) {
 
@@ -1977,7 +2022,7 @@ export class ApiService {
 
         }
       }),
-      delay(2000)
+      delay(this.mockDelay)
     )
   }
 

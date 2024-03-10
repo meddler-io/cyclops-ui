@@ -19,7 +19,7 @@
 
         <!-- grid.component.html -->
         <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayout.lt-sm="column">
-            <div (click)="onClickApp( app?._id?.$oid )" class="card" fxFlex.gt-md="25%" fxFlex.gt-sm="50%" fxFlex="100%"
+            <div (click)="onClickApp( app?._id?.$oid )" class="_card" fxFlex.gt-md="25%" fxFlex.gt-sm="50%" fxFlex="100%"
                 *ngFor="let app of applications | async">
 
                 <div [style.border-left-color]="app?.primary_color" class="grid-item">

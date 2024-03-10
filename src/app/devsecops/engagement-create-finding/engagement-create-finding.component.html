@@ -1,438 +1,54 @@
-<nb-card fxFill>
+<nb-card 
+class="nb-theme-default"
 
+fxFill>
+    <nb-card-body fxFlex fxLayoutGap="1rem" fxLayout="column">
 
-    <nb-card-header>
-        
-        <nb-select placeholder="Round" shape="round">
-            <nb-option value="1">Option 1</nb-option>
-            <nb-option value="2">Option 2</nb-option>
-            <nb-option value="2">Cross</nb-option>
-            <nb-option value="2">Option 2</nb-option>
-            <nb-option value="3">Option 3</nb-option>
-            <nb-option value="4">Option 4</nb-option>
-          </nb-select>
 
-        
 
-    </nb-card-header>
-    <nb-card-body>
-        <button (click)="createFinding()" nbButton >
-            Save
-          </button>
 
+        <div fxLayout="row">
 
-        <div style="padding: 1rem;" fxLayout="column" fxLayoutGap="1rem">
+            <app-engagement-finding-basic-details fxFlex [finding_id]="'658c9421086a02a65aef6b6f'">
+            </app-engagement-finding-basic-details>
 
-
-            <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-
-
-
-                <!-- Severity -->
-
-                <div fxLayout="row">
-
-                    <button size="small" (click)="setSeverity(1)" ghost nbButton>
-                        <nb-icon [status]="  numericSeverity >= 1 ? 'primary' : 'basic' " [icon]="'star' + ( numericSeverity >= 1 ? '' : '-outline' )  "
-                            >
-                        </nb-icon>
-                    </button>
-
-                    <button size="small" (click)="setSeverity(2)" ghost nbButton>
-                        <nb-icon
-                    [status]="  numericSeverity >= 2 ? 'warning' : 'basic' "
-                    [icon]="'star' + ( numericSeverity >= 2 ? '' : '-outline' )  "
->
-                        </nb-icon>
-                    </button>
-
-                    <button size="small" (click)="setSeverity(3)" ghost nbButton>
-                        <nb-icon
-                    [status]="  numericSeverity >= 3 ? 'warning' : 'basic' "
-                        
-                    [icon]="'star' + ( numericSeverity >= 3 ? '' : '-outline' )  ">
-                        </nb-icon>
-                    </button>
-
-                    <button size="small" (click)="setSeverity(4)" ghost nbButton>
-                        <nb-icon
-                    [status]="  numericSeverity >= 4 ? 'danger' : 'basic' "
-                        
-                    [icon]="'star' + ( numericSeverity >= 4 ? '' : '-outline' )  ">
-                        </nb-icon>
-                    </button>
-
-                    <button size="small" (click)="setSeverity(5)" ghost nbButton>
-                        <nb-icon
-                    [status]="  numericSeverity >= 5 ? 'danger' : 'basic' "
-                        
-                    [icon]="'star' + ( numericSeverity >= 5 ? '' : '-outline' )  ">
-                        </nb-icon>
-                    </button>
-                </div>
-
-
-
-
-
-                <!-- Severity -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Severity
-                    </div>
-
-                    <div fxFlex>
-                        <nb-select disabled FxFlex placeholder="Severity">
-
-                            <nb-option value="critical">Critical</nb-option>
-                            <nb-option value="high">High</nb-option>
-                            <nb-option value="medium">Medium</nb-option>
-                            <nb-option value="low">Low</nb-option>
-                            <nb-option value="info">Info</nb-option>
-
-                        </nb-select>
-                    </div>
-
-
-
-
-
-                </div>
-
-
-
-
-
-                <!-- Title -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Title
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-                <!-- Description -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Description
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-
-                <!-- Changelogs -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Comments
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-                <!-- Steps to reproduce -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Steps to reproduce
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-                <!-- Impact -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Impact
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-            </div>
+            <app-vertical-component-label label="Details"> </app-vertical-component-label>
 
         </div>
 
-        <div style="padding: 1rem;" fxLayout="column" fxLayoutGap="1rem">
+        <div fxLayout="row">
 
+            <app-engagement-finding-cwe-selector [finding_id]="'658c9421086a02a65aef6b6f'">
+            </app-engagement-finding-cwe-selector>
 
-            <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                <!-- Severity -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Severity
-                    </div>
-
-                    <div fxFlex>
-                        <nb-select disabled FxFlex placeholder="Severity">
-
-                            <nb-option value="critical">Critical</nb-option>
-                            <nb-option value="high">High</nb-option>
-                            <nb-option value="medium">Medium</nb-option>
-                            <nb-option value="low">Low</nb-option>
-                            <nb-option value="info">Info</nb-option>
-
-                        </nb-select>
-                    </div>
-
-
-
-
-
-                </div>
-
-
-
-
-
-                <!-- Title -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Title
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-                <!-- Description -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Description
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-
-                <!-- Changelogs -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Comments
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-                <!-- Steps to reproduce -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Steps to reproduce
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-                <!-- Impact -->
-                <div fxFlex fxLayoutGap="20px" fxLayout="column">
-
-                    <div style="font-size: 1rem; ;" class="text-hint ">
-
-                        Impact
-
-                    </div>
-
-                    <div fxFlex>
-
-
-
-                        <nb-form-field>
-
-                            <input placeholder="Details (Optional)" nbInput status="basic" type="text" fullWidth>
-
-                        </nb-form-field>
-
-
-                    </div>
-
-
-
-
-                </div>
-
-
-
-            </div>
+            <app-vertical-component-label label="CWE"> </app-vertical-component-label>
 
         </div>
 
+
+
+        <div fxLayout="row">
+
+            <app-engagement-steps-to-reproduce fxFlex [finding_id]="'658c9421086a02a65aef6b6f'">
+
+            </app-engagement-steps-to-reproduce>
+
+            <app-vertical-component-label label="Steps to reproduce"> </app-vertical-component-label>
+
+
+        </div>
+
+        <div *ngIf="false" fxLayout="row">
+
+            <app-engagement-impact fxFlex [finding_id]="'658c9421086a02a65aef6b6f'">
+
+            </app-engagement-impact>
+
+            <app-vertical-component-label label="Impact"> </app-vertical-component-label>
+
+
+
+        </div>
 
     </nb-card-body>
 </nb-card>

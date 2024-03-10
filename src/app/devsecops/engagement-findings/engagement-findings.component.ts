@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NbSidebarService } from '@nebular/theme';
+import { NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
 import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject } from 'rxjs';
+import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
@@ -265,10 +266,28 @@ export class EngagementFindingsComponent implements OnInit , AfterViewInit {
     private engagementService: EngagementService,
 
 
+    private windowService: NewSidebarService
+
 
   ) { }
   ngAfterViewInit(): void {
-    this.create_finding();
+    // this.openDrawer({},  this.createFindingTmpl)
+
+
+    this.create_finding()
+    this.create_finding()
+    this.create_finding()
+    this.create_finding()
+    return;
+    const windowRef = this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+
+    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
+
+    // this.create_finding();
   }
 
   goTo(slug: string) {

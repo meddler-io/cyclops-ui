@@ -1,0 +1,40 @@
+
+<nb-card *ngIf="finding$  | async as finding$"  fxFill>
+
+    <nb-card-header fxLayoutAlign="space-between" >
+        <span class="subtitle-"> Impact</span>
+
+        <button size="small" shape="round" nbButton (click)="addImpactToFinding(  finding$?._id?.$oid  )">
+
+            Add Impact
+        </button>
+
+
+    </nb-card-header>
+
+
+    <nb-list >
+
+
+        <nb-list-item   *ngFor="let impact of finding$?.impact; let i = index">
+
+
+            <app-engagement-impact-step
+            [finding_id]="finding$?._id?.$oid"
+            [step_id]="impact?._id?.$oid"
+            [index]="i+1"
+            fxFlex>
+
+            </app-engagement-impact-step>
+
+
+        </nb-list-item>
+
+    </nb-list>
+
+
+
+   
+    
+
+</nb-card>

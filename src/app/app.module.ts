@@ -2,7 +2,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
-import { NbDatepickerModule, NbDialogModule, NbMenuModule, NbThemeModule, NbThemeService, NbToastrModule, NbWindowModule } from '@nebular/theme';
+import { NbCardModule, NbDatepickerModule, NbDialogModule, NbMenuModule, NbOverlayModule, NbThemeModule, NbThemeService, NbToastrModule, NbWindowModule } from '@nebular/theme';
 import { NbPasswordAuthStrategy, NbAuthModule, NbAuthComponent, NbLoginComponent, NbRegisterComponent, NbLogoutComponent, NbRequestPasswordComponent, NbResetPasswordComponent, NbAuthJWTToken, NbOAuth2AuthStrategy, NbOAuth2ResponseType } from '@nebular/auth';
 
 
@@ -14,18 +14,58 @@ import { AuthGuard } from './AuthGuard';
 import { RoleProvider } from './role.provider';
 import { environment } from 'src/environments/environment';
 import { HttpErrorInterceptor } from './interceptors/HttpErrorInterceptor';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { CustomContainerComponent } from './new-sidebar.service';
+import { QuillConfigModule, QuillModule } from 'ngx-quill';
+import { SlideInAnimationDirective } from './slide-in-animation.directive';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    SlideInAnimationDirective,
+
+    AppComponent,
+    CustomContainerComponent,
+    
+
   ],
   imports: [
-    
-    
-    
+    NbCardModule,
+    NbOverlayModule,
+
+    // 
+    QuillModule.forRoot(),
+
+
+    QuillConfigModule.forRoot({
+      scrollingContainer: '#scrolling-container', 
+      placeholder: 'Enter content',
+      theme: 'bubble',
+
+      modules: {
+        
+        
+        // syntax: true,
+        toolbar: [
+
+
+          
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          [ 'code-block'],
+          
+        ]
+        ,
+        
+
+       
+      }
+    })
+
+    // 
+    ,
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -39,7 +79,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
     NbToastrModule.forRoot(),
     HttpClientModule,
     NbSecurityModule.forRoot({}),
-   
+
 
 
     NbAuthModule.forRoot({
@@ -101,7 +141,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
         // Normal User
         client: {
           parent: 'guest',
-          view: [ 'active_protection',  'dashboard', 'task', 'history', 'business', 'issue', 'notification', 'ENQUEUED', 'PROCESSING', 'COMPLETED', 'REVALIDATION', 'client', 'project_tagging', 'external_tool'],  //      'inprogress', 'completed', 'enqueued', 'task' , 'dashboard'  ],
+          view: ['active_protection', 'dashboard', 'task', 'history', 'business', 'issue', 'notification', 'ENQUEUED', 'PROCESSING', 'COMPLETED', 'REVALIDATION', 'client', 'project_tagging', 'external_tool'],  //      'inprogress', 'completed', 'enqueued', 'task' , 'dashboard'  ],
           modify: ['inprogress', 'enqueued', 'report'],
           create: ['report', 'business'],
 
@@ -110,24 +150,24 @@ import { OverlayContainer } from '@angular/cdk/overlay';
         // Moderator
         user: {
           parent: 'guest',
-          view:  [ 'active_protection', 'dashboard' , 'task', 'history', 'business', 'ENQUEUED', 'PROCESSING', 'COMPLETED', 'REVALIDATION', 'issue', 'client', 'admin', 'revalidate', 'hackerone', 'external_tool'],
+          view: ['active_protection', 'dashboard', 'task', 'history', 'business', 'ENQUEUED', 'PROCESSING', 'COMPLETED', 'REVALIDATION', 'issue', 'client', 'admin', 'revalidate', 'hackerone', 'external_tool'],
           modify: ['inprogress', 'enqueued', 'report'],
           create: ['report', 'issue'],
 
         },
         admin: {
           parent: 'guest',
-          view: [ 'bitbucket',   'active_protection' ,  'dashboard', 'task', 'history', 'resource', 'business', 'REQUESTED', 'ENQUEUED', 'PROCESSING', 'COMPLETED', 'REVALIDATION', 'admin', 'client', 'issue', 'project_tagging', 'hackerone', 'external_tool'], //  ['inprogress', 'completed', 'enqueued', 'task', 'request', 'resource'],
+          view: ['bitbucket', 'active_protection', 'dashboard', 'task', 'history', 'resource', 'business', 'REQUESTED', 'ENQUEUED', 'PROCESSING', 'COMPLETED', 'REVALIDATION', 'admin', 'client', 'issue', 'project_tagging', 'hackerone', 'external_tool'], //  ['inprogress', 'completed', 'enqueued', 'task', 'request', 'resource'],
 
-          modify: ['bitbucket',  'request', 'issue', 'application' , 'active_protection'],
-          create: [ 'bitbucket',  'report', 'business', 'active_protection'],
+          modify: ['bitbucket', 'request', 'issue', 'application', 'active_protection'],
+          create: ['bitbucket', 'report', 'business', 'active_protection'],
 
         },
         superadmin: {
           parent: 'guest',
-          create: ['*', 'active_protection' , 'bitbucket' ],
-          view: ['*' , 'active_protection', 'bitbucket' ],
-          modify: ['*', 'active_protection', 'bitbucket' ],
+          create: ['*', 'active_protection', 'bitbucket'],
+          view: ['*', 'active_protection', 'bitbucket'],
+          modify: ['*', 'active_protection', 'bitbucket'],
 
         }
 
@@ -143,26 +183,26 @@ import { OverlayContainer } from '@angular/cdk/overlay';
       multi: true,
     },
     NbThemeService,
- 
+
     NbGoogleOAuth2Strategy,
     AuthGuard,
 
     {
-      provide: NbRoleProvider, 
+      provide: NbRoleProvider,
       useClass: RoleProvider
     },
 
     NgxAuthModule,
 
     {
-      provide: NbRoleProvider, 
+      provide: NbRoleProvider,
       useClass: RoleProvider
     },
     { provide: OverlayContainer }
 
   ],
   bootstrap: [AppComponent],
-  
-  
+
+
 })
 export class AppModule { }
