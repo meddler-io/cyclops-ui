@@ -1,28 +1,38 @@
-<div *ngIf="active_cwe | async as active_cwe" fxLayoutGap="1rem" fxLayout="column">
+<div *ngIf="active_cwe | async as active_cwe ; else loadingTemplate" fxLayoutGap="1rem" fxLayout="column">
 
 
-    <div 
-    class="label">
+    <div class="label">
         CWE
 
 
-
-    </div>
-    <div (click)="openDialog(  chooseCWE )">
-        <nb-form-field>
-            <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-            <input [value]=" 'CWE-' +  active_cwe?.id + ' '  +  active_cwe?.title" [readonly]="true" fullWidth
-                placeholder="Search CWE" type="text" nbInput>
-        </nb-form-field>
     </div>
 
+    <ng-container *ngIf="active_cwe?.id ; else noCweTemplate ">
+        <div (click)="openDialog(  chooseCWE )">
+            <nb-form-field>
+                <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                <input [value]=" 'CWE-' +  active_cwe?.id + ' '  +  active_cwe?.title" [readonly]="true" fullWidth
+                    placeholder="Search CWE" type="text" nbInput>
+            </nb-form-field>
+        </div>
+
+    </ng-container>
+
+    <ng-template #noCweTemplate>
+
+        <div>
+            <nb-form-field>
+                <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                <input [readonly]="readonly" [placeholder]=" 'No CWE Assigned' " fullWidth type="text" nbInput>
+            </nb-form-field>
+        </div>
+
+    </ng-template>
 
 
-    <ng-template  #chooseCWE>
+    <ng-template #chooseCWE>
 
-        <nb-card
-        
-        class="nb-theme-default" fxFill>
+        <nb-card class="nb-theme-default" fxFill>
             <nb-card-header>
                 <div>
                     <nb-form-field>
@@ -105,3 +115,12 @@
     </ng-template>
 
 </div>
+
+
+
+
+<ng-template #loadingTemplate>
+
+    <app-block-loading-animation caption="CWE"></app-block-loading-animation>
+
+</ng-template>

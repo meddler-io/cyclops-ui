@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, filter, map, of, startWith, Subject, switchMap } from 'rxjs';
+import { combineLatest, delay, filter, map, of, startWith, Subject, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
 
@@ -14,6 +14,7 @@ export class EngagementStepsToReproduceComponent implements OnInit {
 
 
   @Input('finding_id') finding_id;
+  @Input('readonly') readonly ;;
 
 
   refreshFinding = new Subject();
@@ -68,8 +69,8 @@ export class EngagementStepsToReproduceComponent implements OnInit {
 
         }
         )
-      );
-
+      )
+      
 
 
       

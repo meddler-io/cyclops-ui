@@ -21,7 +21,7 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
 
 
-  current_tab = 'images'
+  current_tab = 'details'
 
   switch_tab(tab) {
     this.current_tab = tab;
@@ -40,6 +40,9 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   @ViewChild('template') templateRef;
   @ViewChild('stepEditorTemplate') stepEditorTemplate;
+
+  @ViewChild('createFindingTmpl') createFindingTmpl;
+
 
 
 
@@ -84,6 +87,24 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
   ngAfterViewInit(): void {
     // console.log('nb-window-2', this.index)
     // this.openDialog(this.stepEditorTemplate)
+  }
+
+  deleteStep(ref) {
+
+    this.apiService.deleteStepToFinding(this.finding_id, this.step_id).subscribe(
+      _ => {
+
+        if (_.status == true) {
+          this.windowService.closeAll();
+          ref.close();
+
+          this.openDrawer(this.createFindingTmpl)
+        }
+
+      }
+
+    );
+
   }
   ngOnInit(): void {
 
@@ -220,30 +241,28 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   // 
 
-  openDrawer(context, template, direction = 'left', size?, closeOnOutsideClick = true, isRoot = true, parentContainer?: any) {
-    this.drawerMngr.create({
-      direction: DrawerDirection.Left,
-      template,
-      size,
-      context: { finding_id: context?._id },
-      closeOnOutsideClick,
-      parentContainer,
-      isRoot
-    });
+  openDrawer(template) {
+
+    this.windowService.open(template);
+
+
   }
 
   openDialog(dialog: TemplateRef<any>) {
 
-    this.windowService.open(dialog);
-    return
+    // this.windowService.open(dialog);
+    // return
     // this.openDrawer({}, dialog);
 
 
 
     this.dialogService.open(dialog, {
 
-      dialogClass: 'dialogClass',
-      backdropClass: 'blurBackdrop',
+
+
+      // dialogClass: 'dialogClass',
+      // backdropClass: 'blurBackdrop',
+      autoFocus: false,
       context: {
 
       }

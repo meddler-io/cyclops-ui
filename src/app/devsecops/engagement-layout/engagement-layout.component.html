@@ -1,7 +1,7 @@
 <nb-layout *ngIf="engagementDetails | async as engagementDetails">
     <nb-layout-header fixed>
 
-        <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <div fxLayout="row" fxLayoutAlign="start center">
 
             <!-- Back Buttons -->
 
@@ -14,52 +14,45 @@
 
 
 
-            <div fxLayout="column">
-                <div>
-                    {{engagementDetails?.application?.title}}
-                    (
-                    {{engagementDetails?.application?.platform}}
-
-                    )
-
-
-                </div>
-                <div>
-
-                    {{engagementDetails?.business?.name}}
-                    <nb-icon status="info" icon="chevron-right-outline"></nb-icon>
-
-                    {{engagementDetails?.project?.name}}
 
 
 
-                </div>
+            <!-- <div fxLayoutAlign="center center" fxLayout="row"> -->
 
-            </div>
-
-            <nb-icon status="primary" icon="chevron-right-outline"></nb-icon>
-
-
-            <div fxLayoutAlign="center center" fxLayout="row">
-
-                {{engagementDetails?.engagement}}
+            <!-- {{engagementDetails?.engagement}} -->
 
 
 
-                {{engagementDetails?.state}}
-            </div>
+            <!-- {{engagementDetails?.state}} -->
+            <!-- </div> -->
 
 
         </div>
 
         <!--  -->
-        <div>
+        <div fxFlex fxLayoutAlign="start center">
 
-            <div fxFlex fxLayoutAlign="end center">
+            <div>
+
+                <ng-container *ngFor="let tab of tabs ">
+
+                    <button class="tab-button" [appearance]="rla?.isActive ?  'outline' : 'ghost' "
+                        [status]="rla?.isActive ?  'info' : 'basic' " size="small" [routerLink]="tab[1]"
+                        [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive" nbButton>
+                        {{tab[0]}}
+                    </button>
+                </ng-container>
+            </div>
 
 
 
-                <button [appearance]="rla_sf?.isActive ?  'ghost' : 'ghost' "
+            <div *ngIf="false" fxFlex fxLayoutAlign="end center">
+
+
+
+
+
+                <button class="tab-button" [appearance]="rla_sf?.isActive ?  'ghost' : 'ghost' "
                     [status]="rla_sf?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [  'select_finding' , '658c9421086a02a65aef6b6f'] "
                     [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla_sf="routerLinkActive" nbButton>
@@ -67,14 +60,14 @@
                 </button>
 
 
-                <button [appearance]="rla_d?.isActive ?  'ghost' : 'ghost' "
+                <button class="tab-button" [appearance]="rla_d?.isActive ?  'ghost' : 'ghost' "
                     [status]="rla_d?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [  'details'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
                     #rla_d="routerLinkActive" nbButton>
                     Details
                 </button>
 
-                <button [appearance]="rla_c?.isActive ?  'outline' : 'ghost' "
+                <button class="tab-button" [appearance]="rla_c?.isActive ?  'outline' : 'ghost' "
                     [status]="rla_c?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [ './', 'create'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
                     #rla_c="routerLinkActive" nbButton>
@@ -82,21 +75,21 @@
                 </button>
 
 
-                <button [appearance]="rla_f?.isActive ?  'outline' : 'ghost' "
+                <button class="tab-button" [appearance]="rla_f?.isActive ?  'outline' : 'ghost' "
                     [status]="rla_f?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [ './', 'draft_review'] " [routerLinkActiveOptions]="{ exact: false }"
                     routerLinkActive #rla_f="routerLinkActive" nbButton>
                     Review Findings(d)
                 </button>
 
-                <button [appearance]="rla_ato?.isActive ?  'outline' : 'ghost' "
+                <button class="tab-button" [appearance]="rla_ato?.isActive ?  'outline' : 'ghost' "
                     [status]="rla_ato?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [ './', 'assign_task'] " [routerLinkActiveOptions]="{ exact: false }"
                     routerLinkActive #rla_ato="routerLinkActive" nbButton>
                     Assign(o)
                 </button>
 
-                <button [appearance]="rla_ip?.isActive ?  'outline' : 'ghost' "
+                <button class="tab-button" [appearance]="rla_ip?.isActive ?  'outline' : 'ghost' "
                     [status]="rla_ip?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [ './', 'in_progress'] " [routerLinkActiveOptions]="{ exact: false }"
                     routerLinkActive #rla_ip="routerLinkActive" nbButton>
@@ -110,7 +103,7 @@
 
 
 
-                <button [appearance]="rla_m?.isActive ?  'outline' : 'ghost' "
+                <button class="tab-button" [appearance]="rla_m?.isActive ?  'outline' : 'ghost' "
                     [status]="rla_m?.isActive ?  'success' : 'basic' " size="small" shape="round"
                     [routerLink]=" [  'manage'] " [routerLinkActiveOptions]="{ exact: false }" routerLinkActive
                     #rla_m="routerLinkActive" nbButton>
@@ -126,12 +119,41 @@
 
 
 
-            <!--  -->
-            <button class="publish-button"   outline  size="medium" shape="round" nbButton>
-                Publish
-            </button>
+
         </div>
 
+
+
+        <div fxLayout="column">
+            <div>
+
+                {{engagementDetails?.business?.name}}
+                <nb-icon status="info" icon="chevron-right-outline"></nb-icon>
+
+                {{engagementDetails?.project?.name}}
+
+
+
+            </div>
+
+            <div *ngIf="false" class="text-caption">
+                {{engagementDetails?.application?.title}}
+                (
+                {{engagementDetails?.application?.platform}}
+
+                )
+
+
+            </div>
+
+
+        </div>
+
+        <button class="publish-button" outline size="small" shape="round" nbButton>
+            Publish
+        </button>
+
+        <!--  -->
 
 
     </nb-layout-header>
@@ -139,7 +161,9 @@
 
 
 
-    <nb-sidebar>
+    <nb-sidebar
+    *ngIf="false"
+    >
 
         <nb-sidebar-header style="margin: 0px">
             <div fxFlex fxLayoutAlign="start center">
@@ -170,7 +194,7 @@
     </nb-sidebar>
 
 
-    <nb-layout-column>
+    <nb-layout-column style="padding: 5px;">
 
         <router-outlet>
 

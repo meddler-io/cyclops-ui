@@ -15,7 +15,7 @@ import { FindingStatsComponent } from '../finding-stats/finding-stats.component'
   templateUrl: './engagement-findings.component.html',
   styleUrls: ['./engagement-findings.component.scss']
 })
-export class EngagementFindingsComponent implements OnInit , AfterViewInit {
+export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   math = Math
   findingsListLimit = 20;
@@ -37,6 +37,8 @@ export class EngagementFindingsComponent implements OnInit , AfterViewInit {
   @ViewChild('findingStatsView', { static: true }) findingStatsView: FindingStatsComponent;
   @ViewChild('editTmpl', { static: false }) editTmpl: TemplateRef<any>;
   @ViewChild('createFindingTmpl', { static: false }) createFindingTmpl: TemplateRef<any>;
+  @ViewChild('viewFindingTmpl', { static: false }) viewFindingTmpl: TemplateRef<any>;
+
 
 
 
@@ -274,20 +276,8 @@ export class EngagementFindingsComponent implements OnInit , AfterViewInit {
     // this.openDrawer({},  this.createFindingTmpl)
 
 
-    this.create_finding()
-    this.create_finding()
-    this.create_finding()
-    this.create_finding()
-    return;
-    const windowRef = this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
 
-    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
-    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
-    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
-    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
-    this.windowService.open(this.createFindingTmpl, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
 
-    // this.create_finding();
   }
 
   goTo(slug: string) {
@@ -340,6 +330,7 @@ export class EngagementFindingsComponent implements OnInit , AfterViewInit {
     });
   }
 
+  activeEngagement = this.engagementService.activeEngagement;
 
   ngOnInit(): void {
 
@@ -448,15 +439,26 @@ export class EngagementFindingsComponent implements OnInit , AfterViewInit {
   }
 
   create_finding() {
-    this.openDrawer({},  this.createFindingTmpl)
+    this.openDrawer({}, this.createFindingTmpl)
   }
 
-  openDrawer(context, template = this.editTmpl,direction = 'left', size?, closeOnOutsideClick = true,  isRoot = true, parentContainer?: any) {
+  // onClickFinding
+
+
+  view_finding(finding_id) {
+    console.log('view_finding', finding_id)
+    this.openDrawer({
+      finding_id
+
+    }, this.viewFindingTmpl)
+  }
+
+  openDrawer(context, template = this.editTmpl, direction = 'left', size?, closeOnOutsideClick = true, isRoot = true, parentContainer?: any) {
     this.drawerMngr.create({
       direction: DrawerDirection.Left,
       template,
       size,
-      context: { finding_id: context?._id },
+      context: context,
       closeOnOutsideClick,
       parentContainer,
       isRoot

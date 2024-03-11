@@ -1,9 +1,13 @@
 <!-- [accept]="  allowed_extensions_for_file_upload[application?.platform] "  -->
 
-<ng-container *ngIf="findingDetails | async as findingDetails">
+
+
+<ng-container *ngIf="findingDetails | async as findingDetails  ; else loadingTemplate ">
+
 
 
     <div fxFlex [nbSpinner]="saving$" fxLayoutGap="1rem" fxLayout="column">
+
 
 
 
@@ -21,7 +25,7 @@
                 <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
 
                 <!-- (focusout)="titleFocusout()" -->
-                <input [value]="findingDetails?.title" #titleInp
+                <input [readonly]="readonly" [value]="findingDetails?.title" #titleInp
                     (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Add" type="text"
                     nbInput>
             </nb-form-field>
@@ -47,7 +51,9 @@
                 <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
 
                 <!-- (focusout)="titleFocusout()" -->
-                <input [value]="findingDetails?.title" #descInp
+                <input
+                [readonly]="readonly"
+                [value]="findingDetails?.title" #descInp
                     (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Add" type="text"
                     nbInput>
             </nb-form-field>
@@ -70,3 +76,9 @@
     </div>
 
 </ng-container>
+
+<ng-template #loadingTemplate>
+
+    <app-block-loading-animation caption="Details"></app-block-loading-animation>
+
+</ng-template>

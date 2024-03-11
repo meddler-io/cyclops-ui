@@ -2,7 +2,7 @@ import { Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
-import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, map, of, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, delay, distinctUntilChanged, map, of, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
@@ -15,6 +15,7 @@ import { EngagementService } from '../engagement.service';
 export class EngagementFindingCweSelectorComponent implements OnInit {
 
   @Input('finding_id') finding_id;
+  @Input('readonly') readonly;;
 
 
   searching = false;
@@ -39,7 +40,7 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
 
   openDialog(dialog: TemplateRef<any>) {
 
-    this.windowService.open(dialog , {
+    this.windowService.open(dialog, {
       windowClass: 'sidebar-window'
     });
     return;
@@ -47,7 +48,7 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
     this.dialogRef = this.dialogService.open(dialog, {
       dialogClass: 'dialogClass',
       backdropClass: 'blurBackdrop',
-    }).onClose.subscribe(_=>{
+    }).onClose.subscribe(_ => {
 
       this.searchInput.setValue('', { emitEvent: true });
 
@@ -68,6 +69,10 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
         this.finding_id).pipe(map(_ => _.data)).pipe(
           switchMap(_ => {
             console.log('cwelookup', _?.cwe)
+
+            if (!!!_?.cwe) {
+              return of( { id: undefined }    );
+            }
             return this.apiService.getCWEById(_?.cwe).pipe(map(_ => _.data))
           })
           ,
@@ -76,8 +81,7 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
 
     }))
 
-  
-    
+
   }
 
   ngOnInit(): void {

@@ -14,6 +14,9 @@ import { EngagementService } from '../engagement.service';
 export class EngagementImpactComponent {
 
   @Input('finding_id') finding_id;
+  @Input('readonly') readonly ;;
+
+
 
   refreshFinding = new Subject();
   finding$;

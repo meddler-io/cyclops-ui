@@ -1,0 +1,64 @@
+@import '../../../themes';
+
+
+.wrapper {
+
+
+
+
+  display: flex;
+  //  flex-direction: column;
+}
+
+.wrapper-cell {
+  display: flex;
+  margin-bottom: 30px;
+}
+
+// Animation
+@keyframes placeHolderShimmer {
+  0% {
+    background-position: -468px 0
+  }
+
+  100% {
+    background-position: 468px 0
+  }
+}
+
+.animated-background {
+  animation-duration: 1.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: nb-theme(background-basic-color-3);
+  //  background: linear-gradient(to right, #F6F6F6 8%, #F0F0F0 18%, #F6F6F6 33%);
+  background: linear-gradient(to right, nb-theme(background-basic-color-1) 8%, nb-theme(background-basic-color-2) 18%, nb-theme(background-basic-color-3) 33%);
+
+
+
+  background-size: 800px 104px;
+  height: 96px;
+
+}
+
+// Page Elements
+.image {
+  height: 60px;
+  width: 60px;
+  //  background: #F6F6F6;
+  @extend .animated-background;
+}
+
+.text {
+  margin-left: 20px
+}
+
+.text-line {
+  height: 10px;
+  width: 230px;
+  //  background: #F6F6F6;
+  margin: 4px 0;
+  @extend .animated-background;
+}

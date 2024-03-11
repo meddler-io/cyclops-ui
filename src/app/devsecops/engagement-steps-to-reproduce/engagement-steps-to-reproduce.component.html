@@ -1,4 +1,4 @@
-<ng-container *ngIf="finding$  | async as finding$">
+<ng-container *ngIf="finding$  | async as finding$ ; else loadingTemplate">
 
     <div fxFlex [nbSpinner]="saving$" fxLayoutGap="1rem" fxLayout="column">
 
@@ -9,7 +9,9 @@
             </div>
 
 
-            <nb-button-group size="small" outline shape="round">
+            <nb-button-group
+            *ngIf="!readonly"
+            size="small" outline shape="round">
                 <button (click)="addStep(  finding$?._id?.$oid  )" nbButtonToggle>
                     <nb-icon nbPrefix icon="plus-outline" pack="eva"></nb-icon>
 
@@ -41,7 +43,10 @@
 
 
             </nb-list-item>
-            <nb-list-item>
+            <nb-list-item
+            *ngIf="!readonly"
+            
+            >
 
                 <div fxFlex fxLayoutAlign="center center">
 
@@ -63,3 +68,9 @@
 
 
 </ng-container>
+
+<ng-template #loadingTemplate>
+
+    <app-block-loading-animation caption="Steps to reproduce"></app-block-loading-animation>
+
+</ng-template>

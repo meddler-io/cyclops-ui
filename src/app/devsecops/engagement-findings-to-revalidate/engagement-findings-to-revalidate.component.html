@@ -19,15 +19,15 @@
 
 
                 <div fxLayoutGap="0.5rem">
-                    <button class="tab-simulator" (click)="switch_finding_filter( 'all' )" size="medium" nbButton
+                    <button class="tab-simulator" (click)="switch_finding_filter( 'all' )" size="tiny" nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All ({{all_count}})
                     </button>
-                    <button class="tab-simulator" (click)="switch_finding_filter( 'open' )" size="medium" nbButton
+                    <button class="tab-simulator" (click)="switch_finding_filter( 'open' )" size="tiny" nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' ">Open
                         ({{open_count}})</button>
-                    <button class="tab-simulator" (click)="switch_finding_filter( 'under_review' )" size="medium"
+                    <button class="tab-simulator" (click)="switch_finding_filter( 'under_review' )" size="tiny"
                         nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'under_review' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async ) == 'under_review' ? 'warning' : 'basic' ">Under Review

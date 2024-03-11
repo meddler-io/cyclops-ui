@@ -1,27 +1,54 @@
-<nb-card 
-class="nb-theme-default"
+<nb-card class="nb-theme-default" fxFill>
 
-fxFill>
+
+    <nb-card-header >
+
+        <div fxLayoutAlign="center center" fxLayoutGap="0rem" fxLayout="row" class="header">
+
+            <button size="large" status="basic" ghost nbButton>
+
+                <nb-icon icon="arrow-left-outline"></nb-icon>
+
+            </button>
+
+            <div fxFlex>
+                Finding
+
+            </div>
+
+          
+
+
+
+        </div>
+    </nb-card-header>
     <nb-card-body fxFlex fxLayoutGap="1rem" fxLayout="column">
 
 
 
 
+
+
         <div fxLayout="row">
 
-            <app-engagement-finding-basic-details fxFlex [finding_id]="'658c9421086a02a65aef6b6f'">
+            <app-engagement-finding-basic-details
+            [readonly]="true"
+            fxFlex [finding_id]="finding_id">
             </app-engagement-finding-basic-details>
 
-            <app-vertical-component-label label="Details"> </app-vertical-component-label>
+            <!-- <app-vertical-component-label label="Details"> </app-vertical-component-label> -->
 
         </div>
 
         <div fxLayout="row">
 
-            <app-engagement-finding-cwe-selector [finding_id]="'658c9421086a02a65aef6b6f'">
+            <app-engagement-finding-cwe-selector
+            [readonly]="true"
+            
+            [finding_id]="finding_id">
             </app-engagement-finding-cwe-selector>
 
-            <app-vertical-component-label label="CWE"> </app-vertical-component-label>
+            <!-- <app-vertical-component-label label="CWE"> </app-vertical-component-label> -->
 
         </div>
 
@@ -29,22 +56,28 @@ fxFill>
 
         <div fxLayout="row">
 
-            <app-engagement-steps-to-reproduce fxFlex [finding_id]="'658c9421086a02a65aef6b6f'">
+            <app-engagement-steps-to-reproduce
+            [readonly]="true"
+            
+            fxFlex [finding_id]="finding_id">
 
             </app-engagement-steps-to-reproduce>
 
-            <app-vertical-component-label label="Steps to reproduce"> </app-vertical-component-label>
+            <!-- <app-vertical-component-label label="Steps to reproduce"> </app-vertical-component-label> -->
 
-
+            <!-- 658c9421086a02a65aef6b6f -->
         </div>
 
         <div *ngIf="false" fxLayout="row">
 
-            <app-engagement-impact fxFlex [finding_id]="'658c9421086a02a65aef6b6f'">
+            <app-engagement-impact
+            [readonly]="true"
+            
+            fxFlex [finding_id]="finding_id">
 
             </app-engagement-impact>
 
-            <app-vertical-component-label label="Impact"> </app-vertical-component-label>
+            <!-- <app-vertical-component-label label="Impact"> </app-vertical-component-label> -->
 
 
 

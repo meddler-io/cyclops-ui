@@ -5,6 +5,7 @@ import { ApiService } from '../api.service';
 import { DrawerService } from '../drawer/drawer.service';
 import { StateManagerService } from '../state-manager.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
+import { NewSidebarService } from 'src/app/new-sidebar.service';
 
 @Component({
   selector: 'app-create-engagement',
@@ -23,6 +24,9 @@ export class CreateEngagementComponent implements OnInit, AfterViewInit, OnDestr
   constructor(
     private apiService: ApiService,
     private drawerMngr: DrawerService,
+
+    private sidebarService: NewSidebarService,
+
     private nbSidebarService: NbSidebarService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -43,7 +47,8 @@ export class CreateEngagementComponent implements OnInit, AfterViewInit, OnDestr
 
   }
   open(template) {
-    this.openDrawer(template, {})
+    this.sidebarService.open(template);
+    // this.openDrawer(template, {})
   }
 
   openDrawer(template, context, direction = 'left', size?, closeOnOutsideClick = true, isRoot = true, parentContainer?: any) {

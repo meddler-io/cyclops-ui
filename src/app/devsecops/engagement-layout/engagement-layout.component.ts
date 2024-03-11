@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
+import { EngagementState } from 'src/environments/constants';
 
 @Component({
   selector: 'app-engagement-layout',
@@ -11,14 +12,39 @@ import { EngagementService } from '../engagement.service';
 })
 export class EngagementLayoutComponent implements OnInit {
 
+
+  tabs = [
+    ['Details' , ['details'] , [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],
+    ['Draft' , ['in_progress'], [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],
+
+    ['Assign' , ['assign_task'], [ EngagementState.OPEN   ] ],
+
+
+
+
+    ['Findings' , ['in_progress'], [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],
+    
+    ['Review', ['draft_review'], [ EngagementState.UNDER_REVIEW   ] ], // List of all vulnerabilities
+    ['Home' , ['manage'] , [ EngagementState.UNDER_REVIEW   ] ],
+
+
+
+
+
+  ]
+
   engagementDetails = this.engagementService.activeEngagement.pipe(
-    map(_=>_.engagement)
+    map(_ => _.engagement),
+    tap(_ => {
+      let state: EngagementState = _?.state;
+      console.log('debugger',state)
+    })
   )
 
   constructor(private apiService: ApiService,
     private engagementService: EngagementService,
     private activatedRoute: ActivatedRoute
-    ) {
+  ) {
 
   }
 
@@ -27,12 +53,12 @@ export class EngagementLayoutComponent implements OnInit {
   ngOnInit(): void {
 
     this.activatedRoute.paramMap.pipe(
-      map(_=>_.get('id')),
-      
+      map(_ => _.get('id')),
 
-    ).subscribe(_=>{
+
+    ).subscribe(_ => {
       console.log('console', _)
-      this.engagementService.setActiveEngagementId(_ , this.apiService)
+      this.engagementService.setActiveEngagementId(_, this.apiService)
     })
 
   }

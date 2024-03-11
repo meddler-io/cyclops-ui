@@ -1071,6 +1071,16 @@ export class ApiService {
 
   }
 
+  deleteStepToFinding(id, step_id) {
+
+    return this.deleteRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`).pipe(
+      map(_ => _)
+
+
+    );
+
+  }
+
   getImpactById(id, impact_id) {
 
     return this.getRequest(`api/v1/devsecops/engagement/${id}/finding/impact/${impact_id}`).pipe(

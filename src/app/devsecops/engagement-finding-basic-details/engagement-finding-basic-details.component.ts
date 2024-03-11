@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { map, startWith, Subject, switchMap } from 'rxjs';
+import { delay, map, startWith, Subject, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -8,6 +8,8 @@ import { ApiService } from '../api.service';
   styleUrls: ['./engagement-finding-basic-details.component.scss']
 })
 export class EngagementFindingBasicDetailsComponent {
+
+  @Input('readonly') readonly ;;
 
 
   @Input('finding_id') finding_id;
@@ -31,7 +33,8 @@ export class EngagementFindingBasicDetailsComponent {
 
           return this.apiService.getAssessmentsFindingsById(this.finding_id).pipe(map(_ => _.data))
 
-        }));
+        }))
+        
 
 
   }

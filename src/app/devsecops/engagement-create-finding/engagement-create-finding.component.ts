@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { first, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
@@ -10,6 +10,10 @@ import { EngagementService } from '../engagement.service';
 })
 export class EngagementCreateFindingComponent implements OnInit {
 
+
+  @Input('id') id;
+  @Input('finding_id') finding_id;
+  @Input('readonly') readonly = false;;
 
   
 

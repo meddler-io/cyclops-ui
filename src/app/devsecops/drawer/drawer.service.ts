@@ -44,7 +44,10 @@ export class DrawerService extends InjectionRegistryService<DrawerComponent> {
 
     // const windowRef = this.windowService.open(options.template, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
 
-    this.windowService.open(options.template);
+    this.windowService.open(options.template , 
+      {
+        context: options.context
+      });
 
 
     return;

@@ -49,6 +49,16 @@ export class NewSidebarService extends NbWindowService {
 
 
 
+  closeAll() {
+    console.log('clisngwindows', this.openWindows.length)
+
+
+
+    for (let i = this.openWindows.length - 1 ; i >= 0; i--)
+      this.openWindows[i].close()
+
+  }
+
 
   counter = 0;
   __open(windowContent: TemplateRef<any> | NbComponentType, windowConfig?: Partial<NbWindowConfig>) {
@@ -112,13 +122,14 @@ export class NewSidebarService extends NbWindowService {
 
 
 
-
+    
     windowConfig = { ...windowConfig }
-
+    
     windowConfig.closeOnBackdropClick = false;
     windowConfig.closeOnEsc = false;
     // windowConfig.initialState = NbWindowState.MINIMIZED;
-
+    
+    console.log('windowConfigwindowConfig' , windowConfig.context)
 
     let attachBackdropHandler = this.shouldCreateWindowsContainer();
 
