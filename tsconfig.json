@@ -20,9 +20,11 @@
     ],
     "allowSyntheticDefaultImports": true
   },
+
   "angularCompilerOptions": {
     // "fullTemplateTypeCheck": true,
     // "strictInjectionParameters": true,
-    "enableIvy": false
+    "enableIvy": false,
+    "useDefineForClassFields": true
   }
 }

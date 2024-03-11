@@ -70,10 +70,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "meddler-genz-ui:build:production"
+              "buildTarget": "meddler-genz-ui:build:production"
             },
             "development": {
-              "browserTarget": "meddler-genz-ui:build:development"
+              "buildTarget": "meddler-genz-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -81,7 +81,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "meddler-genz-ui:build"
+            "buildTarget": "meddler-genz-ui:build"
           }
         },
         "test": {
