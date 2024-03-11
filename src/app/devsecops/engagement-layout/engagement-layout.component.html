@@ -1,6 +1,8 @@
 <nb-layout *ngIf="engagementDetails | async as engagementDetails">
     <nb-layout-header fixed>
 
+   
+
         <div fxLayout="row" fxLayoutAlign="start center">
 
             <!-- Back Buttons -->
@@ -12,7 +14,11 @@
                 </nb-icon>
             </button>
 
-
+            <button
+            nbContextMenuTrigger="hover"
+            outline nbButton [nbContextMenu]="items">
+                Show Menu
+              </button>
 
 
 

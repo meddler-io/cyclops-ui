@@ -12,6 +12,10 @@ import { EngagementState } from 'src/environments/constants';
 })
 export class EngagementLayoutComponent implements OnInit {
 
+  items = [
+    { title: 'Profile' },
+    { title: 'Logout' },
+  ];
 
   tabs = [
     ['Details' , ['details'] , [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],

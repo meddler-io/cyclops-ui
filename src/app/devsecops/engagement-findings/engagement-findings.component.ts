@@ -17,6 +17,8 @@ import { FindingStatsComponent } from '../finding-stats/finding-stats.component'
 })
 export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
+
+
   math = Math
   findingsListLimit = 20;
   totalFindings = 0;

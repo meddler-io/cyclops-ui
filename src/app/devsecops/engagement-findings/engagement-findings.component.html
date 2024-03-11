@@ -1,3 +1,5 @@
+
+
 <nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
 
@@ -25,10 +27,13 @@
 
 
                 <div fxLayoutGap="0.5rem">
+                  
+                      
                     <button class="tab-button" (click)="switch_finding_filter( 'all' )" size="tiny" nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All ({{all_count}})
                     </button>
+                    
                     <button class="tab-button" (click)="switch_finding_filter( 'open' )" size="tiny" nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' ">Open
@@ -160,7 +165,6 @@
                 <!-- {{data | json}} -->
                 <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
-
                 <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
 
                     <div style="padding: 0;" fxFlex fxLayoutAlign="center center">
@@ -267,12 +271,12 @@
 
                 <div fxLayoutAlign="end start" class=" item " fxFlex="0 0 7rem">
 
-                    <button *ngIf="!data?.verifiable" (click)="markForVerification( data )"
+                    <button *ngIf="!data?.verifiable" (click)="  $event.stopPropagation();  markForVerification( data )"
                         [disabled]="data?.verifiable" outline nbButton size="tiny" status="info">
                         Verify
                     </button>
 
-                    <button *ngIf="data?.verifiable" (click)="unmarkForVerification( data )" outline nbButton
+                    <button *ngIf="data?.verifiable" (click)="$event.stopPropagation();  unmarkForVerification( data )" outline nbButton
                         size="tiny" status="danger">
                         Not Fixed
                     </button>
