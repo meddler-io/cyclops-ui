@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule, NbWindowModule, NbOverlayModule } from '@nebular/theme';
+import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbMenuModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule, NbWindowModule, NbOverlayModule } from '@nebular/theme';
 import { ApiService } from './api.service';
 import { AppListComponent } from './app-list/app-list.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -134,6 +134,10 @@ import { SeverityButtonComponent } from './severity-button/severity-button.compo
     FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent, LayoutBootstrapComponent, ManageAppSidebarComponent, BPSelectorComponent, APSelectorComponent, ManageTeamComponent, DebugWindowComponent, AppsComponent, AppBriefDetailsComponent, PaginatorComponent, CreateEngagementComponent, CreateDastComponent, CreateSastComponent, CreatePentestComponent, LayoutAppComponent, ManageAppDetailSidebarComponent, AppGeneralsettingsComponent, EngagementLayoutComponent, EngagementCreateFindingComponent, EngagementDetailsComponent, EngagementFindingsToRevalidateComponent, EngagementAssignToComponent, EngagementFindingsComponent, EngagementSelectFindingComponent, HighlightPipe, EngagementStepToReproduceComponent, EngagementStepsToReproduceComponent, EngagementImpactComponent, EngagementImpactStepComponent, EngagementFindingBasicDetailsComponent, EngagementFindingCweSelectorComponent, VerticalComponentLabelComponent, FindingsSummaryBarChartComponent, BlockLoadingAnimationComponent, SeverityButtonComponent],
   imports: [
 
+
+
+
+
     NgxChartsModule,
 
     QuillModule.forRoot(),
@@ -142,6 +146,8 @@ import { SeverityButtonComponent } from './severity-button/severity-button.compo
     NbWindowModule.forChild(),
     NbOverlayModule,
 
+    NbContextMenuModule,
+    NbMenuModule.forRoot(),
     
     AngularMarkdownEditorModule,
     NbLayoutModule,
@@ -167,7 +173,6 @@ import { SeverityButtonComponent } from './severity-button/severity-button.compo
 
     NbSpinnerModule,
     NbToastrModule,
-    NbContextMenuModule,
     NbPopoverModule,
     NbEvaIconsModule,
     NbActionsModule,

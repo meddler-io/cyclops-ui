@@ -2,7 +2,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
-import { NbCardModule, NbDatepickerModule, NbDialogModule, NbMenuModule, NbOverlayModule, NbThemeModule, NbThemeService, NbToastrModule, NbWindowModule } from '@nebular/theme';
+import { NbCardModule, NbDatepickerModule, NbDialogModule, NbMenuModule, NbOverlayModule, NbContextMenuModule, NbThemeModule, NbThemeService, NbToastrModule, NbWindowModule } from '@nebular/theme';
 import { NbPasswordAuthStrategy, NbAuthModule, NbAuthComponent, NbLoginComponent, NbRegisterComponent, NbLogoutComponent, NbRequestPasswordComponent, NbResetPasswordComponent, NbAuthJWTToken, NbOAuth2AuthStrategy, NbOAuth2ResponseType } from '@nebular/auth';
 
 
@@ -34,6 +34,7 @@ import { SlideInAnimationDirective } from './slide-in-animation.directive';
   imports: [
     NbCardModule,
     NbOverlayModule,
+    NbContextMenuModule,
 
     // 
     QuillModule.forRoot(),
