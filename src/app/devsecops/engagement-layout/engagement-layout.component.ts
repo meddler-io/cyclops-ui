@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
 import { EngagementState } from 'src/environments/constants';
+import { NbContextMenuDirective } from '@nebular/theme';
 
 @Component({
   selector: 'app-engagement-layout',
@@ -11,6 +12,11 @@ import { EngagementState } from 'src/environments/constants';
   styleUrls: ['./engagement-layout.component.scss']
 })
 export class EngagementLayoutComponent implements OnInit {
+
+  @ViewChild(NbContextMenuDirective) contextMenu: NbContextMenuDirective;
+  testcm(){
+    this.contextMenu.show();
+  }
 
   items = [
     { title: 'Profile' },
