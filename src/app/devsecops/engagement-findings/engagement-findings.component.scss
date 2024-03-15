@@ -581,6 +581,15 @@ button .button {
 
 }
 
+.description{
+  color           : nb-theme(text-hint-color);
+  white-space: nowrap; /* Prevents wrapping */
+  overflow: hidden; /* Hides overflowed content */
+  text-overflow: ellipsis; /* Displays an ellipsis (...) to represent clipped text */
+  // width: 100%; /* Or specify a fixed width */
+
+}
+
 .nomar {
   margin: 0px;
 
@@ -935,3 +944,26 @@ body {
   left: 300px;
   top : 88px;
 }
+
+.truncate-row {
+  display: flex;
+}
+
+.truncate-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // flex-grow: 1; /* Each cell takes equal space */
+  // margin-right: 4px; /* Add a small margin between cells */
+
+
+
+
+}
+
+.truncate-cell:last-child {
+  margin-right: 0;
+}
+
+
+

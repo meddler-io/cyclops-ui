@@ -35,6 +35,7 @@ import { SlideInAnimationDirective } from './slide-in-animation.directive';
     NbCardModule,
     NbOverlayModule,
     NbContextMenuModule,
+    NbMenuModule.forRoot(),
 
     // 
     QuillModule.forRoot(),
@@ -199,7 +200,7 @@ import { SlideInAnimationDirective } from './slide-in-animation.directive';
       provide: NbRoleProvider,
       useClass: RoleProvider
     },
-    { provide: OverlayContainer }
+    // { provide: OverlayContainer }
 
   ],
   bootstrap: [AppComponent],

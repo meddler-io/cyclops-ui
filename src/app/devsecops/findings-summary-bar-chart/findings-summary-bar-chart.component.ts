@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ColorSeverity } from 'src/environments/constants';
+
+
 
 @Component({
   selector: 'app-findings-summary-bar-chart',
@@ -23,11 +26,13 @@ export class FindingsSummaryBarChartComponent {
 
   colorScheme = {
     domain: [
-      '#3498db',   // Informative (Dark Blue)
-      '#2ecc71',   // Low (Dark Green)
-      '#e67e22',   // Medium (Dark Orange)
-      '#e74c3c',   // High (Dark Red)
-      '#c0392b'    // Critical (Darker Red)
+
+
+      ColorSeverity.INFO,   // Informative (Dark Blue)
+      ColorSeverity.LOW,   // Low (Dark Green)
+      ColorSeverity.MEDIUM,   // Medium (Dark Orange)
+      ColorSeverity.HIGH,   // High (Dark Red)
+      ColorSeverity.CRITICAL    // Critical (Darker Red)
     ]
   }
 

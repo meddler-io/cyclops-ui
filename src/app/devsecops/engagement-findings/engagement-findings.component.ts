@@ -1,14 +1,15 @@
-import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
-import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject } from 'rxjs';
+import { NbCheckboxComponent, NbContextMenuDirective, NbPosition, NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
+import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject, shareReplay, Observable, take } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
 import { EngagementService } from '../engagement.service';
 import { FindingStatsComponent } from '../finding-stats/finding-stats.component';
+import { ColorSeverity } from 'src/environments/constants';
 
 @Component({
   selector: 'app-engagement-findings',
@@ -16,6 +17,85 @@ import { FindingStatsComponent } from '../finding-stats/finding-stats.component'
   styleUrls: ['./engagement-findings.component.scss']
 })
 export class EngagementFindingsComponent implements OnInit, AfterViewInit {
+
+  @ViewChildren('markFind') markFind: QueryList<NbCheckboxComponent>;
+
+
+  ColorSeverity = ColorSeverity;
+  @ViewChild(NbContextMenuDirective) contextMenu: NbContextMenuDirective;
+
+  markMode = true;
+
+  markAll$ = false;
+
+  markAll(findings: Observable<any[]>) {
+
+    console.log('markAll', findings)
+
+    findings.pipe(
+      take(1),
+      tap(_ => {
+        _.forEach(_ => {
+
+          this.markedFindings.add(_?._id?.$oid)
+
+          return true;
+        })
+      })
+
+    ).subscribe()
+
+
+  }
+
+  markedFindings = new Set()
+
+  markModeChanged() {
+    this.markAll$ = false;
+    this.markedFindings.clear();
+  }
+
+  markFinding(marked, index, id) {
+
+    this.markedFindings.entries()
+
+
+    console.log('marked', marked, index, id, this.markedFindings.size)
+    if (marked == true)
+      this.markedFindings.add(id);
+    else
+      this.markedFindings.delete(id);
+
+
+  }
+
+  items = [
+    { title: 'Profile' },
+    { title: 'Logout' },
+  ];
+
+  openMenu() {
+
+
+    setInterval(
+
+      () => {
+
+        this.contextMenu.position = NbPosition.BOTTOM;
+
+
+
+        // U
+
+      }
+      ,
+      10
+    )
+    // this.contextMenu.rebuild();
+
+    this.contextMenu.show();
+    return false;
+  }
 
 
 
@@ -332,27 +412,29 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  activeEngagement = this.engagementService.activeEngagement;
+  activeEngagement = this.engagementService.activeEngagement
 
+    .pipe(
+      filter(_ => !!_)
+      ,
+      map(_ => _.id)
+    );
   ngOnInit(): void {
+
 
     this.findings$ = this.filter_finding_tab.asObservable().pipe(
 
       switchMap(filter_state => {
 
-        return this.engagementService.activeEngagement
-
+        return this.activeEngagement
           .pipe(
-            filter(_ => !!_)
-
-            ,
-            map((engagement) => {
+            map((engagement_id) => {
 
 
               return this.loadMoreFindings$.pipe(
                 map(page_number => {
 
-                  return this.apiService.getOpenFindingsByAssessment(filter_state, engagement.id, page_number).pipe(
+                  return this.apiService.getOpenFindingsByAssessment(filter_state, engagement_id, page_number).pipe(
 
                     map(_ => {
 
@@ -379,18 +461,45 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
                       console.log('totalFindings', this.totalFindings, this.totalPages)
 
                       _.data = _.data.map(_ => {
-                        _.engagement_id = engagement.id;
+                        _.engagement_id = engagement_id;
+                        switch (_.severity) {
+                          case 'Info':
+                            _.color = ColorSeverity.INFO;
+
+                            break;
+                          case 'Low':
+                            _.color = ColorSeverity.LOW;
+
+                            break;
+
+                          case 'Medium':
+                            _.color = ColorSeverity.MEDIUM;
+
+                            break;
+                          case 'High':
+                            _.color = ColorSeverity.HIGH;
+
+                            break;
+                          case 'Critical':
+                            _.color = ColorSeverity.CRITICAL;
+
+                            break;
+                        }
+
+
                         return _;
                       })
 
                       return _.data
                     }),
 
+
                   )
 
 
                 }),
                 switchMap(_ => _),
+
 
               )
             })
@@ -407,7 +516,14 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
       })
 
+      ,
+
+      shareReplay(),
+
     )
+
+      
+
 
 
 
@@ -520,6 +636,40 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   }
 
+
+  markForRevalidation() {
+    console.log('markForRevalidation');
+
+
+    this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
+
+      console.log('markForRevalidation', engagement_id);
+
+      return this.apiService.markMultipleIssueToBeverified(engagement_id, Array.from(this.markedFindings))
+    }))
+
+      .subscribe(_ => {
+        this.refreshFindings();
+      })
+
+  }
+
+  unmarkForRevalidation() {
+    console.log('unmarkForRevalidation');
+
+
+    this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
+
+      console.log('unmarkForRevalidation', engagement_id);
+
+      return this.apiService.unmarkMultipleIssueToBeverified(engagement_id, Array.from(this.markedFindings))
+    }))
+
+      .subscribe(_ => {
+        this.refreshFindings();
+      })
+
+  }
 
 
 }

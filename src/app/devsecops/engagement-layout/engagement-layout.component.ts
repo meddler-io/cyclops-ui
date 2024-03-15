@@ -13,15 +13,8 @@ import { NbContextMenuDirective } from '@nebular/theme';
 })
 export class EngagementLayoutComponent implements OnInit {
 
-  @ViewChild(NbContextMenuDirective) contextMenu: NbContextMenuDirective;
-  testcm(){
-    this.contextMenu.show();
-  }
 
-  items = [
-    { title: 'Profile' },
-    { title: 'Logout' },
-  ];
+
 
   tabs = [
     ['Details' , ['details'] , [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],

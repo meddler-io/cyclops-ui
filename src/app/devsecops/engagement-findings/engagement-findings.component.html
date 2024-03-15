@@ -1,5 +1,3 @@
-
-
 <nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
 
@@ -27,13 +25,16 @@
 
 
                 <div fxLayoutGap="0.5rem">
-                  
-                      
+
+
                     <button class="tab-button" (click)="switch_finding_filter( 'all' )" size="tiny" nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All ({{all_count}})
+
+
+
                     </button>
-                    
+
                     <button class="tab-button" (click)="switch_finding_filter( 'open' )" size="tiny" nbButton
                         [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  "
                         [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' ">Open
@@ -52,13 +53,101 @@
 
 
 
-            <button status="success" shape="round" (click)="create_finding(  )" size="tiny" nbButton
-                appearance="outline">
-                <nb-icon icon="plus-outline">
+            <ng-container>
 
-                </nb-icon>
-                Add
-            </button>
+                <ng-container *ngIf="markMode">
+                    <button
+                    (click)="markAll( findings$  )"
+                    status="success" shape="round" size="tiny" nbButton appearance="outline">
+                        <nb-icon icon="plus-outline">
+
+                        </nb-icon>
+                        Mark All
+
+                        {{markedFindings.size}}
+                    </button>
+
+                    <button
+                    (click)="markForRevalidation()"
+                    [disabled]="markedFindings.size == 0"
+                    nbTooltipPlacement="bottom" nbTooltip="Mark for revalidation"
+                    
+                    status="success" shape="round" size="tiny" nbButton appearance="outline">
+                        <nb-icon icon="plus-outline">
+
+                        </nb-icon>
+                        Revalidate
+                    </button>
+
+                    <button
+                    (click)="unmarkForRevalidation()"
+
+                    [disabled]="markedFindings.size == 0"
+
+                    nbTooltipPlacement="bottom" nbTooltip="Mark as open"
+                    status="success" shape="round" size="tiny" nbButton appearance="outline">
+                        <nb-icon icon="plus-outline">
+
+                        </nb-icon>
+                        Open
+                    </button>
+                </ng-container>
+
+
+                <button status="success" shape="round" (click)="create_finding(  )" size="tiny" nbButton
+                    appearance="outline">
+                    <nb-icon icon="plus-outline">
+
+                    </nb-icon>
+                    Add
+                </button>
+
+
+
+
+                <!-- <nb-button-group shape="round" ghost size="small" status="success"> -->
+
+                <!-- <button nbButton>
+                        <nb-icon icon="swap-outline"></nb-icon>
+                    </button> -->
+                <!-- <button nbButton>
+                        <nb-icon icon="play-circle-outline"></nb-icon>
+                    </button> -->
+
+                <div fxLayoutAlign="space-between center " fxLayoutGap="0.2rem">
+
+
+                    <nb-toggle (checkedChange)="markModeChanged()" labelPosition="left" nbPopoverTrigger="hover"
+                        nbPopoverPlacement="bottom" [status]="markMode ? 'success': 'basic' "
+                        nbTooltipPlacement="bottom" [nbTooltip]="markMode ? 'Cancel' : 'Mark findings' "
+                        [(ngModel)]="markMode">
+
+
+                        <!-- Manage -->
+                    </nb-toggle>
+
+
+                    <button [status]="markMode ? 'success': 'basic' " ghost size="small" nbButton>
+
+                        <nb-icon icon="more-vertical-outline">
+
+                        </nb-icon>
+                    </button>
+                    <!-- </nb-button-group> -->
+
+                </div>
+
+                <!-- <nb-icon nbContextMenuTrigger="hover" nbContextMenuPlacement="bottom" [nbContextMenu]="items"                    icon="more-vertical-outline">                </nb-icon> -->
+
+            </ng-container>
+
+            <ng-template #selectMessageTemplate>
+                <span *ngIf="!markMode">Mark findings</span>
+                <span *ngIf="markMode">Cancel</span>
+            </ng-template>
+
+
+
 
         </div>
 
@@ -152,32 +241,132 @@
 
 
         <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
-        <nb-list-item [class.inactive]="data?.active == false" (click)="view_finding(data?._id?.$oid)"
+        <!-- (click)="view_finding(data?._id?.$oid)" -->
+        <nb-list-item fxLayoutAlign="space-between center" fxLayout="row" [class.inactive]="data?.active == false"
             *ngFor="let data of findings$ | async ; index as index ">
 
 
-            <div fxLayout="row" fxFlex>
+            <!-- Index -->
+            <div fxLayout="row">
+
+
+                <div *ngIf="markMode" fxLayoutAlign="center center">
+ 
+                    <nb-checkbox #markFind style="height: 50% ;" 
+                    [checked]="markedFindings.has( data._id.$oid  )"
+                        (checkedChange)="markFinding(  $event ,  index , data._id.$oid )" status="control">
+
+                    </nb-checkbox>
+                </div>
+
+
+                <div *ngIf="false" style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+
+                    <div class="text-caption" style="padding: 0;" fxFlex fxLayoutAlign="center center">
+
+                        {{ index + 1}}
+
+                    </div>
+
+
+
+                </div>
+
+
+
+                <!-- Verified / Not verified -->
+                <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+
+                    <button *ngIf="!data?.verifiable" (click)="  $event.stopPropagation();  markForVerification( data )"
+                        [disabled]="data?.verifiable" ghost nbButton size="medium" status="success">
+                        <!-- Verify -->
+                        <nb-icon icon="checkmark-circle-2"></nb-icon>
+                    </button>
+
+                    <button *ngIf="data?.verifiable" (click)="$event.stopPropagation();  unmarkForVerification( data )"
+                        outline nbButton size="medium" ghost shape="round" status="danger">
+                        <!-- Not Fixed -->
+                        <nb-icon icon="close-circle"></nb-icon>
+
+                    </button>
+
+
+                </div>
+
+
+                <!-- Severity -->
+                <div style="padding: 0;" fxLayoutAlign="start center" class=" item " fxFlex="0 0 6rem">
+
+                    <button [style.color]="data?.color"
+                        (click)="  $event.stopPropagation();  markForVerification( data )" outline shape="round"
+                        nbButton size="small">
+
+                        {{ ( data?.severity )}}
+
+                    </button>
+
+
+
+
+
+                </div>
+            </div>
+
+            <div fxFlex class="truncate-row item" fxLayoutGap="1rem" fxLayoutAlign="start center" fxLayout="row">
 
                 <!--  -->
+
+                <span class="caption-2">
+                    {{ index + 1}}.
+                </span>
+                <span class="truncate-cell">
+                    {{data?.title}}
+
+                </span>
+
+                <span fxFlex class="truncate-cell description">
+                    {{data?.description}}
+                    {{data?.description}}
+                    {{data?.description}}
+                    {{data?.description}}
+                    {{data?.description}}
+                    {{data?.description}}
+                </span>
 
 
 
                 <!-- {{data | json}} -->
                 <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
-                <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
 
-                    <div style="padding: 0;" fxFlex fxLayoutAlign="center center">
 
-                        {{ data?.index}}
+                <div *ngIf="false" fxFlex fxLayout="row">
+
+                    <!-- Title -->
+                    <div fxLayoutGap="1rem" fxFlex fxLayout="row" class="truncate-row item">
+                        <div class="truncate-cell"> <!-- Adjust fxFlex as needed -->
+                            <!-- Your content here -->
+                            {{data?.title}}
+
+                        </div>
+                        <div class="truncate-cell description"> <!-- Adjust fxFlex as needed -->
+                            <!-- Your content here -->
+                            {{data?.description}}
+                            {{data?.description}}
+                            {{data?.description}}
+                            {{data?.description}}
+                            {{data?.description}}
+                            {{data?.description}}
+
+                        </div>
                     </div>
+
+
 
                 </div>
 
 
-
-
-                <div class="   item " fxFlex="1 0" fxLayoutALign="start">
+                <div *ngIf="false" class="   item " fxFlex="1 0" fxLayout="row" fxLayoutALign="start center">
 
                     <!-- <span class="caption title"> -->
 
@@ -189,10 +378,7 @@
 
 
 
-                    <div style="
-                    display: inline;
-    line-break: anywhere;
-                    ">
+                    <div>
 
                         {{data?.title}}
                     </div>
@@ -209,84 +395,45 @@
 
                     <!-- </span> -->
 
-                </div>
 
-
-                <div fxLayoutAlign="start start" fxFlex="0 0 7rem" class="  item   ">
-                    <div class="severity">
-                        {{ ( data?.severity ) }}
-                    </div>
-
-                </div>
-
-                <div fxFlex="0 0 10rem" class="item  ">
-                    {{data?.doc?.$date}}
-                </div>
-
-
-
-
-                <div *ngIf="false" class="item" class=" item " fxFlex>
-
-
-                    {{data?.description}}
-                    <!-- {{data?.refrence_ids | json}} -->
-
-                </div>
-
-
-                <div class="item  " fxFlex="0 0 10rem">
-
-                    <div>
+                    <div class="description">
 
                         <!-- {{data?.found_by}} -->
-                        {{data?.platform}}
+                        {{data?.description}}
+                        {{data?.description}}
+                        {{data?.description}}
+                        {{data?.description}}
+                        {{data?.description}}
+                        {{data?.description}}
 
                     </div>
-
-                    <div>
-                        <ng-container *ngIf="data?.component_name">
-
-                            <span class="chip">
-                                {{data?.component_name}}
-                            </span>
-                            <span class="sub_chip">
-                                <ng-container *ngIf="data?.component_version">
-                                    &#64;{{data?.component_version}}</ng-container>
-                            </span>
-                        </ng-container>
-
-                    </div>
-
-                    <!-- <ng-container *ngIf="data?.component_name">
-
-                            in {{data?.component_name}}
-                            <ng-container *ngIf="data?.component_version">
-                                @{{data?.component_version}}</ng-container>
-                        </ng-container> -->
-
-
-                </div>
-
-
-                <div fxLayoutAlign="end start" class=" item " fxFlex="0 0 7rem">
-
-                    <button *ngIf="!data?.verifiable" (click)="  $event.stopPropagation();  markForVerification( data )"
-                        [disabled]="data?.verifiable" outline nbButton size="tiny" status="info">
-                        Verify
-                    </button>
-
-                    <button *ngIf="data?.verifiable" (click)="$event.stopPropagation();  unmarkForVerification( data )" outline nbButton
-                        size="tiny" status="danger">
-                        Not Fixed
-                    </button>
-
 
                 </div>
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+            <div>
+                <button [status]="markMode ? 'info': 'basic' " ghost size="small" nbButton>
+
+                    <nb-icon icon="diagonal-arrow-right-up">
+
+                    </nb-icon>
+                </button>
             </div>
 
 
@@ -399,9 +546,8 @@
 <ng-template let-data #viewFindingTmpl>
 
 
-    <app-engagement-create-finding
-    [id]="( activeEngagement | async )?.id  "
-    [finding_id]="data?.finding_id" [id]="data.id  ">
+    <app-engagement-create-finding [id]="( activeEngagement | async )?.id  " [finding_id]="data?.finding_id"
+        [id]="data.id  ">
     </app-engagement-create-finding>
 
 </ng-template>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbMenuModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule, NbWindowModule, NbOverlayModule } from '@nebular/theme';
+import { NbLayoutModule, NbIconModule, NbButtonModule, NbDatepickerModule, NbMenuModule, NbTimepickerModule, NbCardModule, NbInputModule, NbListModule, NbSelectModule, NbFormFieldModule, NbSearchModule, NbTabsetModule, NbSpinnerModule, NbToastrModule, NbToastrService, NbRouteTabsetModule, NbContextMenuModule, NbPopoverModule, NbAutocompleteModule, NbDialogModule, NbAccordionModule, NbStepperModule, NbButtonGroupModule, NbSidebarModule, NbTagModule, NbToggleModule, NbUserModule, NbTreeGridModule, NbCheckboxModule, NbSidebarService, NbActionsModule, NbBadgeModule, NbWindowModule, NbOverlayModule, NbTooltipModule } from '@nebular/theme';
 import { ApiService } from './api.service';
 import { AppListComponent } from './app-list/app-list.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -174,6 +174,7 @@ import { SeverityButtonComponent } from './severity-button/severity-button.compo
     NbSpinnerModule,
     NbToastrModule,
     NbPopoverModule,
+    NbTooltipModule,
     NbEvaIconsModule,
     NbActionsModule,
 

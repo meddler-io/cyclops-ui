@@ -156,10 +156,25 @@ export class ApiService {
 
   markIssueToBeverified(engagement_id: string, issue_id: string) {
 
-    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/${issue_id}`).pipe(
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/mark-for-revalidation/${issue_id}`).pipe(
       map(_ => _?.data)
     )
   }
+
+  markMultipleIssueToBeverified(engagement_id: string, issue_ids: any[]) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/mark-for-revalidation` , issue_ids).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  unmarkMultipleIssueToBeverified(engagement_id: string, issue_ids: any[]) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/unmark-for-revalidation` , issue_ids).pipe(
+      map(_ => _?.data)
+    )
+  }
+
 
   unmarkIssueToBeverified(engagement_id: string, issue_id: string) {
 

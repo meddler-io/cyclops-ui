@@ -2,6 +2,15 @@ type EnumDictionary<T extends string | symbol | number, U> = {
   [K in T]: U;
 };
 
+export class ColorSeverity {
+  static INFO = '#3498db';   // Informative (Dark Blue)
+  static LOW = '#2ecc71';   // Low (Dark Green)
+  static MEDIUM = '#e67e22';   // Medium (Dark Orange)
+  static HIGH = '#e74c3c';   // High (Dark Red)
+  static CRITICAL = '#c0392b';   // Critical (Darker Red)
+}
+
+
 export enum Platform {
   WEBAPP = 'webapp',
   WEBSERVICE = 'webservice',
