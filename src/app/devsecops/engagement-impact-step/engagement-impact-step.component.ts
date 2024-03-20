@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { catchError, EMPTY, map, mergeMap, startWith, Subject, switchMap } from 'rxjs';
+import { catchError, EMPTY, first, map, mergeMap, startWith, Subject, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../api.service';
+import { EngagementService } from '../engagement.service';
 
 
 @Component({
@@ -38,6 +39,8 @@ export class EngagementImpactStepComponent {
 
 
   constructor(
+    private sngagementService: EngagementService,
+
     private apiService: ApiService) { }
   ngOnInit(): void {
 
@@ -80,6 +83,14 @@ export class EngagementImpactStepComponent {
     bucket: ''
   }
 
+  getActiveEngagementId() {
+    return this.sngagementService.activeEngagement.pipe(
+      first(),
+      map(_ => _.id)
+    )
+  }
+
+
   // @ViewChild("file") file;
 
   onFilesAdded(elementRef, attr) {
@@ -91,7 +102,11 @@ export class EngagementImpactStepComponent {
       if (!isNaN(parseInt(key))) {
         this.files.add(files[key]);
 
-        this.apiService.uploadToFinding(files[key], this.finding_id, this.step_id ,  attr , 'impact')
+        this.getActiveEngagementId().subscribe(engagment_id => {
+
+
+
+        this.apiService.uploadToFinding(files[key], engagment_id, this.finding_id, this.step_id ,  attr , 'impact')
           .pipe(mergeMap(_ => _))
           .pipe(
           // mergeMap(_ => {
@@ -128,6 +143,7 @@ export class EngagementImpactStepComponent {
 
 
           );
+        });
       }
     }
   }

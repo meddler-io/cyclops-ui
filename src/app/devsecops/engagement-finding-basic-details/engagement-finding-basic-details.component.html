@@ -1,5 +1,19 @@
 <!-- [accept]="  allowed_extensions_for_file_upload[application?.platform] "  -->
 
+<ng-template #popupMessage>
+
+    <div fxLayoutAlign="center center" style="margin-right: 1rem ; margin-left: 1rem ;">
+
+        <span>
+            Press enter
+        </span>
+        <nb-icon style="margin: 9px;;" status="success" icon="corner-down-left-outline"></nb-icon>
+        <span>
+
+            to save.
+        </span>
+    </div>
+</ng-template>
 
 
 <ng-container *ngIf="findingDetails | async as findingDetails  ; else loadingTemplate ">
@@ -21,13 +35,14 @@
 
 
 
-            <nb-form-field fxFlex>
+
+            <nb-form-field fxFlex [nbTooltipDisabled]="readonly" [nbPopover]="popupMessage" nbPopoverTrigger="focus" nbPopoverPlacement="end">
                 <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
 
                 <!-- (focusout)="titleFocusout()" -->
-                <input [readonly]="readonly" [value]="findingDetails?.title" #titleInp
-                    (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Add" type="text"
-                    nbInput>
+                <input [readonly]="readonly" [value]="findingDetails?.title || '' " #titleInp
+                    (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Title"
+                    type="text" nbInput>
             </nb-form-field>
 
 
@@ -47,15 +62,14 @@
 
 
 
-            <nb-form-field fxFlex>
+            <nb-form-field fxFlex [nbTooltipDisabled]="readonly" [nbPopover]="popupMessage" nbPopoverTrigger="focus" nbPopoverPlacement="end">
+
                 <nb-icon nbPrefix icon="text-outline" pack="eva"></nb-icon>
 
                 <!-- (focusout)="titleFocusout()" -->
-                <input
-                [readonly]="readonly"
-                [value]="findingDetails?.title" #descInp
-                    (keyup.enter)="saveAttr(  { 'title' :  titleInp.value }  )" fullWidth placeholder="Add" type="text"
-                    nbInput>
+                <input [readonly]="readonly" [value]="findingDetails?.description || '' " #descInp
+                    (keyup.enter)="saveAttr(  { 'title' :  descInp.value }  )" fullWidth placeholder="Description"
+                    type="text" nbInput>
             </nb-form-field>
 
 

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
-import { BehaviorSubject, combineLatest, debounceTime, delay, distinctUntilChanged, map, of, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, delay, distinctUntilChanged, first, map, of, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
@@ -14,8 +14,16 @@ import { EngagementService } from '../engagement.service';
 })
 export class EngagementFindingCweSelectorComponent implements OnInit {
 
+  @Output('invalidate') onInvalidate = new EventEmitter();
+
   @Input('finding_id') finding_id;
   @Input('readonly') readonly;;
+  @Input('draft') draft;
+  @Input('window_id') window_id;
+
+  close(){
+    this.windowService.closeById(this.window_id);
+  }
 
 
   searching = false;
@@ -71,7 +79,7 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
             console.log('cwelookup', _?.cwe)
 
             if (!!!_?.cwe) {
-              return of( { id: undefined }    );
+              return of({ id: undefined });
             }
             return this.apiService.getCWEById(_?.cwe).pipe(map(_ => _.data))
           })
@@ -87,6 +95,7 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
   ngOnInit(): void {
 
 
+    this.onInvalidate.next(true);
 
 
     // this.active_cwe = this.apiService.getAssessmentsFindingsById(
@@ -172,21 +181,98 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
 
 
   cwe = 474;
-  selectCWE(id, finding) {
-
-    if (finding?.type == 'weakness') {
-
-      this.apiService.updateFinding(id, { "cwe": finding?.id }).subscribe(_ => {
-
-        // this.cwe = finding?.id;
-        this.searchInput.setValue(finding?.title, { emitEvent: false });
-
-        this.refreshFinding.next(true);
 
 
+  createFinding(data) {
+
+
+    return this.engagementService.activeEngagement.pipe(
+      first(),
+
+      switchMap(_ => {
+
+        return this.apiService.createFinding(_.id, data);
       })
 
+    )
+
+  }
+
+
+  updateFinding( finding_id ,  data) {
+
+
+    return this.engagementService.activeEngagement.pipe(
+      first(),
+
+      switchMap(_ => {
+
+        return this.apiService.updateFinding(_.id , finding_id, data);
+      })
+
+    )
+
+  }
+
+
+  @ViewChild('createFindingTmpl') createFindingTmpl;
+
+  goBack(){
+    this.windowService.closeAll();
+    this.windowService.open(this.createFindingTmpl);
+
+
+
+  }
+
+  selectCWE(id, finding) {
+
+    console.log('selectCWE', id, finding)
+
+    if (finding?.type == 'weakness') {
+      if (id) {
+
+
+        this.updateFinding(id, { "cwe": finding?.id }).subscribe(_ => {
+
+          // this.cwe = finding?.id;
+          this.searchInput.setValue(finding?.title, { emitEvent: false });
+
+          this.refreshFinding.next(true);
+
+          this.goBack();
+
+
+          // 
+
+
+
+
+        })
+
+      } else {
+
+        this.createFinding({ "cwe": finding?.id }).subscribe(_ => {
+
+          // this.cwe = finding?.id;
+
+          this.finding_id = _?._id?.$oid;
+          this.draft = false;
+          this.readonly = false;
+          this.searchInput.setValue(finding?.title, { emitEvent: false });
+
+          this.refreshFinding.next(true);
+
+          this.goBack();
+
+        })
+
+    
+
+      }
+
     }
+
 
   }
 

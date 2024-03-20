@@ -260,10 +260,11 @@ export class ApiService {
   }
 
 
-  updateFindingPush(finding_id: string, step_id: string, type: string, data) {
+  updateFindingPush( engagement_id: string,  finding_id: string, step_id: string, type: string, data) {
 
     if (type == 'step') {
-      return this.updateStepToFinding(finding_id, step_id, data)
+
+      return this.updateStepToFinding(engagement_id, finding_id, step_id, data)
 
     }
 
@@ -401,7 +402,7 @@ export class ApiService {
   }
 
 
-  public uploadToFinding(file: File, finding_id: string, step_id: string, attr: string, type: string) {
+  public uploadToFinding(file: File, engagement_id: string , finding_id: string, step_id: string, attr: string, type: string) {
 
     let fileId = 'fileId';
     // this will be the our resulting map
@@ -460,7 +461,7 @@ export class ApiService {
                 let data = {};
                 data[attr] = { 'file': filedata }
 
-                return this.updateFindingPush(finding_id, step_id,
+                return this.updateFindingPush(engagement_id, finding_id, step_id,
                   type,
                   data,
                 ).pipe(
@@ -1050,22 +1051,22 @@ export class ApiService {
     return this.getRequest(`api/v1/devsecops/finding/fetch/${id}`)
   }
 
-  createFinding(id) {
+  createFinding(id, data) {
 
-    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding`)
-
-  }
-
-
-  updateFinding(id, data) {
-
-    return this.putRequest(`api/v1/devsecops/engagement/${id}/finding`, data)
+    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding` , data)
 
   }
 
-  addStepToFinding(id) {
 
-    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding/step`,)
+  updateFinding(id , finding_id, data) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${id}/finding/${finding_id}`, data)
+
+  }
+
+  addStepToFinding(id, finding_id,  data) {
+
+    return this.postRequest(`api/v1/devsecops/engagement/${id}/finding/${finding_id}/step`,data)
 
   }
 
@@ -1076,19 +1077,18 @@ export class ApiService {
   }
 
 
-  getStepToFinding(id, step_id) {
+  getStepToFinding(engagement_id, finding_id, step_id) {
 
-    return this.getRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`).pipe(
+    return this.getRequest(`api/v1/devsecops/engagement/${engagement_id}/finding/${finding_id}/step/${step_id}`).pipe(
       map(_ => _?.data)
-
 
     );
 
   }
 
-  deleteStepToFinding(id, step_id) {
+  deleteStepToFinding(engagement_id, finding_id, step_id) {
 
-    return this.deleteRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`).pipe(
+    return this.deleteRequest(`api/v1/devsecops/engagement/${engagement_id}/finding/${finding_id}/step/${step_id}`).pipe(
       map(_ => _)
 
 
@@ -1106,9 +1106,9 @@ export class ApiService {
 
   }
 
-  updateStepToFinding(id: string, step_id: string, data) {
+  updateStepToFinding(engaement_id: string,  finding_id: string,  step_id: string, data) {
 
-    return this.putRequest(`api/v1/devsecops/engagement/${id}/finding/step/${step_id}`,
+    return this.putRequest(`api/v1/devsecops/engagement/${engaement_id}/finding/${finding_id}/step/${step_id}`,
       data
     ).pipe(
       delay(this.mockDelay)

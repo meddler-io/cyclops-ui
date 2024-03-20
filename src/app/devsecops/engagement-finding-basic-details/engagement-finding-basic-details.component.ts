@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { delay, map, startWith, Subject, switchMap } from 'rxjs';
+import { delay, first, map, startWith, Subject, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
+import { EngagementService } from '../engagement.service';
 
 @Component({
   selector: 'app-engagement-finding-basic-details',
@@ -10,6 +11,7 @@ import { ApiService } from '../api.service';
 export class EngagementFindingBasicDetailsComponent {
 
   @Input('readonly') readonly ;;
+  @Input('draft') draft;
 
 
   @Input('finding_id') finding_id;
@@ -19,12 +21,15 @@ export class EngagementFindingBasicDetailsComponent {
   findingDetails;
 
   constructor(
+    private engagementService: EngagementService,
+
     private apiService: ApiService) { }
 
   ngOnInit(): void {
 
     this.findingDetails = this.loadDetails.asObservable().pipe(
 
+      
 
       startWith(true),
 
@@ -41,11 +46,26 @@ export class EngagementFindingBasicDetailsComponent {
 
   saving$ = false;
 
+  updateFinding( finding_id ,  data) {
+
+
+    return this.engagementService.activeEngagement.pipe(
+      first(),
+
+      switchMap(_ => {
+
+        return this.apiService.updateFinding(_.id , finding_id, data);
+      })
+
+    )
+
+  }
+
   saveAttr(data) {
 
 
     this.saving$ = true;
-    this.apiService.updateFinding(this.finding_id, data).subscribe(_ => {
+    this.updateFinding(this.finding_id, data).subscribe(_ => {
       this.saving$ = false;
 
       this.loadDetails.next(true);

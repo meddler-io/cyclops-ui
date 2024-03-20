@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { first, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
+import { NbWindowRef } from '@nebular/theme';
+import { NewSidebarService } from 'src/app/new-sidebar.service';
 
 @Component({
   selector: 'app-engagement-create-finding',
@@ -10,16 +12,29 @@ import { EngagementService } from '../engagement.service';
 })
 export class EngagementCreateFindingComponent implements OnInit {
 
+  @Input('ref') ref;
 
-  @Input('id') id;
+
+
   @Input('finding_id') finding_id;
-  @Input('readonly') readonly = false;;
 
+  @Input('readonly') readonly = true;;
+
+  @Input('draft') draft = false;;
+
+
+  @Input('window_id') window_id;
+
+  close(){
+    this.sidebarService.closeById(this.window_id);
+  }
   
 
   constructor(
     private apiService: ApiService,
-    private engagementService: EngagementService
+    private engagementService: EngagementService,
+    private sidebarService: NewSidebarService,
+
 
   ) { }
   ngOnInit(): void {
@@ -33,18 +48,9 @@ export class EngagementCreateFindingComponent implements OnInit {
 
   }
 
-  createFinding() {
-
-
-    this.engagementService.activeEngagement.pipe(
-      first(),
-
-      switchMap(_ => {
-
-        return this.apiService.createFinding(_.id);
-      })
-
-    ).subscribe()
-
+  oninvalidate(event){
+    console.log('oninvalidate', event)
   }
+
+
 }

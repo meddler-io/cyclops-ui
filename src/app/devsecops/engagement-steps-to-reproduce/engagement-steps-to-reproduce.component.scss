@@ -1,0 +1,122 @@
+@import './../../../themes.scss';
+
+
+nb-list-item {
+
+    margin-bottom: 5px;
+  
+    overflow: hidden;
+  
+    padding-top: 1px;
+    padding-bottom: 1px;
+  
+    &:hover {
+      // background: nb-theme(color-basic-100) !important;
+      background: var(--button-ghost-basic-active-background-color);
+  
+      transition: 0.5s;
+      filter    : alpha(opacity=30);
+    }
+  
+  
+  
+    .item {
+  
+      border-radius: 0.3rem;
+  
+      font-size  : 1rem;
+      line-height: 1.5rem;
+  
+      padding            : var(--button-ghost-medium-padding);
+      padding-right      : 0 !important;
+      // background-color: nb-theme(	color-primary-400) !important;
+  
+      max-lines: 2;
+  
+  
+      white-space  : pre-wrap;
+      overflow     : hidden;
+      text-overflow: ellipsis;
+  
+      &:hover {
+        // background: nb-theme(color-basic-100) !important;
+        background: var(--button-ghost-basic-active-background-color);
+        transition: 1s;
+      }
+  
+  
+    }
+  
+    &.dasd:hover {
+      background         : nb-theme(color-basic-100) !important;
+      transition         : 1s;
+      // background-color: nb-theme(	color-basic-hover) !important;
+  
+  
+      .item {
+        padding      : var(--button-ghost-medium-padding);
+        padding-right: 0 !important;
+        color        : #000;
+  
+      }
+  
+  
+    
+    }
+  
+  
+  
+    &.selected {
+  
+      background: nb-theme(color-primary-400);
+  
+      .text {
+  
+        // color: nb-theme(text-color-basic);
+        color: #fff !important;
+  
+      }
+  
+  
+      color: #fff;
+  
+  
+      &.primary {
+        background-color: nb-theme(color-primary-500);
+  
+  
+      }
+  
+  
+      &.success {
+        background-color: nb-theme(color-success-500);
+  
+  
+      }
+  
+  
+      &.danger {
+        background-color: nb-theme(color-danger-500);
+  
+  
+      }
+  
+  
+      &.warning {
+        background-color: nb-theme(color-warning-500);
+  
+  
+      }
+  
+      &.basic {
+        background-color: nb-theme(color-basic-500);
+  
+      }
+  
+    }
+  
+  
+    &.inactive{
+      opacity: 0.4;
+    }
+  }

@@ -15,6 +15,7 @@ import { NbDialogService, NbToastrService } from '@nebular/theme';
 export class FindingDetailViewComponent implements OnInit {
 
     @Input('finding_id') finding_id;
+    @Input('window_id') window_id;
     @Input('issues') issues = false;;
 
     finding_details = of(EMPTY);

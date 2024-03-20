@@ -20,7 +20,13 @@ nb-card-header {
   // background: nb-theme(background-basic-color-3) !important;
   // margin: 0px;
   padding: 0px;
+  padding-right: 1rem;
   overflow: hidden;
 
 
+}
+
+
+button{
+  text-transform: capitalize !important;
 }

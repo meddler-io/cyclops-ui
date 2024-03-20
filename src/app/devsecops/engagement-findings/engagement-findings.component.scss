@@ -376,7 +376,8 @@ nb-list-item {
 
   overflow: hidden;
 
-  padding: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
 
   &:hover {
     // background: nb-theme(color-basic-100) !important;
@@ -672,15 +673,8 @@ nb-list-item.hidden:nth-child(even)+nb-list-item.hidden:nth-child(odd)~nb-list-i
 }
 
 
-// 
 
-body {
-  display        : flex;
-  justify-content: center;
-  align-items    : center;
-  min-height     : 100vh;
-  background     : #f0f0f0;
-}
+
 
 .box {
   position  : relative;

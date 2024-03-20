@@ -3,16 +3,17 @@
 
     <div class="label">
         CWE
+        
 
 
     </div>
 
-    <ng-container *ngIf="active_cwe?.id ; else noCweTemplate ">
+    <ng-container *ngIf="( active_cwe?.id || !readonly ) ; else noCweTemplate ">
         <div (click)="openDialog(  chooseCWE )">
             <nb-form-field>
                 <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-                <input [value]=" 'CWE-' +  active_cwe?.id + ' '  +  active_cwe?.title" [readonly]="true" fullWidth
-                    placeholder="Search CWE" type="text" nbInput>
+                <input [value]=" active_cwe?.id ?    'CWE-' +  active_cwe?.id + ' '  +  active_cwe?.title : '' " [readonly]="true" fullWidth
+                    placeholder="Choose CWE" type="text" nbInput>
             </nb-form-field>
         </div>
 
@@ -77,7 +78,7 @@
             <div>
                 <nb-form-field>
                     <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-                    <input [formControl]="searchInput" fullWidth placeholder="Search CWE" type="text" nbInput>
+                    <input [formControl]="searchInput" fullWidth placeholder="Choose CWE" type="text" nbInput>
                 </nb-form-field>
             </div>
 
@@ -124,3 +125,19 @@
     <app-block-loading-animation caption="CWE"></app-block-loading-animation>
 
 </ng-template>
+
+
+
+
+<ng-template #createFindingTmpl>
+
+
+    <app-engagement-create-finding
+    [readonly]="readonly"
+    [draft]="draft"
+    [finding_id]="finding_id"
+  
+  >
+  
+    </app-engagement-create-finding>
+  

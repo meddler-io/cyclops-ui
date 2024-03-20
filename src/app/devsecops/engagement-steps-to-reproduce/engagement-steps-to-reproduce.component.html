@@ -1,4 +1,4 @@
-<ng-container *ngIf="finding$  | async as finding$ ; else loadingTemplate">
+<ng-container *ngIf="findingDetails  | async as finding$ ; else loadingTemplate">
 
     <div fxFlex [nbSpinner]="saving$" fxLayoutGap="1rem" fxLayout="column">
 
@@ -9,18 +9,18 @@
             </div>
 
 
-            <nb-button-group
-            *ngIf="!readonly"
-            size="small" outline shape="round">
-                <button (click)="addStep(  finding$?._id?.$oid  )" nbButtonToggle>
+            <nb-button-group *ngIf="!readonly" size="small" outline shape="round">
+                <!-- (click)="addStep(  finding$?._id?.$oid  )"  -->
+
+                <button
+                (click)="openDrawer(   addStepToFinding )"
+                
+                nbButtonToggle>
                     <nb-icon nbPrefix icon="plus-outline" pack="eva"></nb-icon>
 
                 </button>
-                <button (click)="addStep(  finding$?._id?.$oid  )" style="text-transform: capitalize  !important ; "
-                    nbButtonToggle>
-
-                    Add
-                </button>
+            
+                
 
             </nb-button-group>
 
@@ -36,27 +36,19 @@
 
 
 
-                <app-engagement-step-to-reproduce [title]="step?.title" [finding_id]="finding$?._id?.$oid"
+
+                <app-engagement-step-to-reproduce
+                [readonly]="readonly"
+                [draft]="draft"
+                [title]="step?.title" [finding_id]="finding$?._id?.$oid"
                     [step_id]="step?._id?.$oid" [index]="i+1" fxFlex>
 
                 </app-engagement-step-to-reproduce>
 
 
             </nb-list-item>
-            <nb-list-item
-            *ngIf="!readonly"
+         
             
-            >
-
-                <div fxFlex fxLayoutAlign="center center">
-
-                    <button outline shape="round" (click)="addStep(  finding$?._id?.$oid  )" style="text-transform: capitalize  !important ; "
-                        nbButton status="success">
-
-                        Add
-                    </button>
-                </div>
-            </nb-list-item>
 
 
         </nb-list>
@@ -65,7 +57,15 @@
 
 
 
+    <ng-template let-data #addStepToFinding>
+        <app-engagement-step-to-reproduce
+        [draft]="true"
+        [window_id]="data.window_id"
+        [finding_id]="finding$?._id?.$oid" fxFlex>
+    
+        </app-engagement-step-to-reproduce>
 
+    </ng-template>
 
 </ng-container>
 
@@ -74,3 +74,4 @@
     <app-block-loading-animation caption="Steps to reproduce"></app-block-loading-animation>
 
 </ng-template>
+

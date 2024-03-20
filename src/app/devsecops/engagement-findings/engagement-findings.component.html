@@ -1,4 +1,4 @@
-<nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+<nb-card  fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
 
 
 
@@ -11,6 +11,7 @@
 
 
     <nb-card-header>
+
 
 
 
@@ -56,9 +57,8 @@
             <ng-container>
 
                 <ng-container *ngIf="markMode">
-                    <button
-                    (click)="markAll( findings$  )"
-                    status="success" shape="round" size="tiny" nbButton appearance="outline">
+                    <button (click)="markAll( findings$  )" status="success" shape="round" size="tiny" nbButton
+                        appearance="outline">
                         <nb-icon icon="plus-outline">
 
                         </nb-icon>
@@ -67,25 +67,18 @@
                         {{markedFindings.size}}
                     </button>
 
-                    <button
-                    (click)="markForRevalidation()"
-                    [disabled]="markedFindings.size == 0"
-                    nbTooltipPlacement="bottom" nbTooltip="Mark for revalidation"
-                    
-                    status="success" shape="round" size="tiny" nbButton appearance="outline">
+                    <button (click)="markForRevalidation()" [disabled]="markedFindings.size == 0"
+                        nbTooltipPlacement="bottom" nbTooltip="Mark for revalidation" status="success" shape="round"
+                        size="tiny" nbButton appearance="outline">
                         <nb-icon icon="plus-outline">
 
                         </nb-icon>
                         Revalidate
                     </button>
 
-                    <button
-                    (click)="unmarkForRevalidation()"
-
-                    [disabled]="markedFindings.size == 0"
-
-                    nbTooltipPlacement="bottom" nbTooltip="Mark as open"
-                    status="success" shape="round" size="tiny" nbButton appearance="outline">
+                    <button (click)="unmarkForRevalidation()" [disabled]="markedFindings.size == 0"
+                        nbTooltipPlacement="bottom" nbTooltip="Mark as open" status="success" shape="round" size="tiny"
+                        nbButton appearance="outline">
                         <nb-icon icon="plus-outline">
 
                         </nb-icon>
@@ -237,7 +230,7 @@
 
 
 
-    <nb-list fxFlex>
+    <nb-list >
 
 
         <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
@@ -251,31 +244,25 @@
 
 
                 <div *ngIf="markMode" fxLayoutAlign="center center">
- 
-                    <nb-checkbox #markFind style="height: 50% ;" 
-                    [checked]="markedFindings.has( data._id.$oid  )"
+
+                    <nb-checkbox #markFind style="height: 50% ;" [checked]="markedFindings.has( data._id.$oid  )"
                         (checkedChange)="markFinding(  $event ,  index , data._id.$oid )" status="control">
 
                     </nb-checkbox>
                 </div>
 
 
-                <div *ngIf="false" style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+              
+                
 
-                    <div class="text-caption" style="padding: 0;" fxFlex fxLayoutAlign="center center">
-
-                        {{ index + 1}}
-
-                    </div>
-
-
-
-                </div>
 
 
 
                 <!-- Verified / Not verified -->
-                <div style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+                <div 
+                
+                [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
 
                     <button *ngIf="!data?.verifiable" (click)="  $event.stopPropagation();  markForVerification( data )"
                         [disabled]="data?.verifiable" ghost nbButton size="medium" status="success">
@@ -298,7 +285,7 @@
                 <div style="padding: 0;" fxLayoutAlign="start center" class=" item " fxFlex="0 0 6rem">
 
                     <button [style.color]="data?.color"
-                        (click)="  $event.stopPropagation();  markForVerification( data )" outline shape="round"
+ outline shape="round"
                         nbButton size="small">
 
                         {{ ( data?.severity )}}
@@ -312,7 +299,7 @@
                 </div>
             </div>
 
-            <div fxFlex class="truncate-row item" fxLayoutGap="1rem" fxLayoutAlign="start center" fxLayout="row">
+            <div (click)="view_finding(data?._id?.$oid)" fxFlex class="truncate-row item" fxLayoutGap="1rem" fxLayoutAlign="start center" fxLayout="row">
 
                 <!--  -->
 
@@ -428,7 +415,8 @@
             </div>
 
             <div>
-                <button [status]="markMode ? 'info': 'basic' " ghost size="small" nbButton>
+                <button (click)="view_finding(data?._id?.$oid)" ghost    
+                    [status]="markMode ? 'basic': 'info' " size="tiny" nbButton>
 
                     <nb-icon icon="diagonal-arrow-right-up">
 
@@ -525,29 +513,54 @@
 </nb-card>
 
 
-<ng-template let-context="context" #editTmpl>
+<ng-template let-data #editTmpl>
 
 
-    <app-finding-detail-view [issues]="true" [finding_id]="context?.finding_id?.$oid">
+    <app-finding-detail-view
+    [window_id]="data.window_id  "
+    
+    [issues]="true" [finding_id]="data?.finding_id?.$oid"
+    
+    >
 
     </app-finding-detail-view>
 
 </ng-template>
 
+<ng-template
 
-<ng-template let-context="context" #createFindingTmpl>
+let-data #createFindingTmpl>
 
-    <app-engagement-create-finding [id]="( activeEngagement | async )?.id  ">
+
+    <app-engagement-create-finding
+    [readonly]="false"
+    [window_id]="data.window_id  "
+
+    [draft]="true"
+    [finding_id]="data?.finding_id"
+>
     </app-engagement-create-finding>
+
 
 </ng-template>
 
 
-<ng-template let-data #viewFindingTmpl>
+<ng-template    let-data #viewFindingTmpl>
 
 
-    <app-engagement-create-finding [id]="( activeEngagement | async )?.id  " [finding_id]="data?.finding_id"
+
+
+    <app-engagement-create-finding
+    [readonly]="false"
+    [window_id]="data.window_id  "
+
+
+
+    [draft]="false"
+    [id]="( activeEngagement | async )?.id  " [finding_id]="data?.finding_id"
         [id]="data.id  ">
     </app-engagement-create-finding>
+
+
 
 </ng-template>

@@ -144,21 +144,6 @@ export class EngagementSelectFindingComponent implements OnInit {
   )
 
   cwe = 474;
-  selectCWE(id, finding) {
 
-    if (finding?.type == 'weakness') {
-
-      this.apiService.updateFinding(id, { "cwe": finding?.id }).subscribe(_ => {
-
-        // this.cwe = finding?.id;
-        this.searchInput.setValue(finding?.title, { emitEvent: false });
-
-        this.refreshFinding.next(true);
-
-
-      })
-
-    }
-
-  }
+  
 }

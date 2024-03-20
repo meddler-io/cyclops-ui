@@ -15,6 +15,7 @@ export class EngagementImpactComponent {
 
   @Input('finding_id') finding_id;
   @Input('readonly') readonly ;;
+  @Input('draft') draft;
 
 
 

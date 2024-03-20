@@ -1,6 +1,6 @@
-import { Component, ComponentRef, Injectable, Injector, TemplateRef } from '@angular/core';
+import { Component, ComponentRef, Injectable, Injector, OnInit, TemplateRef } from '@angular/core';
 import { NbComponentPortal, NbComponentType, NbWindowComponent, NbWindowConfig, NbWindowRef, NbWindowsContainerComponent, NbWindowService, NB_WINDOW_CONTENT, NB_WINDOW_CONTEXT, NbWindowState } from '@nebular/theme';
-import { first, tap } from 'rxjs';
+import { first, of, tap } from 'rxjs';
 
 @Component({
   selector: 'nb-window-2',
@@ -26,7 +26,15 @@ import { first, tap } from 'rxjs';
 
   // styleUrls: ['./window.component.scss'],
 })
-export class CustomContainerComponent extends NbWindowComponent {
+export class CustomContainerComponent extends NbWindowComponent implements OnInit {
+
+
+  windowRef: NbWindowRef;
+
+  ngOnInit(): void {
+
+    console.log('windowRefwindowRef', this.windowRef, this.elementRef)
+  }
 
 
   //   <nb-card>
@@ -54,7 +62,7 @@ export class NewSidebarService extends NbWindowService {
 
 
 
-    for (let i = this.openWindows.length - 1 ; i >= 0; i--)
+    for (let i = this.openWindows.length - 1; i >= 0; i--)
       this.openWindows[i].close()
 
   }
@@ -118,18 +126,29 @@ export class NewSidebarService extends NbWindowService {
 
   }
 
+
+  windowsRefrencesByNames = new Map<string, NbWindowRef>
+
+
+  closeById(windowId) {
+    if (this.windowsRefrencesByNames.has(windowId)) {
+      this.windowsRefrencesByNames.get(windowId).close();
+      this.windowsRefrencesByNames.delete(windowId);
+    }
+  }
+
   open(windowContent: TemplateRef<any> | NbComponentType, windowConfig?: Partial<NbWindowConfig>) {
 
 
 
-    
+
     windowConfig = { ...windowConfig }
-    
+
     windowConfig.closeOnBackdropClick = false;
     windowConfig.closeOnEsc = false;
     // windowConfig.initialState = NbWindowState.MINIMIZED;
-    
-    console.log('windowConfigwindowConfig' , windowConfig.context)
+
+    console.log('windowConfigwindowConfig', windowConfig.context)
 
     let attachBackdropHandler = this.shouldCreateWindowsContainer();
 
@@ -143,11 +162,33 @@ export class NewSidebarService extends NbWindowService {
     // this.createWindowsContainer()
 
 
+    let windowId = (Date.now().toString());
+    console.log('created window_id', windowId)
 
 
-    let windowRef = super.open(
+    if (windowConfig.context)
+      windowConfig.context['window_id'] = windowId;
+    else
+      windowConfig.context = {
+        window_id: windowId
+      }
+
+
+    const windowRef = super.open(
       windowContent, windowConfig
     );
+
+    this.windowsRefrencesByNames.set(windowId, windowRef);
+
+
+
+
+    // windowConfig.context['ref'] = of('prakhar');
+
+
+
+
+    console.log('windowRef', windowRef.componentRef, windowRef.componentRef.instance)
 
 
     if (attachBackdropHandler) {
@@ -204,7 +245,7 @@ export class NewSidebarService extends NbWindowService {
   ): ComponentRef<NbWindowComponent> {
     const context = content instanceof TemplateRef ? { $implicit: config.context, windowRef } : config.context;
 
-    console.log('poooplooppo2');
+
 
     const providers = [
       { provide: NB_WINDOW_CONTENT, useValue: content },

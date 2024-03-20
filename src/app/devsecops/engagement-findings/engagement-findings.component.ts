@@ -314,6 +314,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
 
   refreshFindings() {
+    console.log('refreshFindings');
     // this.triggerRefresh.next(true);
     let loadMoreFindings = this.loadMoreFindings$.value;
     // console.log('loadMoreFindings', loadMoreFindings)
@@ -342,6 +343,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   // findings = this.apiService.getFindings('', '')
 
   constructor(
+
     private apiService: ApiService,
     private drawerMngr: DrawerService,
     private nbSidebarService: NbSidebarService,
@@ -355,6 +357,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   ) { }
   ngAfterViewInit(): void {
+
     // this.openDrawer({},  this.createFindingTmpl)
 
 
@@ -377,15 +380,29 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   onChange(event) {
 
     console.log('event', event)
-  }
+  };
+
+  loading_staate_for_individual: Map<string, number> = new Map();
+
   markForVerification(data) {
 
 
+
     let _id = data?._id?.$oid;
+
+
+    this.loading_staate_for_individual.set(_id, 1);
+
     let engagement_id = data?.engagement_id;
-    console.log('markForVerification', engagement_id, _id);
     this.apiService.markIssueToBeverified(engagement_id, _id).subscribe(_ => {
-      this.refreshFindings()
+
+      const timestamp = Date.now();
+
+      this.loading_staate_for_individual.set(_id, timestamp);
+      console.log('markForVerification', engagement_id, _id);
+
+      this.refreshFindings();
+
 
     });
   }
@@ -400,14 +417,23 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   unmarkForVerification(data) {
 
-    this.refreshFindings()
+
+
+
 
 
     let _id = data?._id?.$oid;
+
+    this.loading_staate_for_individual.set(_id, 1);
+
     let engagement_id = data?.engagement_id;
-    console.log('markForVerification', engagement_id, _id);
     this.apiService.unmarkIssueToBeverified(engagement_id, _id).subscribe(_ => {
-      this.refreshFindings()
+      const timestamp = Date.now();
+
+      this.loading_staate_for_individual.set(_id, timestamp);
+
+      console.log('unmarkForVerification', engagement_id, _id);
+      this.refreshFindings();
 
     });
   }
@@ -422,6 +448,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
 
 
+
     this.findings$ = this.filter_finding_tab.asObservable().pipe(
 
       switchMap(filter_state => {
@@ -434,6 +461,8 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
               return this.loadMoreFindings$.pipe(
                 map(page_number => {
 
+                  const timestamp = Date.now();
+                  console.log('timevalidate', timestamp);
                   return this.apiService.getOpenFindingsByAssessment(filter_state, engagement_id, page_number).pipe(
 
                     map(_ => {
@@ -461,6 +490,20 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
                       console.log('totalFindings', this.totalFindings, this.totalPages)
 
                       _.data = _.data.map(_ => {
+
+
+                        if (this.loading_staate_for_individual.has(_?._id?.$oid)) {
+                          if (this.loading_staate_for_individual.get(_?._id?.$oid) <= timestamp) {
+                            console.log('timevalidate', 'loading', this.loading_staate_for_individual);
+                            this.loading_staate_for_individual.delete(_?._id?.$oid)
+
+                          }
+
+
+                        }
+
+
+
                         _.engagement_id = engagement_id;
                         switch (_.severity) {
                           case 'Info':
@@ -522,7 +565,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
     )
 
-      
+
 
 
 
@@ -557,7 +600,9 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   }
 
   create_finding() {
-    this.openDrawer({}, this.createFindingTmpl)
+    this.openDrawer({
+
+    }, this.createFindingTmpl)
   }
 
   // onClickFinding
@@ -572,7 +617,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   }
 
   openDrawer(context, template = this.editTmpl, direction = 'left', size?, closeOnOutsideClick = true, isRoot = true, parentContainer?: any) {
-    this.drawerMngr.create({
+ let boom =    this.drawerMngr.create({
       direction: DrawerDirection.Left,
       template,
       size,
@@ -581,6 +626,8 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
       parentContainer,
       isRoot
     });
+
+    console.log('boomboompoo', boom)
   }
 
 
@@ -641,14 +688,33 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     console.log('markForRevalidation');
 
 
+    let marked = Array.from(this.markedFindings);
+    marked.forEach((_id: string) => {
+
+      this.loading_staate_for_individual.set(_id, 1);
+    })
+
+
     this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
 
-      console.log('markForRevalidation', engagement_id);
 
-      return this.apiService.markMultipleIssueToBeverified(engagement_id, Array.from(this.markedFindings))
+
+
+
+
+
+      return this.apiService.markMultipleIssueToBeverified(engagement_id, marked)
     }))
 
       .subscribe(_ => {
+
+        const timestamp = Date.now();
+        marked.forEach((_id: string) => {
+
+          this.loading_staate_for_individual.set(_id, timestamp);
+        })
+
+
         this.refreshFindings();
       })
 
@@ -657,15 +723,28 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   unmarkForRevalidation() {
     console.log('unmarkForRevalidation');
 
+    let marked = Array.from(this.markedFindings);
+    marked.forEach((_id: string) => {
+
+      this.loading_staate_for_individual.set(_id, 1);
+    })
 
     this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
 
-      console.log('unmarkForRevalidation', engagement_id);
+      let marked = Array.from(this.markedFindings);
 
-      return this.apiService.unmarkMultipleIssueToBeverified(engagement_id, Array.from(this.markedFindings))
+
+
+      return this.apiService.unmarkMultipleIssueToBeverified(engagement_id, marked)
     }))
 
       .subscribe(_ => {
+        const timestamp = Date.now();
+        marked.forEach((_id: string) => {
+
+          this.loading_staate_for_individual.set(_id, timestamp);
+        })
+
         this.refreshFindings();
       })
 

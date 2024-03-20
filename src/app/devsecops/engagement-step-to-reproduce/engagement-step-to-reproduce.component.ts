@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NbDialogService, NbMenuService, NbSidebarService } from '@nebular/theme';
-import { catchError, EMPTY, filter, map, mergeMap, startWith, Subject, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, first, map, mergeMap, startWith, Subject, switchMap, tap } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../api.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
 import { FormControl } from '@angular/forms';
+import { EngagementService } from '../engagement.service';
 
 @Component({
   selector: 'app-engagement-step-to-reproduce',
@@ -14,6 +15,18 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./engagement-step-to-reproduce.component.scss']
 })
 export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit {
+
+
+  @Input('window_id') window_id;
+
+  close(window_id?: string) {
+    if (window_id)
+      return this.windowService.closeById(window_id);
+
+    this.windowService.closeById(this.window_id);
+  }
+
+
   items = [
     { title: 'Profile' },
     { title: 'Logout' },
@@ -35,6 +48,10 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   @Input() content = ''
   @Input() title = ''
+
+  @Input('draft') draft;
+  @Input('readonly') readonly;
+
 
 
 
@@ -72,9 +89,10 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   constructor(
     private nbMenuService: NbMenuService,
-    private apiService: ApiService
-    ,
-    private drawerMngr: DrawerService,
+    private apiService: ApiService,
+    private engagementService: EngagementService,
+
+
 
     private dialogService: NbDialogService,
 
@@ -91,19 +109,30 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   deleteStep(ref) {
 
-    this.apiService.deleteStepToFinding(this.finding_id, this.step_id).subscribe(
-      _ => {
 
-        if (_.status == true) {
-          this.windowService.closeAll();
-          ref.close();
+    this.getActiveEngagementId().pipe(
 
-          this.openDrawer(this.createFindingTmpl)
+
+      switchMap(engagement_id => {
+
+        return this.apiService.deleteStepToFinding(engagement_id, this.finding_id, this.step_id)
+      })
+
+    )
+      .subscribe(
+        _ => {
+
+          if (_.status == true) {
+            // this.windowService.closeAll();
+            // this.openDrawer(this.createFindingTmpl);
+            this.close()
+            ref.close();
+
+          }
+
         }
 
-      }
-
-    );
+      );
 
   }
   ngOnInit(): void {
@@ -116,10 +145,15 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
       startWith(true),
 
-      switchMap(
-        _ => {
+      switchMap(_ => {
+        return this.getActiveEngagementId()
+      })
+      ,
 
-          return this.apiService.getStepToFinding(this.finding_id, this.step_id).pipe(
+      switchMap(
+        engaement_id => {
+
+          return this.apiService.getStepToFinding(engaement_id, this.finding_id, this.step_id).pipe(
 
             tap(_ => {
               console.log('___', _);
@@ -135,17 +169,76 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   }
 
-  saveAttr(data) {
+  getActiveEngagementId() {
+    return this.engagementService.activeEngagement.pipe(
+      first(),
+      map(_ => _.id)
+    )
+  }
+
+  addStep(data , window_id?: string) {
+
+
+
+    if (!!window_id) {
+
+      window_id = this.window_id;
+    }
 
 
     this.saving$ = true;
-    this.apiService.updateStepToFinding(this.finding_id, this.step_id, data).subscribe(_ => {
-      this.saving$ = false;
 
-      this.loadDetails.next(true);
+    this.getActiveEngagementId().pipe(
 
-    })
+      switchMap((id => {
+        return this.apiService.addStepToFinding(id, this.finding_id, data,)
+      })
+
+      )).subscribe(_ => {
+        this.saving$ = false;
+        this.loadDetails.next(true);
+
+        // this.openDrawer(this.createFindingTmpl)
+        this.close(window_id);
+
+
+
+      })
+
+
+
   }
+
+
+
+  saveAttr(data, window_id) {
+
+
+    console.log('closesaveAttr', window_id)
+    this.saving$ = true;
+
+    this.getActiveEngagementId().pipe(
+
+      switchMap((engagement_id => {
+        return this.apiService.updateStepToFinding(engagement_id, this.finding_id, this.step_id, data,)
+      })
+
+      )).subscribe(_ => {
+
+        this.saving$ = false;
+
+        this.loadDetails.next(true);
+
+
+        this.close(window_id);
+
+
+      })
+
+
+  }
+
+
 
   images = [
 
@@ -165,48 +258,55 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
 
 
+
     const files: { [key: string]: File } = elementRef.files;
     for (let key in files) {
       if (!isNaN(parseInt(key))) {
         this.files.add(files[key]);
 
-        this.apiService.uploadToFinding(files[key], this.finding_id, this.step_id, attr, 'step')
-          .pipe(mergeMap(_ => _))
-          .pipe(
-          // mergeMap(_ => {
+        this.getActiveEngagementId().subscribe(engagment_id => {
 
-          //   return this.apiService.updateApplicationById(id, this.environment, {
-          //     file: _['data']
-          //   })
 
-          // })
-        )
-          .pipe(
-            catchError((err, exc) => {
 
-              return EMPTY;
-            }),
+          this.apiService.uploadToFinding(files[key], engagment_id, this.finding_id, this.step_id, attr, 'step')
+            .pipe(mergeMap(_ => _))
+            .pipe(
+            // mergeMap(_ => {
+
+            //   return this.apiService.updateApplicationById(id, this.environment, {
+            //     file: _['data']
+            //   })
+
+            // })
           )
-          .subscribe(
-            {
-              next: (data) => {
+            .pipe(
+              catchError((err, exc) => {
+
+                return EMPTY;
+              }),
+            )
+            .subscribe(
+              {
+                next: (data) => {
 
 
 
 
-              },
+                },
 
-              error: (err) => console.log("BOOBOO", err),
-              complete: () => this.loadDetails.next(true),
+                error: (err) => console.log("BOOBOO", err),
+                complete: () => this.loadDetails.next(true),
 
-            }
-
-
+              }
 
 
 
 
-          );
+
+
+            );
+        })
+
       }
     }
   }
@@ -248,7 +348,16 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   }
 
-  openDialog(dialog: TemplateRef<any>) {
+  openDialog(dialog: TemplateRef<any>, context?: any): any {
+
+    let window_id = this.window_id;
+
+    if (context?.window_id) {
+
+      window_id = context?.window_id;
+    }
+
+    console.log('closeclose', this.window_id)
 
     // this.windowService.open(dialog);
     // return
@@ -271,10 +380,6 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
 
     });
-  }
-
-  addStep() {
-
   }
 
   editStep(step_id) {

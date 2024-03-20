@@ -40,17 +40,17 @@ export class DrawerService extends InjectionRegistryService<DrawerComponent> {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
-  create(options: DrawerOptions) {
+  create(options: DrawerOptions) : any{
 
     // const windowRef = this.windowService.open(options.template, { title: 'Hello' , closeOnBackdropClick : true  , windowClass: 'ngx-drawer', buttons: { fullScreen: false , minimize: false, maximize: false } });
 
-    this.windowService.open(options.template , 
+   let windowRef =  this.windowService.open(options.template , 
       {
         context: options.context
       });
 
 
-    return;
+    return windowRef;
     
     const component = super.create(options);
     this.createSubscriptions(component, options.isRoot, options.parentContainer);

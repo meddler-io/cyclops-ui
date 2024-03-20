@@ -1,22 +1,30 @@
 <nb-card class="nb-theme-default" fxFill>
 
 
-    <nb-card-header >
+    <nb-card-header>
+
+
+
 
         <div fxLayoutAlign="center center" fxLayoutGap="0rem" fxLayout="row" class="header">
 
-            <button size="large" status="basic" ghost nbButton>
+            <button
+            (click)="close()"
+            size="large" status="basic" ghost nbButton>
 
-                <nb-icon icon="arrow-left-outline"></nb-icon>
+                <nb-icon icon="chevron-left-outline"></nb-icon>
 
             </button>
 
             <div fxFlex>
                 Finding
 
+
             </div>
 
-          
+            <!-- <button size="small" outline nbButton>                Save            </button> -->
+
+
 
 
 
@@ -26,26 +34,12 @@
 
 
 
-
-
-
-        <div fxLayout="row">
-
-            <app-engagement-finding-basic-details
-            [readonly]="true"
-            fxFlex [finding_id]="finding_id">
-            </app-engagement-finding-basic-details>
-
-            <!-- <app-vertical-component-label label="Details"> </app-vertical-component-label> -->
-
-        </div>
-
         <div fxLayout="row">
 
             <app-engagement-finding-cwe-selector
-            [readonly]="true"
             
-            [finding_id]="finding_id">
+            (invalidate)="oninvalidate($event)"
+            [draft]="draft" [readonly]="readonly" [finding_id]="finding_id">
             </app-engagement-finding-cwe-selector>
 
             <!-- <app-vertical-component-label label="CWE"> </app-vertical-component-label> -->
@@ -54,34 +48,47 @@
 
 
 
-        <div fxLayout="row">
+        <ng-container *ngIf="draft ==  false ">
 
-            <app-engagement-steps-to-reproduce
-            [readonly]="true"
-            
-            fxFlex [finding_id]="finding_id">
 
-            </app-engagement-steps-to-reproduce>
+            <div fxLayout="row">
 
-            <!-- <app-vertical-component-label label="Steps to reproduce"> </app-vertical-component-label> -->
+                <app-engagement-finding-basic-details [draft]="draft" [readonly]="readonly" fxFlex
+                    [finding_id]="finding_id">
+                </app-engagement-finding-basic-details>
 
-            <!-- 658c9421086a02a65aef6b6f -->
-        </div>
+                <!-- <app-vertical-component-label label="Details"> </app-vertical-component-label> -->
 
-        <div *ngIf="false" fxLayout="row">
-
-            <app-engagement-impact
-            [readonly]="true"
-            
-            fxFlex [finding_id]="finding_id">
-
-            </app-engagement-impact>
-
-            <!-- <app-vertical-component-label label="Impact"> </app-vertical-component-label> -->
+            </div>
 
 
 
-        </div>
+
+            <div fxLayout="row">
+
+                <app-engagement-steps-to-reproduce [draft]="draft" [readonly]="readonly" fxFlex
+                    [finding_id]="finding_id">
+
+                </app-engagement-steps-to-reproduce>
+
+                <!-- <app-vertical-component-label label="Steps to reproduce"> </app-vertical-component-label> -->
+
+                <!-- 658c9421086a02a65aef6b6f -->
+            </div>
+
+            <div *ngIf="false" fxLayout="row">
+
+                <app-engagement-impact [draft]="draft" [readonly]="readonly" fxFlex [finding_id]="finding_id">
+
+                </app-engagement-impact>
+
+                <!-- <app-vertical-component-label label="Impact"> </app-vertical-component-label> -->
+
+
+
+            </div>
+        </ng-container>
+
 
     </nb-card-body>
 </nb-card>
