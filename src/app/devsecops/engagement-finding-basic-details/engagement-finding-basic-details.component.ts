@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { delay, first, map, startWith, Subject, switchMap } from 'rxjs';
+import { delay, first, map, Observable, startWith, Subject, switchMap, tap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
 
@@ -10,26 +10,41 @@ import { EngagementService } from '../engagement.service';
 })
 export class EngagementFindingBasicDetailsComponent {
 
-  @Input('readonly') readonly ;;
+  @Input('readonly') readonly;;
   @Input('draft') draft;
 
 
   @Input('finding_id') finding_id;
 
+  private engagement_id;
+
   loadDetails = new Subject()
 
   findingDetails;
 
+
+  @Input('onrefresh') onrefresh: Observable<string>;
+  onRefreshPushEventHandler() {
+    this.onrefresh?.subscribe(_ => {
+
+      console.log('onRefreshPushEventHandler', _)
+      this.loadDetails.next(_);
+    })
+  }
+
+
   constructor(
-    private engagementService: EngagementService,
+    // private engagementService: EngagementService,
 
     private apiService: ApiService) { }
 
   ngOnInit(): void {
 
+
+    this.onRefreshPushEventHandler();
     this.findingDetails = this.loadDetails.asObservable().pipe(
 
-      
+
 
       startWith(true),
 
@@ -38,30 +53,36 @@ export class EngagementFindingBasicDetailsComponent {
 
           return this.apiService.getAssessmentsFindingsById(this.finding_id).pipe(map(_ => _.data))
 
-        }))
-        
+        })
+
+      ,
+      tap((_: any) => {
+        this.engagement_id = _?.assessment_id?.$oid;
+
+
+      })
+
+    )
+
+
 
 
   }
 
   saving$ = false;
 
-  updateFinding( finding_id ,  data) {
 
 
-    return this.engagementService.activeEngagement.pipe(
-      first(),
+  updateFinding(finding_id, data) {
 
-      switchMap(_ => {
 
-        return this.apiService.updateFinding(_.id , finding_id, data);
-      })
+    return this.apiService.updateFinding(this.engagement_id, finding_id, data);
 
-    )
 
   }
 
   saveAttr(data) {
+
 
 
     this.saving$ = true;

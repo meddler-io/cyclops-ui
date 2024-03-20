@@ -1,9 +1,30 @@
-import { Component, ComponentRef, Injectable, Injector, OnInit, TemplateRef } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { ChangeDetectionStrategy, Component, ComponentRef, Injectable, Injector, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { NbComponentPortal, NbComponentType, NbWindowComponent, NbWindowConfig, NbWindowRef, NbWindowsContainerComponent, NbWindowService, NB_WINDOW_CONTENT, NB_WINDOW_CONTEXT, NbWindowState } from '@nebular/theme';
-import { first, of, tap } from 'rxjs';
+import { Subject, first, of, tap } from 'rxjs';
+import { DRAWER_ANIMATION } from './devsecops/drawer/drawer.animation';
+import { DrawerDirection } from './devsecops/drawer/drawer-direction.enum';
+
 
 @Component({
   selector: 'nb-window-2',
+  animations: [trigger('drawerTransition', DRAWER_ANIMATION)],
+
+  // host: {
+  //   role: 'dialog',
+  //   tabindex: '-1',
+  //   '[class]': 'cssClasses',
+  //   '[style.width]': 'widthSize',
+  //   '[style.height]': 'heightSize',
+  //   '[style.zIndex]': 'zIndex',
+  //   '[style.position]': 'position',
+  //   '[@drawerTransition]': 'direction'
+  // },
+  // encapsulation: ViewEncapsulation.None,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
+
+
+
   styles: [
 
 
@@ -28,13 +49,20 @@ import { first, of, tap } from 'rxjs';
 })
 export class CustomContainerComponent extends NbWindowComponent implements OnInit {
 
+  @Input() cssClass: string = '';
+  @Input() direction: any = DrawerDirection.Left;
+
+
+
+  sidebarState;
+
+
+  
+
+  
 
   windowRef: NbWindowRef;
 
-  ngOnInit(): void {
-
-    console.log('windowRefwindowRef', this.windowRef, this.elementRef)
-  }
 
 
   //   <nb-card>
@@ -56,6 +84,7 @@ export class NewSidebarService extends NbWindowService {
   previous_stacked_window: any[][] = [];
 
 
+  onClose$ = new Subject<string>();
 
   closeAll() {
     console.log('clisngwindows', this.openWindows.length)
@@ -94,6 +123,8 @@ export class NewSidebarService extends NbWindowService {
 
       windowRef.onClose.pipe(
         tap(_ => {
+
+
 
           this.counter -= 1;
 
@@ -190,6 +221,9 @@ export class NewSidebarService extends NbWindowService {
 
     console.log('windowRef', windowRef.componentRef, windowRef.componentRef.instance)
 
+    windowRef.onClose.subscribe(_=>{
+      this.onClose$.next(windowId);
+    })
 
     if (attachBackdropHandler) {
 

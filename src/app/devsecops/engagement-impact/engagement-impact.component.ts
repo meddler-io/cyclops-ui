@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, filter, map, of, startWith, Subject, switchMap } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, startWith, Subject, switchMap } from 'rxjs';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
 
@@ -19,7 +19,7 @@ export class EngagementImpactComponent {
 
 
 
-  refreshFinding = new Subject();
+  loadDetails = new Subject();
   finding$;
 
   dataForm = this.fb.group({
@@ -29,6 +29,17 @@ export class EngagementImpactComponent {
 
   get impact() {
     return this.dataForm.get('impact') as FormArray;
+  }
+
+
+
+  @Input('onrefresh') onrefresh : Observable<string>;
+  onRefreshPushEventHandler(){
+    this.onrefresh?.subscribe(_=>{
+      
+      console.log('onRefreshPushEventHandler', _)
+      this.loadDetails.next(_);
+    })
   }
 
   constructor(
@@ -48,6 +59,7 @@ export class EngagementImpactComponent {
   ngOnInit(): void {
 
 
+    this.onRefreshPushEventHandler();
 
     this.finding$ = combineLatest([of(this.finding_id), this.activatedRoute.paramMap.pipe(
 
@@ -67,7 +79,7 @@ export class EngagementImpactComponent {
           console.log('bommmerr', finding_id);
 
 
-          return this.refreshFinding.pipe(
+          return this.loadDetails.pipe(
             startWith(true),
             switchMap(_ => {
               return this.apiService.getAssessmentsFindingsById(finding_id).pipe(map(_ => _.data))

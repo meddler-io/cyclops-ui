@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NbDialogService, NbMenuService, NbSidebarService } from '@nebular/theme';
-import { catchError, EMPTY, filter, first, map, mergeMap, startWith, Subject, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, filter, first, map, mergeMap, of, startWith, Subject, switchMap, tap } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../api.service';
@@ -18,6 +18,8 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
 
   @Input('window_id') window_id;
+
+  @Input('engagement_id') engagement_id;
 
   close(window_id?: string) {
     if (window_id)
@@ -90,7 +92,7 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
   constructor(
     private nbMenuService: NbMenuService,
     private apiService: ApiService,
-    private engagementService: EngagementService,
+
 
 
 
@@ -110,15 +112,10 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
   deleteStep(ref) {
 
 
-    this.getActiveEngagementId().pipe(
+
+    return this.apiService.deleteStepToFinding(this.engagement_id, this.finding_id, this.step_id)
 
 
-      switchMap(engagement_id => {
-
-        return this.apiService.deleteStepToFinding(engagement_id, this.finding_id, this.step_id)
-      })
-
-    )
       .subscribe(
         _ => {
 
@@ -145,15 +142,12 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
       startWith(true),
 
-      switchMap(_ => {
-        return this.getActiveEngagementId()
-      })
-      ,
+
 
       switchMap(
-        engaement_id => {
+        _ => {
 
-          return this.apiService.getStepToFinding(engaement_id, this.finding_id, this.step_id).pipe(
+          return this.apiService.getStepToFinding(this.engagement_id, this.finding_id, this.step_id).pipe(
 
             tap(_ => {
               console.log('___', _);
@@ -169,14 +163,9 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
   }
 
-  getActiveEngagementId() {
-    return this.engagementService.activeEngagement.pipe(
-      first(),
-      map(_ => _.id)
-    )
-  }
 
-  addStep(data , window_id?: string) {
+
+  addStep(data, window_id?: string) {
 
 
 
@@ -188,22 +177,21 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
 
     this.saving$ = true;
 
-    this.getActiveEngagementId().pipe(
-
-      switchMap((id => {
-        return this.apiService.addStepToFinding(id, this.finding_id, data,)
-      })
-
-      )).subscribe(_ => {
-        this.saving$ = false;
-        this.loadDetails.next(true);
-
-        // this.openDrawer(this.createFindingTmpl)
-        this.close(window_id);
 
 
 
-      })
+    this.apiService.addStepToFinding(this.engagement_id, this.finding_id, data,
+
+    ).subscribe(_ => {
+      this.saving$ = false;
+      this.loadDetails.next(true);
+
+      // this.openDrawer(this.createFindingTmpl)
+      this.close(window_id);
+
+
+
+    })
 
 
 
@@ -217,13 +205,12 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
     console.log('closesaveAttr', window_id)
     this.saving$ = true;
 
-    this.getActiveEngagementId().pipe(
 
-      switchMap((engagement_id => {
-        return this.apiService.updateStepToFinding(engagement_id, this.finding_id, this.step_id, data,)
-      })
 
-      )).subscribe(_ => {
+    this.apiService.updateStepToFinding(this.engagement_id, this.finding_id, this.step_id, data,)
+
+
+      .subscribe(_ => {
 
         this.saving$ = false;
 
@@ -264,50 +251,48 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
       if (!isNaN(parseInt(key))) {
         this.files.add(files[key]);
 
-        this.getActiveEngagementId().subscribe(engagment_id => {
 
 
+        this.apiService.uploadToFinding(files[key], this.engagement_id, this.finding_id, this.step_id, attr, 'step')
+          .pipe(mergeMap(_ => _))
+          .pipe(
+          // mergeMap(_ => {
 
-          this.apiService.uploadToFinding(files[key], engagment_id, this.finding_id, this.step_id, attr, 'step')
-            .pipe(mergeMap(_ => _))
-            .pipe(
-            // mergeMap(_ => {
+          //   return this.apiService.updateApplicationById(id, this.environment, {
+          //     file: _['data']
+          //   })
 
-            //   return this.apiService.updateApplicationById(id, this.environment, {
-            //     file: _['data']
-            //   })
+          // })
+        )
+          .pipe(
+            catchError((err, exc) => {
 
-            // })
+              return EMPTY;
+            }),
           )
-            .pipe(
-              catchError((err, exc) => {
-
-                return EMPTY;
-              }),
-            )
-            .subscribe(
-              {
-                next: (data) => {
+          .subscribe(
+            {
+              next: (data) => {
 
 
 
 
-                },
+              },
 
-                error: (err) => console.log("BOOBOO", err),
-                complete: () => this.loadDetails.next(true),
+              error: (err) => console.log("BOOBOO", err),
+              complete: () => this.loadDetails.next(true),
 
-              }
+            }
 
 
 
 
 
 
-            );
-        })
-
+          );
       }
+
+
     }
   }
 

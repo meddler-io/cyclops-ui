@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild 
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
-import { BehaviorSubject, combineLatest, debounceTime, delay, distinctUntilChanged, first, map, of, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, delay, distinctUntilChanged, first, map, Observable, of, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
@@ -14,12 +14,16 @@ import { EngagementService } from '../engagement.service';
 })
 export class EngagementFindingCweSelectorComponent implements OnInit {
 
-  @Output('invalidate') onInvalidate = new EventEmitter();
+
 
   @Input('finding_id') finding_id;
   @Input('readonly') readonly;;
   @Input('draft') draft;
   @Input('window_id') window_id;
+
+
+
+
 
   close(){
     this.windowService.closeById(this.window_id);
@@ -92,10 +96,21 @@ export class EngagementFindingCweSelectorComponent implements OnInit {
 
   }
 
+
+  @Input('onrefresh') onrefresh : Observable<string>;
+  onRefreshPushEventHandler(){
+    this.onrefresh?.subscribe(_=>{
+      
+      console.log('onRefreshPushEventHandler', _)
+      this.refreshFinding.next(true);
+    })
+  }
+  
   ngOnInit(): void {
 
 
-    this.onInvalidate.next(true);
+
+
 
 
     // this.active_cwe = this.apiService.getAssessmentsFindingsById(
