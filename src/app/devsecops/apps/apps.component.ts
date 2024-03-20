@@ -112,10 +112,7 @@ export class AppsComponent implements OnInit, AfterViewInit {
       closeOnOutsideClick,
       parentContainer,
       isRoot
-    }).onDestroy(_ => {
-
-    });
-
+    })
   }
 
   goToApp(app,  $event){

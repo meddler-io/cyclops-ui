@@ -56,6 +56,24 @@ export class CreateDastComponent {
 
   }
 
+  gotoEngagementRoute( engagement_id ) {
+
+
+    this.router.navigate(
+      [
+
+        '/',
+        'devsec',
+        'engagement',
+        engagement_id
+      ]
+      
+    
+    );
+
+
+  }
+
   saveUrl(id, url) {
 
     this.reconfirm.next({
@@ -384,9 +402,17 @@ export class CreateDastComponent {
   }
 
   createEngagement() {
-    this.apiService.createSastEngagement(
+    this.apiService.createDastEngagement(
       this.application_id,
       Array.from(this.tags.values()),
-      this.changelogs.value).subscribe()
+      this.changelogs.value).subscribe(_=>{
+        console.log('created', _)
+        if(_.status == true){
+          let id = _?._id;
+          this.gotoEngagementRoute(id);
+
+          
+        }
+      })
   }
 }

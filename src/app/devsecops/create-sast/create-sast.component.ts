@@ -247,6 +247,31 @@ export class CreateSastComponent {
     this.apiService.createSastEngagement(
       this.application_id, 
       Array.from(this.tags.values() )  ,
-      this.changelogs.value ).subscribe()
+      this.changelogs.value ).subscribe(_=>{
+        console.log('created', _)
+        if(_.status == true){
+          let id = _?._id;
+          this.gotoEngagementRoute(id);
+
+          
+        }
+      })
+  }
+  gotoEngagementRoute( engagement_id ) {
+
+
+    this.router.navigate(
+      [
+
+        '/',
+        'devsec',
+        'engagement',
+        engagement_id
+      ]
+      
+    
+    );
+
+
   }
 }

@@ -217,7 +217,7 @@ export class ApiService {
       }
 
     ).pipe(
-      map(_ => _?.data)
+
     )
   }
 
@@ -231,7 +231,7 @@ export class ApiService {
       }
 
     ).pipe(
-      map(_ => _?.data)
+
     )
   }
 
@@ -245,7 +245,7 @@ export class ApiService {
       }
 
     ).pipe(
-      map(_ => _?.data)
+
     )
   }
 
