@@ -202,7 +202,7 @@ export class EngagementStepToReproduceComponent implements OnInit, AfterViewInit
   saveAttr(data, window_id) {
 
 
-    console.log('closesaveAttr', window_id)
+    console.log('closesaveAttr', window_id, this.engagement_id)
     this.saving$ = true;
 
 
