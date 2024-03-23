@@ -10,6 +10,12 @@
   flex: 1;
 }
 
+
+.padding-match-list-item{
+  padding-left: var(--list-item-padding);
+  padding-right: var(--list-item-padding);
+}
+
 td {
 
   text-transform: capitalize;
@@ -290,7 +296,7 @@ nb-card-header {
   background: nb-theme(background-basic-color-3) !important;
   margin: 0px;
   padding: 4px;
-  overflow: hidden;
+  // overflow: hidden;
 
 
 }

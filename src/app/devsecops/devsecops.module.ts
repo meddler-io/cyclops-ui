@@ -120,6 +120,8 @@ import { FindingsSummaryBarChartComponent } from './findings-summary-bar-chart/f
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BlockLoadingAnimationComponent } from './block-loading-animation/block-loading-animation.component';
 import { SeverityButtonComponent } from './severity-button/severity-button.component';
+import { DebugModuleModule } from './debug-module/debug-module.module';
+import { EngagementFindingSeverityComponent } from './engagement-finding-severity/engagement-finding-severity.component';
 
 
 
@@ -129,6 +131,7 @@ import { SeverityButtonComponent } from './severity-button/severity-button.compo
   declarations:  [  
     
 
+    EngagementFindingSeverityComponent,
     PerformanceDebugComponent,
 
     FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent, LayoutBootstrapComponent, ManageAppSidebarComponent, BPSelectorComponent, APSelectorComponent, ManageTeamComponent, DebugWindowComponent, AppsComponent, AppBriefDetailsComponent, PaginatorComponent, CreateEngagementComponent, CreateDastComponent, CreateSastComponent, CreatePentestComponent, LayoutAppComponent, ManageAppDetailSidebarComponent, AppGeneralsettingsComponent, EngagementLayoutComponent, EngagementCreateFindingComponent, EngagementDetailsComponent, EngagementFindingsToRevalidateComponent, EngagementAssignToComponent, EngagementFindingsComponent, EngagementSelectFindingComponent, HighlightPipe, EngagementStepToReproduceComponent, EngagementStepsToReproduceComponent, EngagementImpactComponent, EngagementImpactStepComponent, EngagementFindingBasicDetailsComponent, EngagementFindingCweSelectorComponent, VerticalComponentLabelComponent, FindingsSummaryBarChartComponent, BlockLoadingAnimationComponent, SeverityButtonComponent],
@@ -137,6 +140,7 @@ import { SeverityButtonComponent } from './severity-button/severity-button.compo
 
 
 
+    DebugModuleModule,
 
     NgxChartsModule,
 

@@ -20,6 +20,17 @@
 
             </div>
 
+            <div>
+
+                <app-engagement-finding-severity
+                [onrefresh]="onRefresh$" [draft]="draft" [readonly]="readonly"
+                [finding_id]="finding_id"                >
+
+                </app-engagement-finding-severity>
+          
+                
+            </div>
+
             <!-- <button size="small" outline nbButton>                Save            </button> -->
 
 
@@ -34,8 +45,8 @@
 
         <div fxLayout="row">
 
-            <app-engagement-finding-cwe-selector [onrefresh]="onRefresh$" 
-                [draft]="draft" [readonly]="readonly" [finding_id]="finding_id">
+            <app-engagement-finding-cwe-selector [onrefresh]="onRefresh$" [draft]="draft" [readonly]="readonly"
+                [finding_id]="finding_id">
             </app-engagement-finding-cwe-selector>
 
             <!-- <app-vertical-component-label label="CWE"> </app-vertical-component-label> -->

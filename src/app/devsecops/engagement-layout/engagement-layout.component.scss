@@ -103,3 +103,10 @@ nb-list {
         padding: 10px !important;
 
 }
+
+::ng-deep nb-layout-footer{
+    nav{
+    padding: 0 !important;
+
+    }
+}

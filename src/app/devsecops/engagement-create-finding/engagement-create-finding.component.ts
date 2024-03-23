@@ -4,6 +4,7 @@ import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
 import { NbWindowRef } from '@nebular/theme';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
+import { Severity } from 'src/environments/constants';
 
 @Component({
   selector: 'app-engagement-create-finding',
@@ -25,6 +26,8 @@ export class EngagementCreateFindingComponent implements OnInit, OnDestroy {
 
   @Input('window_id') window_id;
 
+
+
   close() {
     this.sidebarService.closeById(this.window_id);
   }
@@ -45,7 +48,7 @@ export class EngagementCreateFindingComponent implements OnInit, OnDestroy {
 
   onRefresh$ = new Subject<string>();
 
-  refresh(id){
+  refresh(id) {
 
     this.onRefresh$.next(id);
   }

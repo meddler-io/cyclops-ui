@@ -1,0 +1,14 @@
+
+    
+    
+    <nb-select
+    
+    [formControl]="currentState"
+    placeholder="Select Showcase" >
+    <nb-option
+    
+    *ngFor="let state of states"
+    [value]="state">{{state}}</nb-option>
+    
+</nb-select>
+

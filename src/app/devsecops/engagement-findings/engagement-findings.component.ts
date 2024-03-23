@@ -2,7 +2,7 @@ import { AfterViewInit, Component, HostListener, OnInit, QueryList, TemplateRef,
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NbCheckboxComponent, NbContextMenuDirective, NbPosition, NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
-import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject, shareReplay, Observable, take } from 'rxjs';
+import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject, shareReplay, Observable, take, of } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
 import { DrawerDirection } from '../drawer/drawer-direction.enum';
@@ -10,9 +10,13 @@ import { DrawerService } from '../drawer/drawer.service';
 import { EngagementService } from '../engagement.service';
 import { FindingStatsComponent } from '../finding-stats/finding-stats.component';
 import { ColorSeverity } from 'src/environments/constants';
+import { trigger } from '@angular/animations';
+import { DRAWER_ANIMATION } from '../drawer/drawer.animation';
 
 @Component({
   selector: 'app-engagement-findings',
+  animations: [trigger('drawerTransition', DRAWER_ANIMATION)],
+
   templateUrl: './engagement-findings.component.html',
   styleUrls: ['./engagement-findings.component.scss']
 })
@@ -24,20 +28,27 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   ColorSeverity = ColorSeverity;
   @ViewChild(NbContextMenuDirective) contextMenu: NbContextMenuDirective;
 
-  markMode = true;
+  markMode = false;
 
   markAll$ = false;
 
-  markAll(findings: Observable<any[]>) {
+  markAll( ) {
 
-    console.log('markAll', findings)
 
-    findings.pipe(
+
+    this.findings$.pipe(
       take(1),
-      tap(_ => {
+      tap((_: any[]) => {
         _.forEach(_ => {
 
-          this.markedFindings.add(_?._id?.$oid)
+          _?.subscribe(_ => {
+
+
+            if (_?.marked_for_review_under_other_engagement == false)
+              this.markedFindings.add(_?._id?.$oid)
+
+          })
+
 
           return true;
         })
@@ -53,14 +64,23 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   markModeChanged() {
     this.markAll$ = false;
     this.markedFindings.clear();
+
+    if(this.markMode){
+      this.markAll();
+    }
+  }
+
+  markFindingWithChecks(finding, id) {
+
   }
 
   markFinding(marked, index, id) {
 
-    this.markedFindings.entries()
 
 
-    console.log('marked', marked, index, id, this.markedFindings.size)
+
+
+
     if (marked == true)
       this.markedFindings.add(id);
     else
@@ -106,6 +126,9 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
 
   under_review_count = 0;
+  under_review_others_count = 0;
+  under_review_current_count = 0;
+
   open_count = 0;
   all_count = 0;
 
@@ -172,6 +195,11 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     this.refreshFindings()
   }
 
+
+  refreshFinding(_id) {
+    this.refreshIndividualFindingSignal.get(_id).next(1);
+
+  }
   selectedBuildId = new FormControl();
 
 
@@ -315,6 +343,8 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   refreshFindings() {
     console.log('refreshFindings');
+    this.markMode = false;
+
     // this.triggerRefresh.next(true);
     let loadMoreFindings = this.loadMoreFindings$.value;
     // console.log('loadMoreFindings', loadMoreFindings)
@@ -399,7 +429,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
       const timestamp = Date.now();
 
       this.loading_staate_for_individual.set(_id, timestamp);
-      console.log('markForVerification', engagement_id, _id);
+      console.log('markForVerification', engagement_id, _id, data);
 
       this.refreshFindings();
 
@@ -445,6 +475,64 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
       ,
       map(_ => _.id)
     );
+
+
+  refreshIndividualFindingSignal = new Map<string, any>();
+
+  findingMappedFunc$ = (_, timestamp, engagement_id) => {
+
+
+    if (this.loading_staate_for_individual.has(_?._id?.$oid)) {
+      if (this.loading_staate_for_individual.get(_?._id?.$oid) <= timestamp) {
+
+        this.loading_staate_for_individual.delete(_?._id?.$oid)
+
+      }
+
+
+    }
+
+
+
+
+    _.engagement_id = engagement_id;
+
+    _.engagement_ids_under_review = _.engagement_ids_under_review.map(_ => _.$oid);
+
+
+
+
+
+    switch (_.severity) {
+      case 'Info':
+        _.color = ColorSeverity.INFO;
+
+        break;
+      case 'Low':
+        _.color = ColorSeverity.LOW;
+
+        break;
+
+      case 'Medium':
+        _.color = ColorSeverity.MEDIUM;
+
+        break;
+      case 'High':
+        _.color = ColorSeverity.HIGH;
+
+        break;
+      case 'Critical':
+        _.color = ColorSeverity.CRITICAL;
+
+        break;
+    }
+
+
+    return _;
+
+  }
+
+
   ngOnInit(): void {
 
 
@@ -462,7 +550,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
                 map(page_number => {
 
                   const timestamp = Date.now();
-                  console.log('timevalidate', timestamp);
+
                   return this.apiService.getOpenFindingsByAssessment(filter_state, engagement_id, page_number).pipe(
 
                     map(_ => {
@@ -472,6 +560,10 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
 
                       this.under_review_count = _?.under_review_count || 0;
+                      this.under_review_current_count = _?.under_review_current_count || 0;
+                      this.under_review_others_count = _?.under_review_others_count || 0;
+
+
                       this.all_count = _?.all_count || 0;
                       this.open_count = _?.open_count || 0;
 
@@ -489,49 +581,54 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
                       this.totalPages = this.math.ceil(this.totalFindings / defaultPageSize)
                       console.log('totalFindings', this.totalFindings, this.totalPages)
 
+
+                      _.data = _.data.map((_) => { return this.findingMappedFunc$(_, timestamp, engagement_id) })
+
+
+
+
+
+                      this.refreshIndividualFindingSignal.clear();
                       _.data = _.data.map(_ => {
 
 
-                        if (this.loading_staate_for_individual.has(_?._id?.$oid)) {
-                          if (this.loading_staate_for_individual.get(_?._id?.$oid) <= timestamp) {
-                            console.log('timevalidate', 'loading', this.loading_staate_for_individual);
-                            this.loading_staate_for_individual.delete(_?._id?.$oid)
-
-                          }
+                        let refSignal = new BehaviorSubject(undefined).pipe(
 
 
-                        }
+                          switchMap((value: any) => {
+                            console.log('bububub', value);
+                            if (value) {
+                              // If a value is emitted, switch to fetching data from the API
+                              return this.apiService.getOpenFindingsByAssessmentByFindingId(engagement_id, _?._id?.$oid).pipe(
+                                map(_ => _?.data),
+                                map(_ => {
+                                  return this.findingMappedFunc$(_, timestamp, engagement_id)
+                                })
+                              );
+                            } else {
+                              // If no value is emitted, return an empty observable
+                              return of(_);
+                            }
+                          }),
 
 
 
-                        _.engagement_id = engagement_id;
-                        switch (_.severity) {
-                          case 'Info':
-                            _.color = ColorSeverity.INFO;
+                        );
 
-                            break;
-                          case 'Low':
-                            _.color = ColorSeverity.LOW;
-
-                            break;
-
-                          case 'Medium':
-                            _.color = ColorSeverity.MEDIUM;
-
-                            break;
-                          case 'High':
-                            _.color = ColorSeverity.HIGH;
-
-                            break;
-                          case 'Critical':
-                            _.color = ColorSeverity.CRITICAL;
-
-                            break;
-                        }
+                        let _id = _._id.$oid;
 
 
-                        return _;
+
+                        this.refreshIndividualFindingSignal.set(_id, refSignal);
+                        // return of(_);
+                        return refSignal
+
                       })
+
+
+
+
+                      // _.data = _.data.map(_ => of(_))
 
                       return _.data
                     }),
@@ -561,7 +658,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
       ,
 
-      shareReplay(),
+      // shareReplay(),
 
     )
 
@@ -608,16 +705,44 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   // onClickFinding
 
 
+
+  on_click_list_item(finding_id, finding) {
+
+    if (finding?.marked_for_review_under_other_engagement == true) {
+      return
+    }
+
+
+    if (this.markMode) {
+
+      this.markFinding(!this.markedFindings.has(finding_id), 0, finding_id)
+      return;
+    }
+
+    this.view_finding(finding_id)
+
+  }
+
   view_finding(finding_id) {
+
+
     console.log('view_finding', finding_id)
     this.openDrawer({
       finding_id
 
-    }, this.viewFindingTmpl)
+    }, this.viewFindingTmpl).onClose.subscribe(_ => {
+
+      if (
+        this.refreshIndividualFindingSignal.has(finding_id)
+      ) {
+        this.refreshIndividualFindingSignal.get(finding_id).next(1)
+
+      }
+    })
   }
 
-  openDrawer(context, template = this.editTmpl, direction = 'left', size?, closeOnOutsideClick = true, isRoot = true, parentContainer?: any) {
- let boom =    this.drawerMngr.create({
+  openDrawer(context, template = this.editTmpl, direction = 'left', size?, closeOnOutsideClick = true, isRoot = true, parentContainer?: any): NbWindowRef {
+    return this.drawerMngr.create({
       direction: DrawerDirection.Left,
       template,
       size,
@@ -627,7 +752,8 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
       isRoot
     });
 
-    console.log('boomboompoo', boom)
+
+
   }
 
 
@@ -713,6 +839,8 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
           this.loading_staate_for_individual.set(_id, timestamp);
         })
+
+
 
 
         this.refreshFindings();

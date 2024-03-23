@@ -16,6 +16,20 @@ export class EngagementLayoutComponent implements OnInit {
 
 
 
+  next_step_title: Record<EngagementState, string> = {
+
+    [EngagementState.DRAFT]: 'Open',
+    [EngagementState.OPEN]: 'Initiate',
+    [EngagementState.IN_PROGRESS]: 'Publish',
+    [EngagementState.PENDING_REVIEW]: 'Review',
+    [EngagementState.UNDER_REVIEW]: 'Accept',
+    [EngagementState.ACCEPTED]: 'Close',
+    [EngagementState.REJECTED]: 'Close',
+    [EngagementState.CLOSED]: 'Archive',
+    [EngagementState.ARCHIVED]: 'No Action',
+  }
+
+
   tabs = [
     ['Details' , ['details'] , [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],
     ['Draft' , ['in_progress'], [ EngagementState.ACCEPTED , EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS  , EngagementState.OPEN , EngagementState.PENDING_REVIEW , EngagementState.REJECTED, EngagementState.UNDER_REVIEW  ]  ],

@@ -57,6 +57,8 @@ export class AppsComponent implements OnInit, AfterViewInit {
         map(
           _ => {
 
+            console.log('failure', _)
+
             return this.apiService.getApplications(_?.businessId, _?.projectId, platform);
           }
         )
@@ -102,6 +104,7 @@ export class AppsComponent implements OnInit, AfterViewInit {
   }
   openDrawer(context, direction = 'left', size?, closeOnOutsideClick = true, template = this.appDetails, isRoot = true, parentContainer?: any) {
 
+    console.log('context', context)
 
 
     this.drawerMngr.create({

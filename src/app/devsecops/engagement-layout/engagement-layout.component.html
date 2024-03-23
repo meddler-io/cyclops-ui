@@ -1,6 +1,4 @@
-<nb-layout
-withscroll
-*ngIf="engagementDetails | async as engagementDetails">
+<nb-layout withscroll *ngIf="engagementDetails | async as engagementDetails">
     <nb-layout-header fixed>
 
 
@@ -139,6 +137,10 @@ withscroll
                 {{engagementDetails?.project?.name}}
 
 
+                &nbsp;
+                {{engagementDetails?.state}}
+
+
 
             </div>
 
@@ -157,6 +159,8 @@ withscroll
 
         <button class="publish-button" outline size="small" shape="round" nbButton>
             Publish
+
+            {{next_step_title[ engagementDetails?.state ]}}
         </button>
 
         <!--  -->
@@ -213,7 +217,14 @@ withscroll
     </nb-layout-column>
 
 
-    <nb-layout-footer>
+    <nb-layout-footer
+
+    
+    style="padding: 0;">
+    <div fxFlex fxLayoutAlign="end end">
+
+        <app-manage-engagement-state fx></app-manage-engagement-state>
+    </div>
 
     </nb-layout-footer>
 </nb-layout>

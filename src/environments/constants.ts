@@ -10,6 +10,13 @@ export class ColorSeverity {
   static CRITICAL = '#c0392b';   // Critical (Darker Red)
 }
 
+export class Severity {
+  static INFO = 'Info';   // Informative (Dark Blue)
+  static LOW = 'Low';   // Low (Dark Green)
+  static MEDIUM = 'Medium';   // Medium (Dark Orange)
+  static HIGH = 'High';   // High (Dark Red)
+  static CRITICAL = 'Critical';   // Critical (Darker Red)
+}
 
 export enum Platform {
   WEBAPP = 'webapp',

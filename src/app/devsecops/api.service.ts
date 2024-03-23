@@ -6,6 +6,7 @@ import { BehaviorSubject, EMPTY, Observable, of, pipe, Subject, throwError } fro
 import { catchError, delay, distinct, distinctUntilChanged, distinctUntilKeyChanged, filter, first, map, mergeMap, share, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TransitionState } from './build-item/build-item.component';
+import { EngagementState } from 'src/environments/constants';
 
 export const PUBLIC_SSH_KEY = `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bkdt4M4kJ8K01EUxyY3c/pBCPj8ForBIQs7Up9VaWaKpJ6HqY8Z14k5KnN8T3tu2G0EOP2TQ3PIHDhQBJaU6xpEbqmYk4VCb30uRBUjfOz4xJSPqVl8DcpU7USupSSFqJMWXj4YLjVmMQTq1vA/MFAuVlpTuDOy86AnqIbq6mw4vrUpZoZegozg/jA4NzaXkQTEOYI92fWC6w1YznynFQNQtI+aXp33LhzgUGTYFLTDD7/ueINjlu5PAc2Rle8+tQ7cUxBC9xKUxzTC2+NI9PIlh6LJCiogESjLUXouNw5f7lmkIhmr9NdE3I/i1D2E6Oefgxnk9iAjbYIkl6GNv prakhar.agnihotri@prakharagnihotri.local`
 
@@ -178,7 +179,7 @@ export class ApiService {
 
   unmarkIssueToBeverified(engagement_id: string, issue_id: string) {
 
-    return this.deleteRequest(`api/v1/devsecops/engagement/${engagement_id}/${issue_id}`).pipe(
+    return this.deleteRequest(`api/v1/devsecops/engagement/${engagement_id}/mark-open/${issue_id}`).pipe(
       map(_ => _?.data)
     )
   }
@@ -1171,7 +1172,7 @@ export class ApiService {
 
   getOpenFindingsByAssessment(filter: string, assessment_id?: string, page_number: number = 1) {
 
-    return this.getRequest(`api/v1/devsecops/engagement/findings/${filter}/${assessment_id}`, {
+    return this.getRequest(`api/v1/devsecops/engagement/${assessment_id}/${filter}/findings`, {
       // 'cursor_id': '652d14878eacec4be51de38d',
       // 'type': 'OLD'
       page: page_number,
@@ -1189,6 +1190,30 @@ export class ApiService {
     )
 
   }
+
+  getOpenFindingsByAssessmentByFindingId( assessment_id: string, finding_id: string) {
+
+    return this.getRequest(`api/v1/devsecops/engagement/${assessment_id}/findings/${finding_id}`, {
+      // 'cursor_id': '652d14878eacec4be51de38d',
+      // 'type': 'OLD'
+
+
+    }).pipe(
+
+      tap(
+        _ => {
+          console.log(_)
+        }
+      ),
+
+
+
+    )
+
+  }
+
+
+  
 
   getAssessmentsFindings(business_id?: string, project_id?: string, application_id?: string, page_number: number = 1) {
 
@@ -2189,6 +2214,16 @@ export class ApiService {
       map(_ => _.data?.projects)
     )
 
+  }
+
+
+  // DEBUG End;oints
+
+  debugModifyEngagementState(engagement_id: string, state:  EngagementState ) {
+
+    return this.putRequest(`api/v1/devsecops/debug/engagement/${engagement_id}/state/${state}`).pipe(
+      map(_ => _?.data)
+    )
   }
 
 
