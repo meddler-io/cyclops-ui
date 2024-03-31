@@ -155,6 +155,20 @@ export class ApiService {
   }
 
 
+  moveFindingToDraft(engagement_id: string, issue_id: string) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/draft/${issue_id}`).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  moveFindingToPublish(engagement_id: string, issue_id: string) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/publish/${issue_id}`).pipe(
+      map(_ => _?.data)
+    )
+  }
+
   markIssueToBeverified(engagement_id: string, issue_id: string) {
 
     return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/mark-for-revalidation/${issue_id}`).pipe(
@@ -181,6 +195,13 @@ export class ApiService {
 
     return this.deleteRequest(`api/v1/devsecops/engagement/${engagement_id}/mark-open/${issue_id}`).pipe(
       map(_ => _?.data)
+    )
+  }
+
+  updateEngagementState(engagement_id: string, state: EngagementState) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/state/${state}`).pipe(
+      map(_ => _?.status)
     )
   }
 
@@ -1184,6 +1205,20 @@ export class ApiService {
           console.log(_)
         }
       ),
+
+
+
+    )
+
+  }
+
+  getOpenFindingsByAssessmentStats(assessment_id?: string) {
+
+    return this.getRequest(`api/v1/devsecops/engagement/${assessment_id}/findings/stats`, {
+
+    }).pipe(
+
+     map(_=>_.data)
 
 
 

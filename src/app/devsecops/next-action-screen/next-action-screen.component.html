@@ -1,0 +1,125 @@
+<ng-container *ngIf="activeEngagement | async as activeEngagement">
+
+
+
+    <nb-card>
+        <nb-card-header>
+
+            Assessment Confirmation
+
+
+        </nb-card-header>
+
+
+        <nb-card-body>
+
+
+            <ng-container [ngTemplateOutlet]="getTemplate( activeEngagement?.state )  "></ng-container>
+
+        </nb-card-body>
+
+        <nb-card-footer>
+
+            <div fxFlex fxLayoutGap="1rem" fxLayoutAlign="end center">
+
+
+
+                <button style="text-transform: capitalize;" size="small" nbButton ghost status="danger">
+                    Cancel
+                </button>
+
+                <button
+                (click)="confirm(   activeEngagement?.id,  activeEngagement?.state  )"
+                style="text-transform: capitalize;" size="small" nbButton outline status="success">
+                    Confirm
+                </button>
+
+            </div>
+
+        </nb-card-footer>
+
+    </nb-card>
+
+
+
+
+</ng-container>
+
+<ng-template #draft let-context>
+
+    <div *ngIf="activeEngagement | async" fxLayout="column">
+        <div fxFlex *ngIf="activeEngagement.open_count > 0 ; else  noIsssues">
+            <span class="h6 text-basic">
+
+                You've chosen to proceed with creating an assessment. <br>Revalidating <span class="h5 text-primary subtitle-2 ">
+
+                    {{activeEngagement.under_review_count}} </span> issues while <span class="h5 text-danger subtitle-2">
+
+                    {{activeEngagement.open_count}}
+                </span> issues still remain open.<br>Confirm to proceed.
+
+
+
+                <!-- {{activeEngagement | json}} -->
+            </span>
+        </div>
+
+        <ng-template #noIsssues>
+            <span class="h6 text-basic">
+                
+                You've chosen to proceed with creating an assessment.<br>
+                Revalidating <span class="h5 text-primary subtitle-2 ">
+
+                    {{activeEngagement.under_review_count}}</span>  issues. All previous open issues are marked for revalidation.<br>Confirm to proceed.
+
+            </span>
+        </ng-template>
+
+   
+        
+
+    </div>
+
+</ng-template>
+
+<ng-template #open>
+    <div fxLayout="column">
+        <div fxFlex >
+            <span class="h6 text-basic">
+                Please confirm if you wish to enqueue this assessment.
+                <!-- {{activeEngagement | json}} -->
+            </span>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #in_progress>
+    <p>in_progress</p>
+</ng-template>
+
+<ng-template #pending_review>
+    <p>pending_review</p>
+</ng-template>
+
+<ng-template #under_review>
+    <p>under_review</p>
+</ng-template>
+
+<ng-template #accepted>
+    <p>accepted</p>
+</ng-template>
+
+
+<ng-template #rejected>
+    <p>rejected</p>
+</ng-template>
+
+<ng-template #closed>
+    <p>closed</p>
+</ng-template>
+
+
+<ng-template #archived>
+    <p>archived</p>
+</ng-template>

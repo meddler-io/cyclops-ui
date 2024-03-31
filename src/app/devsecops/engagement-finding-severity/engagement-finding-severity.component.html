@@ -1,8 +1,10 @@
 <ng-container *ngIf="findingDetails | async as findingDetails">
 
     <nb-select
-    
-    outline
+    optionsPanelClass="nb-theme-default"
+    class="nb-theme-default"
+    ghost
+    status="primary"
     [selected]="findingDetails?.severity" [nbSpinner]="severityChanging"
         (selectedChange)="onSeverityChange($event, findingDetails.assessment_id.$oid)">
         <nb-option *ngFor="let severity of severity_list" [value]="severity">{{severity}}</nb-option>

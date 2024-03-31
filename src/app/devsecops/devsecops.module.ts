@@ -122,6 +122,9 @@ import { BlockLoadingAnimationComponent } from './block-loading-animation/block-
 import { SeverityButtonComponent } from './severity-button/severity-button.component';
 import { DebugModuleModule } from './debug-module/debug-module.module';
 import { EngagementFindingSeverityComponent } from './engagement-finding-severity/engagement-finding-severity.component';
+import { NextActionScreenComponent } from './next-action-screen/next-action-screen.component';
+import { ChangeFindingStateComponent } from './change-finding-state/change-finding-state.component';
+import { PopoverScrollBlockerAbstractComponent } from './popover-scroll-blocker-abstract/popover-scroll-blocker-abstract.component';
 
 
 
@@ -129,8 +132,10 @@ import { EngagementFindingSeverityComponent } from './engagement-finding-severit
 
 @NgModule({
   declarations:  [  
-    
+    NextActionScreenComponent,
 
+    ChangeFindingStateComponent,
+    PopoverScrollBlockerAbstractComponent,
     EngagementFindingSeverityComponent,
     PerformanceDebugComponent,
 
@@ -139,7 +144,7 @@ import { EngagementFindingSeverityComponent } from './engagement-finding-severit
 
 
 
-
+    
     DebugModuleModule,
 
     NgxChartsModule,

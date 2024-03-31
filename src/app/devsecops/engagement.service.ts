@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { shareReplay, Subject } from 'rxjs';
+import { BehaviorSubject, filter, shareReplay, Subject } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -9,7 +9,9 @@ export class EngagementService {
 
 
   private activeEngagement$ = new Subject<{ id: string, engagement: any }>();
-  activeEngagement = this.activeEngagement$.pipe(shareReplay())
+  activeEngagement = this.activeEngagement$.pipe(
+    filter(_=>!!_),
+    shareReplay())
 
   constructor() { }
 

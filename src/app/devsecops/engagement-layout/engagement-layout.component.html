@@ -1,56 +1,43 @@
-<nb-layout withscroll *ngIf="engagementDetails | async as engagementDetails">
+<nb-layout withscroll>
     <nb-layout-header fixed>
 
-
-
-
-
-        <div fxLayout="row" fxLayoutAlign="start center">
+        <ng-container *ngIf="engagementDetails | async as engagementDetails">
 
             <!-- Back Buttons -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+
+                <button [routerLink]=" [ '/' , 'devsec' , 'home' ] " nbButton appearance="ghost" status="info">
+                    <nb-icon icon="corner-left-up-outline">
+
+                    </nb-icon>
+                </button>
 
 
-            <button [routerLink]=" [ '/' , 'devsec' , 'home' ] " nbButton appearance="ghost" status="primary">
-                <nb-icon icon="corner-left-up-outline">
-
-                </nb-icon>
-            </button>
-
-
-
-
-
-
-            <!-- <div fxLayoutAlign="center center" fxLayout="row"> -->
-
-            <!-- {{engagementDetails?.engagement}} -->
-
-
-
-            <!-- {{engagementDetails?.state}} -->
-            <!-- </div> -->
-
-
-        </div>
-
-        <!--  -->
-        <div fxFlex fxLayoutAlign="start center">
-
-            <div>
-
-                <ng-container *ngFor="let tab of tabs ">
-
-                    <button class="tab-button" [appearance]="rla?.isActive ?  'outline' : 'ghost' "
-                        [status]="rla?.isActive ?  'info' : 'basic' " size="small" [routerLink]="tab[1]"
-                        [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive" nbButton>
-                        {{tab[0]}}
-                    </button>
-                </ng-container>
             </div>
 
 
 
-            <div *ngIf="false" fxFlex fxLayoutAlign="end center">
+
+
+            <!--  -->
+            <div fxFlex fxLayoutAlign="start center">
+
+                <div>
+
+                    <ng-container *ngFor="let tab of tabs ">
+
+                        <button class="tab-button" [appearance]="rla?.isActive ?  'outline' : 'ghost' "
+                            [status]="rla?.isActive ?  'info' : 'basic' " size="small" [routerLink]="tab[1]"
+                            [routerLinkActiveOptions]="{ exact: false }" routerLinkActive #rla="routerLinkActive"
+                            nbButton>
+                            {{tab[0]}}
+                        </button>
+                    </ng-container>
+                </div>
+
+
+
+                <!-- <div *ngIf="false" fxFlex fxLayoutAlign="end center">
 
 
 
@@ -119,51 +106,55 @@
 
 
 
-            </div>
+            </div> -->
 
-
-
-
-        </div>
-
-
-
-        <div fxLayout="column">
-            <div>
-
-                {{engagementDetails?.business?.name}}
-                <nb-icon status="info" icon="chevron-right-outline"></nb-icon>
-
-                {{engagementDetails?.project?.name}}
-
-
-                &nbsp;
-                {{engagementDetails?.state}}
 
 
 
             </div>
 
-            <div *ngIf="false" class="text-caption">
-                {{engagementDetails?.application?.title}}
-                (
-                {{engagementDetails?.application?.platform}}
 
-                )
+
+            <div fxLayout="column">
+                <div>
+
+                    {{engagementDetails?.business?.name}}
+                    <nb-icon status="info" icon="chevron-right-outline"></nb-icon>
+
+                    {{engagementDetails?.project?.name}}
+
+
+                    &nbsp;
+                    {{engagementDetails?.state}}
+
+
+
+                </div>
+
+                <div *ngIf="false" class="text-caption">
+                    {{engagementDetails?.application?.title}}
+                    (
+                    {{engagementDetails?.application?.platform}}
+
+                    )
+
+
+                </div>
 
 
             </div>
 
 
-        </div>
 
-        <button class="publish-button" outline size="small" shape="round" nbButton>
-            Publish
+            <button (click)="nextAction( dialogTemplate )" class="publish-button" outline size="small" shape="round"
+                nbButton>
+                Publish
 
-            {{next_step_title[ engagementDetails?.state ]}}
-        </button>
+                {{next_step_title[ engagementDetails?.state ]}}
+            </button>
 
-        <!--  -->
+            <!--  -->
+        </ng-container>
 
 
     </nb-layout-header>
@@ -171,35 +162,6 @@
 
 
 
-    <nb-sidebar *ngIf="false">
-
-        <nb-sidebar-header style="margin: 0px">
-            <div fxFlex fxLayoutAlign="start center">
-
-                <nb-select selected="all" size="small">
-                    <nb-option value="all">
-                        All
-                    </nb-option>
-                    <nb-option value="new">
-                        New
-                    </nb-option>
-                    <nb-option value="verify">
-                        Verify
-                    </nb-option>
-                </nb-select>
-            </div>
-        </nb-sidebar-header>
-
-        <nb-list>
-            <nb-list-item *ngFor="let finding of findings$ | async" class="subitem-header">
-                {{finding?.title}}
-            </nb-list-item>
-
-
-
-        </nb-list>
-
-    </nb-sidebar>
 
 
     <nb-layout-column style="padding: 5px;">
@@ -217,14 +179,17 @@
     </nb-layout-column>
 
 
-    <nb-layout-footer
+    <nb-layout-footer style="padding: 0;">
+        <div fxFlex fxLayoutAlign="end end">
 
-    
-    style="padding: 0;">
-    <div fxFlex fxLayoutAlign="end end">
-
-        <app-manage-engagement-state fx></app-manage-engagement-state>
-    </div>
+            <app-manage-engagement-state fx></app-manage-engagement-state>
+        </div>
 
     </nb-layout-footer>
 </nb-layout>
+
+<ng-template #dialogTemplate>
+    <app-next-action-screen>
+
+    </app-next-action-screen>
+</ng-template>

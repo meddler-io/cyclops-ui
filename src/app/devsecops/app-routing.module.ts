@@ -50,6 +50,7 @@ import { EngagementFindingsToRevalidateComponent } from "./engagement-findings-t
 import { EngagementAssignToComponent } from "./engagement-assign-to/engagement-assign-to.component";
 import { EngagementFindingsComponent } from "./engagement-findings/engagement-findings.component";
 import { EngagementSelectFindingComponent } from "./engagement-select-finding/engagement-select-finding.component";
+import { NextActionScreenComponent } from "./next-action-screen/next-action-screen.component";
 
 
 
@@ -63,6 +64,11 @@ const appRoutes: Routes = [
     component: EngagementLayoutComponent,
     children: [
 
+      {
+        path: 'test', component: NextActionScreenComponent,
+        // outlet: 'content',
+       
+      },
 
       {
         path: 'select_finding/:finding_id', component: EngagementSelectFindingComponent,
@@ -78,7 +84,15 @@ const appRoutes: Routes = [
       },
 
       {
-        path: 'draft_review', component: EngagementFindingsToRevalidateComponent,
+        path: 'draft_review', component: EngagementFindingsComponent,
+        // path: 'draft_review', component: EngagementFindingsToRevalidateComponent,
+        // outlet: 'content',
+       
+      },
+
+      {
+        path: 'findings_under_review', component: EngagementFindingsComponent,
+        // path: 'draft_review', component: EngagementFindingsToRevalidateComponent,
         // outlet: 'content',
        
       },
@@ -90,6 +104,9 @@ const appRoutes: Routes = [
       },
       {
         path: 'in_progress', component: EngagementFindingsComponent,
+        data: {
+          'mode': 'in_progress' 
+        }
         // outlet: 'content',
        
       },

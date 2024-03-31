@@ -44,6 +44,18 @@ export enum EngagementState {
 }
 
 
+export enum FindingState {
+  OPEN = "open",// The finding has been identified but has not yet been resolved or mitigated.
+  CLOSED = "closed",// The finding has been addressed and resolved satisfactorily.
+  UNDER_INVESTIGATION = "under_investigation",//The finding is being analyzed or investigated to determine its validity or severity.
+  MITiGATED = "mitigated",// Action has been taken to reduce the risk associated with the finding.
+  REOPENED = "reopened",// he finding was closed but has been reopened due to it resurfacing or not being adequately addressed.
+  PENDING_REVIEW = "pending_review",// The finding is awaiting review or approval from relevant stakeholders.
+  DEFERRED = "deferred",// The finding is acknowledged but scheduled for resolution at a later time.
+  FALSE_POSITIVE = "false_postive",// The finding was initially flagged as a security issue but has been determined to be a benign or false alert.
+  RESOLVED = "resolved", // Similar to closed, but may imply a partial resolution or temporary fix.
+  ESCALATED = "escalated", //The finding has been escalated to higher levels of authority for attention or action.
+}
 
 
 export const PlatformEngagementCompatibility: EnumDictionary<Platform, Engagement[]> = {

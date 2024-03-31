@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, HostListener, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NbCheckboxComponent, NbContextMenuDirective, NbPosition, NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
+import { NbCheckboxComponent, NbContextMenuDirective, NbOverlayService, NbPopoverComponent, NbPosition, NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
 import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject, shareReplay, Observable, take, of } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
@@ -9,7 +9,7 @@ import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
 import { EngagementService } from '../engagement.service';
 import { FindingStatsComponent } from '../finding-stats/finding-stats.component';
-import { ColorSeverity } from 'src/environments/constants';
+import { ColorSeverity, EngagementState } from 'src/environments/constants';
 import { trigger } from '@angular/animations';
 import { DRAWER_ANIMATION } from '../drawer/drawer.animation';
 
@@ -18,9 +18,11 @@ import { DRAWER_ANIMATION } from '../drawer/drawer.animation';
   animations: [trigger('drawerTransition', DRAWER_ANIMATION)],
 
   templateUrl: './engagement-findings.component.html',
-  styleUrls: ['./engagement-findings.component.scss']
+  styleUrls: ['./engagement-findings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class EngagementFindingsComponent implements OnInit, AfterViewInit {
+export class EngagementFindingsComponent implements OnInit {
 
   @ViewChildren('markFind') markFind: QueryList<NbCheckboxComponent>;
 
@@ -32,7 +34,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   markAll$ = false;
 
-  markAll( ) {
+  markAll() {
 
 
 
@@ -65,7 +67,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     this.markAll$ = false;
     this.markedFindings.clear();
 
-    if(this.markMode){
+    if (this.markMode) {
       this.markAll();
     }
   }
@@ -136,10 +138,11 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   totalPages;
 
 
-  filter_finding_tab = new BehaviorSubject('all'); // 'all' , 'open' , under_review'
+  filter_finding_tab$ = new BehaviorSubject('open'); // 'all' , 'open' , under_review' , 'under_review_others : new , recurrent , draft
+
+  filter_finding_tab = this.filter_finding_tab$.pipe(shareReplay());
 
 
-  @ViewChild('findingStatsView', { static: true }) findingStatsView: FindingStatsComponent;
   @ViewChild('editTmpl', { static: false }) editTmpl: TemplateRef<any>;
   @ViewChild('createFindingTmpl', { static: false }) createFindingTmpl: TemplateRef<any>;
   @ViewChild('viewFindingTmpl', { static: false }) viewFindingTmpl: TemplateRef<any>;
@@ -364,7 +367,7 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
   // loadingFindings$ = new BehaviorSubject(false);
   // loadingFindings = this.loadingFindings$.asObservable()
 
-  findings$;
+
 
 
 
@@ -382,18 +385,17 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     private engagementService: EngagementService,
 
 
-    private windowService: NewSidebarService
+    private windowService: NewSidebarService,
+    private overlayService: NbOverlayService,
 
 
   ) { }
-  ngAfterViewInit(): void {
-
-    // this.openDrawer({},  this.createFindingTmpl)
-
-
-
+  ngOnInit(): void {
+    console.log('afterviewinit')
 
   }
+
+
 
   goTo(slug: string) {
     this.router.navigate(['../', slug], {
@@ -439,9 +441,10 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
   switch_finding_filter(filter) {
 
+
     // this.currentPage = 0;
     this.loadMoreFindings$.next(1);
-    this.filter_finding_tab.next(filter);
+    this.filter_finding_tab$.next(filter);
   }
 
 
@@ -468,13 +471,8 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  activeEngagement = this.engagementService.activeEngagement
+  current_route = EngagementState.OPEN;
 
-    .pipe(
-      filter(_ => !!_)
-      ,
-      map(_ => _.id)
-    );
 
 
   refreshIndividualFindingSignal = new Map<string, any>();
@@ -531,154 +529,199 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
     return _;
 
   }
+  activeEngagement = this.engagementService.activeEngagement
 
+  .pipe(
+    filter(_ => !!_),
+    
+    tap(_ => {
 
-  ngOnInit(): void {
+      // return;
+      this.current_route = _.engagement.state;
+      console.log('current_route', this.current_route);
+      // return;
 
 
+      if (this.current_route == EngagementState.DRAFT) {
+        this.switch_finding_filter('all');
 
-    this.findings$ = this.filter_finding_tab.asObservable().pipe(
+      } else if (this.current_route == EngagementState.OPEN) {
+        this.switch_finding_filter('under_review_current');
 
-      switchMap(filter_state => {
+      }
+      else if (this.current_route == EngagementState.IN_PROGRESS) {
+        this.switch_finding_filter('new');
 
-        return this.activeEngagement
-          .pipe(
-            map((engagement_id) => {
+      }
+      else if (this.current_route == EngagementState.PENDING_REVIEW) {
 
+      } else if (this.current_route == EngagementState.UNDER_REVIEW) {
 
-              return this.loadMoreFindings$.pipe(
-                map(page_number => {
+      } else if (this.current_route == EngagementState.ACCEPTED) {
 
-                  const timestamp = Date.now();
+      } else if (this.current_route == EngagementState.CLOSED) {
 
-                  return this.apiService.getOpenFindingsByAssessment(filter_state, engagement_id, page_number).pipe(
+      } else if (this.current_route == EngagementState.REJECTED) {
 
-                    map(_ => {
+      }
 
 
-                      this.totalFindings = _?.count || 0;
 
 
-                      this.under_review_count = _?.under_review_count || 0;
-                      this.under_review_current_count = _?.under_review_current_count || 0;
-                      this.under_review_others_count = _?.under_review_others_count || 0;
+    })
+    ,
+    map(_ => _.id),
 
+  
+    
+  );
 
-                      this.all_count = _?.all_count || 0;
-                      this.open_count = _?.open_count || 0;
 
+  loadingFindings = false;
 
-                      this.findingsListLimit = _?.defaultPageSize || 0;
+  findings$ = this.filter_finding_tab.pipe(
 
+tap(_=>{
 
+  this.loadingFindings = true;
+  console.log('loading_cfindings', 'started');
+}),
 
-                      this.currentPage = _?.page_number;
+    switchMap(filter_state => {
 
+      console.log('boomboom', filter_state);
+      return this.engagementService.activeEngagement
+        .pipe(
+          filter(_ => !!_)
+          ,
 
-                      let defaultPageSize = _?.defaultPageSize;
+          map(_ => _.id),
 
+          map((engagement_id) => {
 
-                      this.totalPages = this.math.ceil(this.totalFindings / defaultPageSize)
-                      console.log('totalFindings', this.totalFindings, this.totalPages)
 
+            return this.loadMoreFindings$.pipe(
+              map(page_number => {
 
-                      _.data = _.data.map((_) => { return this.findingMappedFunc$(_, timestamp, engagement_id) })
+                const timestamp = Date.now();
 
+                return this.apiService.getOpenFindingsByAssessment(filter_state, engagement_id, page_number).pipe(
 
+                  map(_ => {
 
 
+                    this.totalFindings = _?.count || 0;
 
-                      this.refreshIndividualFindingSignal.clear();
-                      _.data = _.data.map(_ => {
 
+                    this.under_review_count = _?.under_review_count || 0;
+                    this.under_review_current_count = _?.under_review_current_count || 0;
+                    this.under_review_others_count = _?.under_review_others_count || 0;
 
-                        let refSignal = new BehaviorSubject(undefined).pipe(
 
+                    this.all_count = _?.all_count || 0;
+                    this.open_count = _?.open_count || 0;
 
-                          switchMap((value: any) => {
-                            console.log('bububub', value);
-                            if (value) {
-                              // If a value is emitted, switch to fetching data from the API
-                              return this.apiService.getOpenFindingsByAssessmentByFindingId(engagement_id, _?._id?.$oid).pipe(
-                                map(_ => _?.data),
-                                map(_ => {
-                                  return this.findingMappedFunc$(_, timestamp, engagement_id)
-                                })
-                              );
-                            } else {
-                              // If no value is emitted, return an empty observable
-                              return of(_);
-                            }
-                          }),
 
+                    this.findingsListLimit = _?.defaultPageSize || 0;
 
 
-                        );
 
-                        let _id = _._id.$oid;
+                    this.currentPage = _?.page_number;
 
 
+                    let defaultPageSize = _?.defaultPageSize;
 
-                        this.refreshIndividualFindingSignal.set(_id, refSignal);
-                        // return of(_);
-                        return refSignal
 
-                      })
+                    this.totalPages = this.math.ceil(this.totalFindings / defaultPageSize)
+                    console.log('totalFindings', this.totalFindings, this.totalPages)
 
 
+                    _.data = _.data.map((_) => { return this.findingMappedFunc$(_, timestamp, engagement_id) })
 
 
-                      // _.data = _.data.map(_ => of(_))
 
-                      return _.data
-                    }),
 
 
-                  )
+                    this.refreshIndividualFindingSignal.clear();
+                    _.data = _.data.map(_ => {
 
 
-                }),
-                switchMap(_ => _),
+                      let refSignal = new BehaviorSubject(undefined).pipe(
 
 
-              )
-            })
+                        switchMap((value: any) => {
+                          console.log('bububub', value);
+                          if (value) {
+                            // If a value is emitted, switch to fetching data from the API
+                            return this.apiService.getOpenFindingsByAssessmentByFindingId(engagement_id, _?._id?.$oid).pipe(
+                              map(_ => _?.data),
+                              map(_ => {
+                                return this.findingMappedFunc$(_, timestamp, engagement_id)
+                              })
+                            );
+                          } else {
+                            // If no value is emitted, return an empty observable
+                            return of(_);
+                          }
+                        }),
 
-            ,
 
-            switchMap(_ => _)
 
+                      );
 
+                      let _id = _._id.$oid;
 
 
 
-          )
+                      this.refreshIndividualFindingSignal.set(_id, refSignal);
+                      // return of(_);
+                      return refSignal
 
-      })
+                    })
 
-      ,
 
-      // shareReplay(),
 
-    )
 
+                    // _.data = _.data.map(_ => of(_))
 
+                    return _.data
+                  }),
 
 
+                )
 
 
-    // TODO
-    // this.nbSidebarService.collapse(
-    //   'buildList'
-    // );
+              }),
+              switchMap(_ => _),
 
 
+            )
+          })
 
+          ,
 
+          switchMap(_ => _)
 
 
 
-  }
+
+
+        )
+
+    })
+
+    ,
+    tap(_=>{
+      this.loadingFindings = false;
+
+      console.log('loading_cfindings', 'end');
+    }),
+    // shareReplay(),
+
+  )
+  // To avoid errors..ngonint moved to ngafterviewinit
+ 
+  
 
   ngOnDestroy(): void {
     // TODO
@@ -721,6 +764,13 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
     this.view_finding(finding_id)
 
+  }
+
+  test(testTemplate){
+  //  let xo =  this.overlayService.create();
+
+    // let sd : NbPopoverComponent;
+    // sd.overlayContainer
   }
 
   view_finding(finding_id) {
@@ -875,6 +925,50 @@ export class EngagementFindingsComponent implements OnInit, AfterViewInit {
 
         this.refreshFindings();
       })
+
+  }
+
+  moveToPublish(data) {
+
+
+    let _id = data?._id?.$oid;
+
+
+    this.loading_staate_for_individual.set(_id, 1);
+
+    let engagement_id = data?.engagement_id;
+    this.apiService.moveFindingToPublish(engagement_id, _id).subscribe(_ => {
+
+      const timestamp = Date.now();
+
+      this.loading_staate_for_individual.set(_id, timestamp);
+      console.log('moveFindingToPublish', engagement_id, _id, data);
+
+      this.refreshFindings();
+
+
+    });
+
+  }
+
+  moveToDraft(data) {
+    let _id = data?._id?.$oid;
+
+
+    this.loading_staate_for_individual.set(_id, 1);
+
+    let engagement_id = data?.engagement_id;
+    this.apiService.moveFindingToDraft(engagement_id, _id).subscribe(_ => {
+
+      const timestamp = Date.now();
+
+      this.loading_staate_for_individual.set(_id, timestamp);
+      console.log('moveFindingToDraft', engagement_id, _id, data);
+
+      this.refreshFindings();
+
+
+    });
 
   }
 
