@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
 import { ApiService } from '../api.service';
 import { EngagementService } from '../engagement.service';
-import { Observable, filter, map, switchMap } from 'rxjs';
+import { Observable, filter, map, switchMap, tap } from 'rxjs';
 import { EngagementState } from 'src/environments/constants';
 
 @Component({
@@ -53,6 +53,8 @@ export class NextActionScreenComponent implements AfterViewInit {
   ) {
 
   }
+
+
   ngAfterViewInit(): void {
     this.activeEngagement = this.engagementService.activeEngagement
 
@@ -63,6 +65,11 @@ export class NextActionScreenComponent implements AfterViewInit {
           .pipe(map(__ => { __.state = _.engagement.state; __.id = _.id; return __; }))
 
         )
+        ,
+        tap(_=>{
+          console.log('console', _);
+        })
+
       );
   }
 
@@ -77,11 +84,11 @@ export class NextActionScreenComponent implements AfterViewInit {
       _sub = this.apiService.updateEngagementState(id, EngagementState.IN_PROGRESS)
     }
     else if (state == EngagementState.IN_PROGRESS) {
-      _sub = this.apiService.updateEngagementState(id, EngagementState.PENDING_REVIEW)
-    }
-    else if (state == EngagementState.PENDING_REVIEW) {
       _sub = this.apiService.updateEngagementState(id, EngagementState.UNDER_REVIEW)
     }
+    // else if (state == EngagementState.PENDING_REVIEW) {
+    //   _sub = this.apiService.updateEngagementState(id, EngagementState.UNDER_REVIEW)
+    // }
     else if (state == EngagementState.UNDER_REVIEW) {
       _sub = this.apiService.updateEngagementState(id, EngagementState.ACCEPTED)
     }

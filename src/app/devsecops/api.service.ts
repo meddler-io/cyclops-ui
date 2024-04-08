@@ -6,7 +6,7 @@ import { BehaviorSubject, EMPTY, Observable, of, pipe, Subject, throwError } fro
 import { catchError, delay, distinct, distinctUntilChanged, distinctUntilKeyChanged, filter, first, map, mergeMap, share, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { TransitionState } from './build-item/build-item.component';
-import { EngagementState } from 'src/environments/constants';
+import { EngagementState, FindingState } from 'src/environments/constants';
 
 export const PUBLIC_SSH_KEY = `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Bkdt4M4kJ8K01EUxyY3c/pBCPj8ForBIQs7Up9VaWaKpJ6HqY8Z14k5KnN8T3tu2G0EOP2TQ3PIHDhQBJaU6xpEbqmYk4VCb30uRBUjfOz4xJSPqVl8DcpU7USupSSFqJMWXj4YLjVmMQTq1vA/MFAuVlpTuDOy86AnqIbq6mw4vrUpZoZegozg/jA4NzaXkQTEOYI92fWC6w1YznynFQNQtI+aXp33LhzgUGTYFLTDD7/ueINjlu5PAc2Rle8+tQ7cUxBC9xKUxzTC2+NI9PIlh6LJCiogESjLUXouNw5f7lmkIhmr9NdE3I/i1D2E6Oefgxnk9iAjbYIkl6GNv prakhar.agnihotri@prakharagnihotri.local`
 
@@ -190,6 +190,28 @@ export class ApiService {
     )
   }
 
+  moveMultipleFindingsToDraft(engagement_id: string, issue_ids: any[]) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/draft` , issue_ids).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  moveMultipleFindingsToPublish(engagement_id: string, issue_ids: any[]) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/publish` , issue_ids).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+  changeMultipleFindingsState( state : FindingState,  engagement_id: string, issue_ids: any[]) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/finding/state/${state}` , issue_ids).pipe(
+      map(_ => _?.data)
+    )
+  }
+
+
 
   unmarkIssueToBeverified(engagement_id: string, issue_id: string) {
 
@@ -204,6 +226,22 @@ export class ApiService {
       map(_ => _?.status)
     )
   }
+
+  updateFindingState(engagement_id: string, finding_id: string, state: FindingState) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/finding/${finding_id}/state/${state}`).pipe(
+      // map(_ => _?.status)
+    )
+  }
+
+
+  updateFindingClaimState(engagement_id: string, finding_id: string, state: FindingState) {
+
+    return this.putRequest(`api/v1/devsecops/engagement/${engagement_id}/finding/${finding_id}/claim-state/${state}`).pipe(
+      map(_ => _?.status)
+    )
+  }
+
 
 
   getApplicationById(id: string) {

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest, filter, map, share, switchMap, tap } from 'rxjs';
 import { ApiService } from '../api.service';
+import { NbPopoverDirective } from '@nebular/theme';
 
 @Component({
   selector: 'app-finding-stats',
@@ -8,6 +9,7 @@ import { ApiService } from '../api.service';
   styleUrls: ['./finding-stats.component.scss']
 })
 export class FindingStatsComponent implements OnInit {
+
 
 
   info_status = true;

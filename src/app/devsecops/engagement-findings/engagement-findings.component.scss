@@ -10,6 +10,15 @@
   flex: 1;
 }
 
+.tab-button{
+  color: nb-theme(text-basic-color)  !important;
+
+  &.not-important{
+  color: nb-theme(text-hint-color)  !important;
+    
+  }
+}
+
 
 .padding-match-list-item{
   padding-left: var(--list-item-padding);

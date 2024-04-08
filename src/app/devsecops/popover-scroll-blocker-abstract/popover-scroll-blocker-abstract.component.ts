@@ -1,4 +1,5 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-popover-scroll-blocker-abstract',
@@ -11,7 +12,8 @@ export class PopoverScrollBlockerAbstractComponent {
 
 
     
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    public apiService: ApiService
     ) {}
 
   cdkOverlayElementRef;

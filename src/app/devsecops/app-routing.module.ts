@@ -51,6 +51,8 @@ import { EngagementAssignToComponent } from "./engagement-assign-to/engagement-a
 import { EngagementFindingsComponent } from "./engagement-findings/engagement-findings.component";
 import { EngagementSelectFindingComponent } from "./engagement-select-finding/engagement-select-finding.component";
 import { NextActionScreenComponent } from "./next-action-screen/next-action-screen.component";
+import { FindingsSummaryBarChartComponent } from "./findings-summary-bar-chart/findings-summary-bar-chart.component";
+import { EngagementSummaryStatsComponent } from "./engagement-summary-stats/engagement-summary-stats.component";
 
 
 
@@ -65,7 +67,7 @@ const appRoutes: Routes = [
     children: [
 
       {
-        path: 'test', component: NextActionScreenComponent,
+        path: 'test', component: EngagementSummaryStatsComponent,
         // outlet: 'content',
        
       },
@@ -85,6 +87,9 @@ const appRoutes: Routes = [
 
       {
         path: 'draft_review', component: EngagementFindingsComponent,
+        data: {
+          'mode': 'active_revalidation' 
+        }
         // path: 'draft_review', component: EngagementFindingsToRevalidateComponent,
         // outlet: 'content',
        

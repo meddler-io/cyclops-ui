@@ -1,4 +1,4 @@
-<ng-container *ngIf="activeEngagement | async as activeEngagement">
+<ng-container *ngIf="activeEngagement | async  as activeEngagement ; else loadingTemplate">
 
 
 
@@ -28,9 +28,8 @@
                     Cancel
                 </button>
 
-                <button
-                (click)="confirm(   activeEngagement?.id,  activeEngagement?.state  )"
-                style="text-transform: capitalize;" size="small" nbButton outline status="success">
+                <button (click)="confirm(   activeEngagement?.id,  activeEngagement?.state  )"
+                    style="text-transform: capitalize;" size="small" nbButton outline status="success">
                     Confirm
                 </button>
 
@@ -43,83 +42,144 @@
 
 
 
+
+
+
+
+
+
+
+    <ng-template #draft let-context>
+
+        <div *ngIf="( activeEngagement ) as activeEngagement" fxLayout="column">
+            <div fxFlex *ngIf="activeEngagement._open > 0 ; else  noIsssues">
+                <span class="h6 text-basic">
+
+                    You've chosen to proceed with creating an assessment. <br>Revalidating <span
+                        class="h5 text-primary subtitle-2 ">
+
+                        {{activeEngagement._under_review_current}} </span> issues while <span
+                        class="h5 text-danger subtitle-2">
+
+                        {{activeEngagement._open}}
+                    </span> issues still remain open.<br>Confirm to proceed.
+                    <!-- {{activeEngagement | json}} -->
+
+
+
+                    <!-- {{activeEngagement | json}} -->
+                </span>
+            </div>
+
+            <ng-template #noIsssues>
+                <span class="h6 text-basic">
+
+                    You've chosen to proceed with creating an assessment.<br>
+                    Revalidating <span
+                        class="h5 text-primary subtitle-2 ">{{activeEngagement._under_review_current}}</span>
+                    issues. All previous open issues are marked for
+                    revalidation.<br>Confirm to proceed.
+
+                </span>
+            </ng-template>
+
+
+
+
+        </div>
+
+    </ng-template>
+
+    <ng-template #open>
+        <div fxLayout="column">
+            <div fxFlex>
+                <span class="h6 text-basic">
+                    Please confirm if you wish to enqueue this assessment.
+                    <!-- {{activeEngagement | json}} -->
+                </span>
+            </div>
+        </div>
+    </ng-template>
+
+
+    <ng-template #in_progress>
+        <div fxLayout="column" *ngIf="( activeEngagement ) as activeEngagement">
+            <div fxFlex>
+                <span class="h6 text-basic">
+
+                    You've chosen to proceed with publishing the assessment.<br>
+                    Found <span class="h5 text-primary subtitle-2 ">
+
+                        {{activeEngagement._new}}</span> issues. All previous open issues are marked for
+                    revalidation.<br>Confirm to proceed.
+                    <br>
+                    <strong>Note:</strong> All the unpublished / draft findings will be deleted!
+
+                </span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #pending_review>
+        <p>pending_review</p>
+    </ng-template>
+
+    <ng-template #under_review>
+        <div fxLayout="column" *ngIf="( activeEngagement ) as activeEngagement">
+            <div fxFlex>
+                <span class="h6 text-basic">
+
+                    You've chosen to proceed with publishing the assessment.<br>
+
+                    <strong>Note:</strong> No modification can be done once .
+
+                </span>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #accepted>
+        <p>accepted</p>
+    </ng-template>
+
+
+    <ng-template #rejected>
+        <p>rejected</p>
+    </ng-template>
+
+    <ng-template #closed>
+        <p>closed</p>
+    </ng-template>
+
+
+    <ng-template #archived>
+        <p>archived</p>
+    </ng-template>
+
 </ng-container>
 
-<ng-template #draft let-context>
 
-    <div *ngIf="activeEngagement | async" fxLayout="column">
-        <div fxFlex *ngIf="activeEngagement.open_count > 0 ; else  noIsssues">
-            <span class="h6 text-basic">
+<ng-template #loadingTemplate>
 
-                You've chosen to proceed with creating an assessment. <br>Revalidating <span class="h5 text-primary subtitle-2 ">
+    <nb-card size="tiny" [nbSpinner]="true">
+        <nb-card-header>
 
-                    {{activeEngagement.under_review_count}} </span> issues while <span class="h5 text-danger subtitle-2">
-
-                    {{activeEngagement.open_count}}
-                </span> issues still remain open.<br>Confirm to proceed.
+            Assessment Confirmation
 
 
-
-                <!-- {{activeEngagement | json}} -->
-            </span>
-        </div>
-
-        <ng-template #noIsssues>
-            <span class="h6 text-basic">
-                
-                You've chosen to proceed with creating an assessment.<br>
-                Revalidating <span class="h5 text-primary subtitle-2 ">
-
-                    {{activeEngagement.under_review_count}}</span>  issues. All previous open issues are marked for revalidation.<br>Confirm to proceed.
-
-            </span>
-        </ng-template>
-
-   
-        
-
-    </div>
-
-</ng-template>
-
-<ng-template #open>
-    <div fxLayout="column">
-        <div fxFlex >
-            <span class="h6 text-basic">
-                Please confirm if you wish to enqueue this assessment.
-                <!-- {{activeEngagement | json}} -->
-            </span>
-        </div>
-    </div>
-</ng-template>
+        </nb-card-header>
 
 
-<ng-template #in_progress>
-    <p>in_progress</p>
-</ng-template>
-
-<ng-template #pending_review>
-    <p>pending_review</p>
-</ng-template>
-
-<ng-template #under_review>
-    <p>under_review</p>
-</ng-template>
-
-<ng-template #accepted>
-    <p>accepted</p>
-</ng-template>
+        <nb-card-body>
 
 
-<ng-template #rejected>
-    <p>rejected</p>
-</ng-template>
-
-<ng-template #closed>
-    <p>closed</p>
-</ng-template>
 
 
-<ng-template #archived>
-    <p>archived</p>
+        </nb-card-body>
+
+        <nb-card-footer>
+        </nb-card-footer>
+    </nb-card>
+
+
 </ng-template>

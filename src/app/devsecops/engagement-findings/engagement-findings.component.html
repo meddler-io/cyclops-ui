@@ -1,575 +1,1320 @@
-<ng-template #testTemplate>
+<ng-template let-context #changeFindingStatePopupTemplate>
 
-    <app-change-finding-state>
+
+
+
+    <app-change-finding-state (onclose)="refreshFinding($event)" [id]="context.id"
+        [engagement_id]="context.engagement_id" [ref]="getPopoverRef( context.index) " [mode]="context.mode">
 
     </app-change-finding-state>
 </ng-template>
 
+<ng-template let-context #findingSettingsPopupTemplate>
+
+
+
+    <app-findings-settings-popup [options]="SetingsMenu$ | async" (onclose)="onSettingSelection($event)"
+        [id]="context.id" [engagement_id]="context.engagement_id" [ref]="getPopoverRef( context.index) "
+        [mode]="context.mode">
+
+    </app-findings-settings-popup>
+</ng-template>
 
 <ng-container *ngIf="activeEngagement | async as activeEngagement">
 
-    <nb-card fxFill nbSpinnerStatus="danger" nbSpinnerSize="large" nbSpinnerMessage="Refreshing data">
+    <ng-container *ngIf="( current_tab | async ) as current_tab">
+
+
+        <nb-card fxFill>
 
 
 
-        <!-- {{iocs | async | json}} -->
-        <!-- {{dns_data | async | json}} -->
+            <!-- {{iocs | async | json}} -->
+            <!-- {{dns_data | async | json}} -->
 
 
-        <!-- <nb-card-body > -->
-        <!-- <div fxFlex fxLayoutAlign="center start" fxLayout="row"> -->
-
-
-        <nb-card-header>
+            <!-- <nb-card-body > -->
+            <!-- <div fxFlex fxLayoutAlign="center start" fxLayout="row"> -->
 
 
 
-
-            <div fxLayoutAlign="start center">
-
-                <div fxFlex fxLayout="row">
-
-
+            <!-- Hide header as there are no tabs..for 'open' state -->
+            <nb-card-header fxLayout="row" *ngIf="current_state != 'open' ">
 
 
 
 
 
 
-                    <!--  -->
-                    <div class="padding-match-list-item" [@drawerTransition]="'left'" fxLayoutAlign="center center">
+                <div fxFlex fxLayoutAlign="start center">
+
+                    <div fxFlex fxLayout="row">
+
 
 
                         <!--  -->
 
-                        <button nbTooltipPlacement="bottom" [nbTooltip]="markMode ? 'Cancel' : 'Mark All' "
-                            (click)=" markMode = !markMode;   markModeChanged(  )"
-                            [appearance]="markMode ? 'filled': 'outline' " [status]="markMode ? 'danger': 'info' "
-                            shape="round" nbButton size="small" status="success">
-                            <!-- Verify -->
+                        <ng-container [ngSwitch]="current_state">
+
+
+                            <ng-template #selectAllButtonTemplate>
+                                <div class="padding-match-list-item" [@drawerTransition]="'left'"
+                                    fxLayoutAlign="center center">
+
+
+                                    <!--  -->
+
+                                    <button nbTooltipPlacement="bottom" [nbTooltip]="markMode ? 'Cancel' : 'Mark All' "
+                                        (click)=" toggleMarkMode(  )" [appearance]="markMode ? 'filled': 'outline' "
+                                        [status]="markMode ? 'danger': 'info' " shape="round" nbButton size="small"
+                                        status="success">
+                                        <!-- Verify -->
+                                        <nb-icon icon="done-all-outline">
+
+                                        </nb-icon>
+
+                                    </button>
+                                    <!--  -->
+
+                                </div>
+                            </ng-template>
+
+                            <ng-template [ngSwitchCase]="'draft'">
+                                <ng-container *ngTemplateOutlet="selectAllButtonTemplate">
+
+                                </ng-container>
+
+
+                            </ng-template>
+
+                        </ng-container>
+
+                        <!--  -->
+
+                        <!-- Main tabs component -->
+                        <ng-container>
+
+
+                            <ng-container *ngIf="current_state == 'draft' ">
+
+
+                                <div fxFlex fxLayoutGap="0.5rem">
+
+                                    <button [disabled]="( current_tab) != 'all'  &&  markMode == true "
+                                        class="tab-button" (click)="switch_finding_filter( 'all' )" size="tiny" nbButton
+                                        [appearance]=" ( current_tab ) == 'all' ? 'outline' :  'ghost'  "
+                                        [status]=" ( current_tab) == 'all' ? 'info' : 'basic' ">All
+                                        ({{all_count}})
+
+                                    </button>
+
+
+
+                                    <button [disabled]="( current_tab) != 'open'  &&  markMode == true "
+                                        class="tab-button" (click)="switch_finding_filter( 'open' )" size="tiny"
+                                        nbButton [appearance]=" ( current_tab ) == 'open' ? 'outline' :  'ghost'  "
+                                        [status]=" ( current_tab ) == 'open' ? 'danger' : 'basic' ">Open
+                                        ({{open_count}})</button>
+
+                                    <!-- under_review_current -->
+                                    <!-- under_review -->
+                                    <button [disabled]="( current_tab) != 'under_review_current'  &&  markMode == true "
+                                        class="tab-button" (click)="switch_finding_filter( 'under_review_current' )"
+                                        size="tiny" nbButton
+                                        [appearance]=" ( current_tab ) == 'under_review_current' ? 'outline' :  'ghost'  "
+                                        [status]=" ( current_tab ) == 'under_review_current' ? 'warning' : 'basic' ">Under
+                                        Review
+                                        ({{under_review_count}})</button>
+
+                                    <button [disabled]="( current_tab) != 'under_review_others'  &&  markMode == true "
+                                        class="tab-button" (click)="switch_finding_filter( 'under_review_others' )"
+                                        size="tiny" nbButton
+                                        [appearance]=" ( current_tab ) == 'under_review_others' ? 'outline' :  'ghost'  "
+                                        [status]=" ( current_tab ) == 'under_review_others' ? 'info' : 'basic' ">Already
+                                        Under Review
+                                        ({{under_review_others_count}})
+                                    </button>
+
+                                </div>
+
+                            </ng-container>
+
+
+                            <ng-container *ngIf="current_state == 'open' ">
+
+
+                                <div fxFlex fxLayoutGap="0.5rem">
+
+                                    <button [disabled]="( current_tab) != 'under_review_current'  &&  markMode == true "
+                                        class="tab-button" (click)="switch_finding_filter( 'under_review_current' )"
+                                        size="tiny" nbButton
+                                        [appearance]=" ( current_tab ) == 'under_review_current' ? 'outline' :  'ghost'  "
+                                        [status]=" ( current_tab) == 'under_review_current' ? 'info' : 'basic' ">All
+                                        ({{all_count}})
+
+                                    </button>
+
+
+
+
+
+
+                                </div>
+
+                            </ng-container>
+
+
+
+                            <!-- Tabs Just for creation: New / recurrent -->
+                            <ng-container *ngIf="current_state == 'in_progress' ">
+
+                                <!-- parent_tab check -->
+                                <ng-container *ngIf="parent_tab == 'active_revalidation' ; else in_progress_template ">
+
+
+                                    <div fxFlex fxLayoutGap="0.5rem">
+
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'under_review_current' )"
+                                            size="tiny" nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab) == 'under_review_current' ? 'success' : 'basic' ">All
+                                            ({{all_count}})
+
+                                        </button>
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_fixed'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_fixed' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_fixed' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_fixed' ? 'danger' : 'basic' ">Fixed
+                                            ({{open_count}})</button>
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_open'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_open' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_open' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_open' ? 'danger' : 'basic' ">Still
+                                            open
+                                            ({{open_count}})</button>
+                                    </div>
+
+                                </ng-container>
+
+                                <ng-template #in_progress_template>
+
+
+                                    <div fxFlex fxLayoutGap="0.5rem">
+
+                                        <button [disabled]="( current_tab) != 'new'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'new' )" size="tiny"
+                                            nbButton [appearance]=" ( current_tab ) == 'new' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'new' ? 'primary' : 'basic' ">Findings
+                                            ({{open_count}})</button>
+
+
+
+
+                                        <button [disabled]="( current_tab) != 'draft'  &&  markMode == true "
+                                            class="tab-button not-important" (click)="switch_finding_filter( 'draft' )"
+                                            size="tiny" nbButton
+                                            [appearance]=" ( current_tab ) == 'draft' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'draft' ? 'info' : 'basic' ">Draft
+                                            ({{open_count}})</button>
+                                    </div>
+
+                                </ng-template>
+
+                            </ng-container>
+
+
+                            <!-- Tabs Just for review: New / recurrent -->
+                            <!-- plan to remove draft -->
+
+                            <ng-container *ngIf="current_state == 'under_review' ">
+
+                                <!-- parent_tab check -->
+                                <ng-container *ngIf="parent_tab == 'active_revalidation' ; else in_review_template ">
+
+
+                                    <div fxFlex fxLayoutGap="0.5rem">
+
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'under_review_current' )"
+                                            size="tiny" nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab) == 'under_review_current' ? 'success' : 'basic' ">All
+                                            ({{all_count}})
+
+                                        </button>
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_fixed'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_fixed' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_fixed' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_fixed' ? 'danger' : 'basic' ">Fixed
+                                            ({{open_count}})</button>
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_open'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_open' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_open' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_open' ? 'danger' : 'basic' ">Still
+                                            open
+                                            ({{open_count}})</button>
+                                    </div>
+
+                                </ng-container>
+
+                                <ng-template #in_review_template>
+
+
+                                    <div fxFlex fxLayoutGap="0.5rem">
+
+                                        <button [disabled]="( current_tab) != 'new'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'new' )" size="tiny"
+                                            nbButton [appearance]=" ( current_tab ) == 'new' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'new' ? 'primary' : 'basic' ">Findings
+                                            ({{open_count}})</button>
+
+
+
+
+
+                                        <button [disabled]="( current_tab) != 'draft'  &&  markMode == true "
+                                            class="tab-button not-important" (click)="switch_finding_filter( 'draft' )"
+                                            size="tiny" nbButton
+                                            [appearance]=" ( current_tab ) == 'draft' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'draft' ? 'info' : 'basic' ">Draft
+                                            ({{open_count}})</button>
+                                    </div>
+                                </ng-template>
+
+
+                            </ng-container>
+
+                            <!-- Accepted -->
+                            <ng-container *ngIf="current_state == 'accepted' ">
+
+                                <!-- parent_tab check -->
+                                <ng-container *ngIf="parent_tab == 'active_revalidation' ; else in_review_template ">
+
+
+                                    <div fxFlex fxLayoutGap="0.5rem">
+
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'under_review_current' )"
+                                            size="tiny" nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab) == 'under_review_current' ? 'success' : 'basic' ">All
+                                            ({{all_count}})
+
+                                        </button>
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_fixed'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_fixed' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_fixed' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_fixed' ? 'danger' : 'basic' ">Fixed
+                                            ({{open_count}})</button>
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_open'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_open' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_open' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_open' ? 'danger' : 'basic' ">Still
+                                            open
+                                            ({{open_count}})</button>
+                                    </div>
+
+                                </ng-container>
+
+                                <ng-template #in_review_template>
+
+
+                                    <div fxFlex fxLayoutGap="0.5rem">
+
+                                        <button [disabled]="( current_tab) != 'current_all_open'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'current_all_open' )" size="tiny"
+                                            nbButton [appearance]=" ( current_tab ) == 'current_all_open' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'current_all_open' ? 'primary' : 'basic' ">All
+                                            ({{open_count}})</button>
+
+                                        <!-- current_all_open -->
+
+                                        <button [disabled]="( current_tab) != 'new'  &&  markMode == true "
+                                            class="tab-button" (click)="switch_finding_filter( 'new' )" size="tiny"
+                                            nbButton [appearance]=" ( current_tab ) == 'new' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'new' ? 'primary' : 'basic' ">New
+                                            ({{open_count}})</button>
+
+
+
+                                        <button
+                                            [disabled]="( current_tab) != 'under_review_current_open'  &&  markMode == true "
+                                            class="tab-button "
+                                            (click)="switch_finding_filter( 'under_review_current_open' )" size="tiny"
+                                            nbButton
+                                            [appearance]=" ( current_tab ) == 'under_review_current_open' ? 'outline' :  'ghost'  "
+                                            [status]=" ( current_tab ) == 'under_review_current_open' ? 'danger' : 'basic' ">
+                                            Recurrent
+                                            ({{open_count}})</button>
+
+
+                                    </div>
+                                </ng-template>
+
+
+                            </ng-container>
+                        </ng-container>
+
+
+
+                    </div>
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+                <!-- Add Button -->
+                <div *ngIf="markMode == false ">
+
+                    <ng-container *ngIf="current_state  == 'in_progress' ">
+
+                        <ng-container *ngIf="current_tab  == 'new'  || current_tab  == 'draft'  ">
+
+
+                            <button class="h6" [@drawerTransition]="'left'" status="danger" shape="round"
+                                (click)="create_finding(  )" size="small" nbButton appearance="hero">
+                                <nb-icon icon="plus-outline">
+
+                                </nb-icon>
+
+                                New
+
+                            </button>
+                        </ng-container>
+
+                    </ng-container>
+
+
+                    <ng-container *ngIf="current_state  == 'under_review' ">
+                        <ng-container *ngIf="current_tab  == 'new'  || current_tab  == 'draft'  ">
+
+                            <button class="h6" [@drawerTransition]="'left'" status="danger" shape="round"
+                                (click)="create_finding(  )" size="small" nbButton appearance="hero">
+                                <nb-icon icon="plus-outline">
+
+                                </nb-icon>
+
+                                New
+
+                            </button>
+                        </ng-container>
+                    </ng-container>
+                </div>
+
+                <!-- More Button -->
+                <div fxLayoutAlign="center center">
+
+                    <button nbButton [nbPopover]="findingSettingsPopupTemplate" ghost size="small"
+                        nbPopoverPlacement="bottom" nbPopoverTrigger="click"
+                        [nbPopoverContext]="{  mode: 'review'  ,  index: 0 , id: 0 , engagement_id: 0 }">
+                        <nb-icon icon="more-vertical"></nb-icon>
+                    </button>
+                </div>
+
+            </nb-card-header>
+
+
+            <nb-card-footer fxLayoutAlign="start center">
+
+
+
+                <ng-container>
+
+                    <ng-container *ngIf="markMode">
+
+                        <button [@drawerTransition]="'left'" [disabled]="markedFindings.size == 0"
+                            (click)="markAll(   )" status="danger" shape="round" size="tiny" nbButton
+                            appearance="outline">
+                            <nb-icon icon="plus-outline">
+
+                            </nb-icon>
+                            Clear All
+
+                        </button>
+
+
+                        <button [@drawerTransition]="'left'" nbTooltipPlacement="bottom" nbTooltip="Mark All"
+                            (click)="markAll( findings$  )" status="success" shape="round" size="small" nbButton
+                            appearance="ghost">
                             <nb-icon icon="done-all-outline">
 
                             </nb-icon>
 
+                            {{markedFindings.size}}
                         </button>
-                        <!--  -->
 
-                    </div>
-                    <!--  -->
+                        <button [@drawerTransition]="'left'" (click)="markForRevalidation()"
+                            [disabled]="markedFindings.size == 0" nbTooltipPlacement="bottom"
+                            nbTooltip="Mark for revalidation" status="success" shape="round" size="tiny" nbButton
+                            appearance="outline">
+                            <nb-icon icon="plus-outline">
 
+                            </nb-icon>
+                            Revalidate
+                        </button>
 
-                    <ng-container *ngIf="current_route == 'draft' ">
+                        <button [@drawerTransition]="'left'" (click)="unmarkForRevalidation()"
+                            [disabled]="markedFindings.size == 0" nbTooltipPlacement="bottom" nbTooltip="Mark as open"
+                            status="success" shape="round" size="tiny" nbButton appearance="outline">
+                            <nb-icon icon="plus-outline">
 
-
-                        <div fxFlex fxLayoutGap="0.5rem">
-
-                            <button [disabled]="( filter_finding_tab | async) != 'all'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'all' )" size="tiny" nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'all' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async) == 'all' ? 'info' : 'basic' ">All
-                                ({{all_count}})
-
-                            </button>
-
-
-
-                            <button [disabled]="( filter_finding_tab | async) != 'open'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'open' )" size="tiny" nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'open' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async ) == 'open' ? 'danger' : 'basic' ">Open
-                                ({{open_count}})</button>
-
-                            <!-- under_review_current -->
-                            <!-- under_review -->
-                            <button
-                                [disabled]="( filter_finding_tab | async) != 'under_review_current'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'under_review_current' )" size="tiny"
-                                nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'under_review_current' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async ) == 'under_review_current' ? 'warning' : 'basic' ">Marked
-                                for Review
-                                ({{under_review_count}})</button>
-
-                            <button
-                                [disabled]="( filter_finding_tab | async) != 'under_review_others'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'under_review_others' )" size="tiny"
-                                nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'under_review_others' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async ) == 'under_review_others' ? 'info' : 'basic' ">Already
-                                Under Review
-                                ({{under_review_others_count}})
-                            </button>
-
-                        </div>
-
-                    </ng-container>
-
-
-                    <ng-container *ngIf="current_route == 'open' ">
-
-
-                        <div fxFlex fxLayoutGap="0.5rem">
-
-                            <button
-                                [disabled]="( filter_finding_tab | async) != 'under_review_current'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'under_review_current' )" size="tiny"
-                                nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'under_review_current' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async) == 'under_review_current' ? 'info' : 'basic' ">All
-                                ({{all_count}})
-
-                            </button>
-
-
-
-
-
-
-                        </div>
-
+                            </nb-icon>
+                            Open
+                        </button>
                     </ng-container>
 
 
 
-                    <!-- Tabs Just for creation: New / recurrent -->
-                    <ng-container *ngIf="current_route == 'in_progress' ">
+                    <!-- Add Buttton -->
 
-                        <div fxFlex fxLayoutGap="0.5rem">
+                    <ng-container *ngIf="current_state  == 'in_progress' ">
 
-                            <button [disabled]="( filter_finding_tab | async) != 'new'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'new' )" size="tiny" nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'new' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async ) == 'new' ? 'primary' : 'basic' ">Findings
-                                ({{open_count}})</button>
+                        <button [@drawerTransition]="'left'" *ngIf="markMode == false " status="success" shape="round"
+                            (click)="create_finding(  )" size="tiny" nbButton appearance="outline">
+                            <nb-icon icon="plus-outline">
 
-
-
-                            <button
-                                [disabled]="( filter_finding_tab | async) != 'under_review_current'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'under_review_current' )" size="tiny"
-                                nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'under_review_current' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async) == 'under_review_current' ? 'danger' : 'basic' ">Revalidation
-                                ({{all_count}})
-
-                            </button>
-
-                        </div>
-
-                        <div>
-                            <button [disabled]="( filter_finding_tab | async) != 'draft'  &&  markMode == true "
-                                class="tab-button" (click)="switch_finding_filter( 'draft' )" size="tiny" nbButton
-                                [appearance]=" ( filter_finding_tab | async ) == 'draft' ? 'outline' :  'ghost'  "
-                                [status]=" ( filter_finding_tab | async ) == 'draft' ? 'info' : 'basic' ">Draft
-                                ({{open_count}})</button>
-                        </div>
-
-
+                            </nb-icon>
+                            Add
+                        </button>
                     </ng-container>
 
 
 
 
+                    <!-- <nb-button-group shape="round" ghost size="small" status="success"> -->
 
-
-                </div>
-
-
-
-
-
-
-
-
-
-            </div>
-
-        </nb-card-header>
-
-
-        <nb-card-footer fxLayoutAlign="start center">
-            {{current_route}}
-
-
-            <ng-container>
-
-                <ng-container *ngIf="markMode">
-
-                    <button [@drawerTransition]="'left'" [disabled]="markedFindings.size == 0" (click)="markAll(   )"
-                        status="danger" shape="round" size="tiny" nbButton appearance="outline">
-                        <nb-icon icon="plus-outline">
-
-                        </nb-icon>
-                        Clear All
-
-                    </button>
-
-
-                    <button [@drawerTransition]="'left'" nbTooltipPlacement="bottom" nbTooltip="Mark All"
-                        (click)="markAll( findings$  )" status="success" shape="round" size="small" nbButton
-                        appearance="ghost">
-                        <nb-icon icon="done-all-outline">
-
-                        </nb-icon>
-
-                        {{markedFindings.size}}
-                    </button>
-
-                    <button [@drawerTransition]="'left'" (click)="markForRevalidation()"
-                        [disabled]="markedFindings.size == 0" nbTooltipPlacement="bottom"
-                        nbTooltip="Mark for revalidation" status="success" shape="round" size="tiny" nbButton
-                        appearance="outline">
-                        <nb-icon icon="plus-outline">
-
-                        </nb-icon>
-                        Revalidate
-                    </button>
-
-                    <button [@drawerTransition]="'left'" (click)="unmarkForRevalidation()"
-                        [disabled]="markedFindings.size == 0" nbTooltipPlacement="bottom" nbTooltip="Mark as open"
-                        status="success" shape="round" size="tiny" nbButton appearance="outline">
-                        <nb-icon icon="plus-outline">
-
-                        </nb-icon>
-                        Open
-                    </button>
-                </ng-container>
-
-
-
-                <!-- Add Buttton -->
-
-                <ng-container *ngIf="current_route  == 'in_progress' ">
-
-                    <button [@drawerTransition]="'left'" *ngIf="markMode == false " status="success" shape="round"
-                        (click)="create_finding(  )" size="tiny" nbButton appearance="outline">
-                        <nb-icon icon="plus-outline">
-
-                        </nb-icon>
-                        Add
-                    </button>
-                </ng-container>
-
-
-
-
-                <!-- <nb-button-group shape="round" ghost size="small" status="success"> -->
-
-                <!-- <button nbButton>
+                    <!-- <button nbButton>
                     <nb-icon icon="swap-outline"></nb-icon>
                 </button> -->
-                <!-- <button nbButton>
+                    <!-- <button nbButton>
                     <nb-icon icon="play-circle-outline"></nb-icon>
                 </button> -->
 
-                <div *ngIf="false" fxLayoutAlign="space-between center " fxLayoutGap="0.2rem">
-
-
-                    <nb-toggle (checkedChange)="markModeChanged()" labelPosition="left" nbPopoverTrigger="hover"
-                        nbPopoverPlacement="bottom" [status]="markMode ? 'success': 'basic' "
-                        nbTooltipPlacement="bottom" [nbTooltip]="markMode ? 'Cancel' : 'Mark findings' "
-                        [(ngModel)]="markMode">
-
-
-                        <!-- Manage -->
-                    </nb-toggle>
+                    <div *ngIf="false" fxLayoutAlign="space-between center " fxLayoutGap="0.2rem">
 
 
 
-                    <button [status]="markMode ? 'success': 'basic' " ghost size="small" nbButton>
-
-                        <nb-icon icon="more-vertical-outline">
-
-                        </nb-icon>
-                    </button>
-                    <!-- </nb-button-group> -->
-
-                </div>
-
-                <!-- <nb-icon nbContextMenuTrigger="hover" nbContextMenuPlacement="bottom" [nbContextMenu]="items"                    icon="more-vertical-outline">                </nb-icon> -->
-
-            </ng-container>
-
-            <ng-template #selectMessageTemplate>
-                <span *ngIf="!markMode">Mark findings</span>
-                <span *ngIf="markMode">Cancel</span>
-            </ng-template>
-            <!--  -->
+                        <nb-toggle #ref (checkedChange)="markModeChanged()" labelPosition="left"
+                            nbPopoverTrigger="hover" nbPopoverPlacement="bottom"
+                            [status]="markMode ? 'success': 'basic' " nbTooltipPlacement="bottom"
+                            [nbTooltip]="markMode ? 'Cancel' : 'Mark findings' " [(ngModel)]="markMode">
 
 
-            <div fxLayoutGap="1rem" fxLayout="row">
-                <button style="margin-left:  1rem;" [disabled]="loadingFindings$
+                            <!-- Manage -->
+                        </nb-toggle>
+
+
+
+
+                        <button [status]="markMode ? 'success': 'basic' " ghost size="small" nbButton>
+
+                            <nb-icon icon="more-vertical-outline">
+
+                            </nb-icon>
+                        </button>
+                        <!-- </nb-button-group> -->
+
+                    </div>
+
+                    <!-- <nb-icon nbContextMenuTrigger="hover" nbContextMenuPlacement="bottom" [nbContextMenu]="items"                    icon="more-vertical-outline">                </nb-icon> -->
+
+                </ng-container>
+
+                <ng-template #selectMessageTemplate>
+                    <span *ngIf="!markMode">Mark findings</span>
+                    <span *ngIf="markMode">Cancel</span>
+                </ng-template>
+                <!--  -->
+
+
+                <div fxLayoutGap="1rem" fxLayout="row">
+                    <button style="margin-left:  1rem;" [disabled]="loadingFindings$
         ||
         ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 ) || 1
         " (click)="previousPage()" size="tiny" status="success" nbButton ghost>
 
-                    <nb-icon icon="arrow-left-outline"></nb-icon>
+                        <nb-icon icon="arrow-left-outline"></nb-icon>
 
-                </button>
-
-
-
-                <div *ngIf="true">
-
-                    <nb-select size="tiny" [selected]="currentPage" (selectedChange)="goto($event)" placeholder="Go to">
-
-                        <nb-select-label>
-                            <div>
-                                Page {{currentPage}}
-                            </div>
+                    </button>
 
 
-                            <div *ngIf="false">
-                                Page
 
-                                <span class="page" [class.page_no]="!loadingFindings$">
+                    <div *ngIf="true">
 
-                                    <!-- {{selectedItem}} -->
-                                    <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
+                        <nb-select size="tiny" [selected]="currentPage" (selectedChange)="goto($event)"
+                            placeholder="Go to">
 
-                                    {{currentPage}}
-                                </span>
-
-                                of
-                                <span class="page" [class.page_no]="!loadingFindings$">
-
-                                    {{totalPages}}
-
-                                </span>
-
-                            </div>
+                            <nb-select-label>
+                                <div>
+                                    Page {{currentPage}}
+                                </div>
 
 
-                        </nb-select-label>
+                                <div *ngIf="false">
+                                    Page
 
-                        <nb-option
-                            *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
-                            [value]="i + 1">
-                            <div>
-                                Page
-                                {{i + 1}}
-                            </div>
-                        </nb-option>
+                                    <span class="page" [class.page_no]="!loadingFindings$">
+
+                                        <!-- {{selectedItem}} -->
+                                        <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
+
+                                        {{currentPage}}
+                                    </span>
+
+                                    of
+                                    <span class="page" [class.page_no]="!loadingFindings$">
+
+                                        {{totalPages}}
+
+                                    </span>
+
+                                </div>
 
 
-                    </nb-select>
-                    <!-- {{lastFindingIdOffset}} -->
-                    <!-- {{findingsListLimit}} -->
+                            </nb-select-label>
+
+                            <nb-option
+                                *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
+                                [value]="i + 1">
+                                <div>
+                                    Page
+                                    {{i + 1}}
+                                </div>
+                            </nb-option>
+
+
+                        </nb-select>
+                        <!-- {{lastFindingIdOffset}} -->
+                        <!-- {{findingsListLimit}} -->
+
+                    </div>
+
+                    <button style="margin-right:  1rem;"
+                        [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
+                        (click)="nextPage()" size="tiny" status="success" nbButton ghost>
+
+
+                        <nb-icon icon="arrow-right-outline"></nb-icon>
+
+                    </button>
+
 
                 </div>
 
-                <button style="margin-right:  1rem;"
-                    [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
-                    (click)="nextPage()" size="tiny" status="success" nbButton ghost>
 
+            </nb-card-footer>
 
-                    <nb-icon icon="arrow-right-outline"></nb-icon>
-
-                </button>
-
-
-            </div>
-
-
-        </nb-card-footer>
-
-        <!-- </div> -->
-        <!-- <ng-template #findingView> -->
+            <!-- </div> -->
+            <!-- <ng-template #findingView> -->
 
 
 
 
 
-        <nb-list [nbSpinner]="loadingFindings">
+            <nb-list [nbSpinner]="loadingFindings">
 
 
-            <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
-            <!-- (click)="view_finding(data?._id?.$oid)" -->
-            <nb-list-item fxLayoutAlign="space-between center" fxLayout="row" [class.inactive]="data?.active == false"
-                *ngFor="let data of findings$ | async ; index as index ">
+                <!-- style="  border-left: 8px solid {{ data?.severity | severity : 'color' }} ;" -->
+                <!-- (click)="view_finding(data?._id?.$oid)" -->
+                <nb-list-item fxLayoutAlign="space-between center" fxLayout="row"
+                    [class.inactive]="data?.active == false" *ngFor="let data of findings$ | async ; index as index ">
 
 
-                <div fxLayoutAlign="space-between center" fxLayout="row" [class.inactive]="data?.active == false"
-                    fxFlex="0 0 100%" [style.opacity]=" data?.marked_for_review_under_other_engagement ? '0.6' : 1 "
-                    [class.disabled]="data?.marked_for_review_under_other_engagement" *ngIf="data  | async as data">
-
-
-
-                    <div fxLayout="row">
-
-                        <button (click)=" test( testTemplate )" nbButton [nbPopover]="testTemplate" ghost size="small"
-                            nbPopoverPlacement="bottom">
-                            <nb-icon icon="more-vertical"></nb-icon>
-                        </button>
-
-                        <!-- <ng-container *ngIf="!data?.marked_for_review_under_other_engagement"> -->
-
-
-                        <div [@drawerTransition]="'left'" *ngIf="markMode" fxLayoutAlign="center center">
-
-                            <nb-checkbox [disabled]="data?.marked_for_review_under_other_engagement" #markFind
-                                style="height: 50% ;" [checked]="markedFindings.has( data._id.$oid  )"
-                                (checkedChange)="on_click_list_item(   data._id.$oid , data  ) " status="primary">
-
-                            </nb-checkbox>
-                        </div>
-                        <!-- </ng-container> -->
+                    <!-- Parent list-item -->
+                    <div fxLayoutGap="1rem" fxLayoutAlign="space-between center" fxLayout="row"
+                        [class.inactive]="data?.active == false" fxFlex="0 0 100%"
+                        [style.opacity]=" data?.marked_for_review_under_other_engagement ? '0.6' : 1 "
+                        [class.disabled]="data?.marked_for_review_under_other_engagement" *ngIf="data  | async as data">
 
 
 
+                        <!-- marker / checkbox selector -->
+                        <ng-container>
 
-                        <ng-container *ngIf="current_route == 'in_progress' ">
-                            <ng-container *ngIf=" ( filter_finding_tab | async ) == 'under_review_current' ">
+                            <ng-template #checkboxSelectorTemplate>
+
+                                <ng-container *ngIf="markMode">
+
+                                    <div [@drawerTransition]="'left'" fxLayoutAlign="center center">
+
+                                        <nb-checkbox [disabled]="data?.marked_for_review_under_other_engagement"
+                                            #markFind style="height: 50% ;"
+                                            [checked]="markedFindings.has( data._id.$oid  )"
+                                            (checkedChange)="on_click_list_item(   data._id.$oid , data  ) "
+                                            status="primary">
+
+                                        </nb-checkbox>
+                                    </div>
+                                </ng-container>
+                            </ng-template>
+
+                            <ng-container [ngSwitch]="current_state">
+
+                                <!-- For All Cases (all, open , under_review, already_under_review) -->
+                                <ng-template [ngSwitchCase]="'open'">
+                                </ng-template>
+
+                                <ng-container *ngSwitchDefault>
+                                    <ng-container *ngTemplateOutlet="checkboxSelectorTemplate"></ng-container>
+
+                                </ng-container>
 
 
-                                {{ filter_finding_tab | async }}
                             </ng-container>
 
 
                         </ng-container>
 
 
+                        <!-- State Icon -->
+
+                        <ng-container>
+
+                            <ng-container [ngSwitch]="current_state">
+
+                                <!-- For All Cases (all, open , under_review, already_under_review) -->
 
 
-                        <!-- Open / Makred for revalidation -->
-                        <ng-container *ngIf="!data?.from_currently_active_engagement">
 
-                            <div nbTooltipPlacement="bottom"
-                                [nbTooltip]="!data?.verifiable ? 'Mark for review' : 'Mark open' "
-                                [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) " style="padding: 0;"
-                                fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
+                                <!-- For draft state -->
+                                <ng-template [ngSwitchCase]="'draft'">
 
-                                <button *ngIf="!data?.verifiable"
-                                    (click)="  $event.stopPropagation();  markForVerification( data )"
-                                    [disabled]="data?.verifiable" ghost nbButton size="medium" status="success">
-                                    <!-- Verify -->
-                                    <nb-icon icon="checkmark-circle-2"></nb-icon>
+                                    <ng-container>
+
+                                        <ng-template #draftStateTemplate>
+
+                                            <ng-container>
+
+
+                                                <button [disabled]="data?.active == false"
+                                                    (click)="  $event.stopPropagation(); data?.verifiable ?  unmarkForVerification( data ) : markForVerification( data )  "
+                                                    nbButton nbTooltipPlacement="bottom" outline shape="round"
+                                                    size="small" [status]="data?.verifiable ? 'info'  : 'danger' "
+                                                    [nbTooltip]="data?.verifiable ? 'Mark open'  : 'Mark for review' ">
+                                                    {{ data?.verifiable ? 'R' : 'O' }}
+
+
+                                                </button>
+
+
+
+                                            </ng-container>
+                                        </ng-template>
+
+                                        <ng-container [ngSwitch]=" current_tab  ">
+
+
+
+                                            <!-- All -->
+                                            <ng-template [ngSwitchCase]="'all'">
+
+                                                <ng-container *ngTemplateOutlet="draftStateTemplate"></ng-container>
+                                            </ng-template>
+
+                                            <!-- open -->
+                                            <ng-template [ngSwitchCase]="'open'">
+
+                                                <ng-container *ngTemplateOutlet="draftStateTemplate"></ng-container>
+                                            </ng-template>
+
+                                            <!-- under_review -->
+                                            <ng-template [ngSwitchCase]="'under_review_current'">
+
+                                                <ng-container *ngTemplateOutlet="draftStateTemplate"></ng-container>
+                                            </ng-template>
+
+                                            <!-- under_review_others -->
+                                            <ng-template [ngSwitchCase]="'under_review_others'">
+
+                                                <ng-container *ngTemplateOutlet="draftStateTemplate"></ng-container>
+                                            </ng-template>
+
+                                        </ng-container>
+
+
+
+
+
+
+                                    </ng-container>
+
+                                </ng-template>
+
+                                <!-- For open state..no state managemenet - symbolizer required -->
+
+                                <!-- For 'in_progress' state -->
+                                <ng-template [ngSwitchCase]="'in_progress'">
+
+
+                                    <ng-container>
+
+                                        <ng-template #reviewStateManageTempalate>
+
+                                            <ng-container>
+
+
+
+                                                <ng-container
+                                                    *ngIf=" ClosedFindingState.includes( data?.state ) ; else notClosedLocalTemplate ">
+
+                                                    <button outline shape="round" nbButton size="small"
+                                                        status="success">
+                                                        <!-- Verify -->
+                                                        <nb-icon icon="checkmark-outline"></nb-icon>
+                                                    </button>
+
+                                                </ng-container>
+
+                                                <ng-template #notClosedLocalTemplate>
+                                                    <button outline shape="round" nbButton size="small" status="danger">
+
+                                                        <!-- Verify -->
+                                                        <nb-icon icon="close-outline"></nb-icon>
+                                                    </button>
+                                                </ng-template>
+
+
+                                                <button nbButton [nbPopover]="changeFindingStatePopupTemplate" ghost
+                                                    size="small" nbPopoverPlacement="bottom"
+                                                    [nbPopoverContext]="{  mode: 'review'  ,  index: index , id: data._id.$oid , engagement_id: data.assessment_id.$oid }">
+                                                    <nb-icon icon="more-vertical"></nb-icon>
+                                                </button>
+
+
+                                            </ng-container>
+                                        </ng-template>
+
+                                        <ng-template #publishtStateSwitchTemplate>
+                                            <ng-container>
+
+
+                                                <div nbTooltipPlacement="bottom" nbTooltip="Move to draft"
+                                                    [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                                                    style="padding: 0;" fxLayoutAlign="center center" class=" item "
+                                                    fxFlex="0 0 3rem">
+
+                                                    <button (click)="  $event.stopPropagation();  moveToDraft( data )"
+                                                        ghost nbButton size="medium" status="warning">
+                                                        <!-- to Draft -->
+                                                        <nb-icon icon="trending-down-outline"></nb-icon>
+                                                    </button>
+
+
+                                                </div>
+
+
+                                            </ng-container>
+
+                                        </ng-template>
+
+
+                                        <ng-template #draftStateSwitchTemplate>
+
+                                            <ng-container>
+
+
+
+                                                <div nbTooltipPlacement="bottom" nbTooltip="Move to published"
+                                                    [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                                                    style="padding: 0;" fxLayoutAlign="center center" class=" item "
+                                                    fxFlex="0 0 3rem">
+
+                                                    <button (click)="  $event.stopPropagation();  moveToPublish( data )"
+                                                        ghost nbButton size="medium" status="success">
+                                                        <!-- to Draft -->
+                                                        <nb-icon icon="undo-outline"></nb-icon>
+                                                    </button>
+
+
+                                                </div>
+
+
+
+
+                                            </ng-container>
+                                        </ng-template>
+
+                                        <!--  current_tab: 'new'  new findings discovered in this assessment -> can be moved to drat / archived /  'under_review_current' findings under review for this asessment -> finding state management with vertical icon -->
+                                        <!-- draft state: like new -->
+
+
+
+                                        <ng-container [ngSwitch]=" current_tab  ">
+
+
+
+                                            <!-- new -->
+                                            <ng-template [ngSwitchCase]="'new'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="publishtStateSwitchTemplate"></ng-container>
+
+                                            </ng-template>
+
+                                            <!-- new -->
+                                            <ng-template [ngSwitchCase]="'draft'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="draftStateSwitchTemplate"></ng-container>
+
+                                            </ng-template>
+
+
+                                            <!-- under_review_current -->
+                                            <ng-template [ngSwitchCase]="'under_review_current'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="reviewStateManageTempalate"></ng-container>
+                                            </ng-template>
+
+                                            <!-- under_review_current_fixed -->
+                                            <ng-template [ngSwitchCase]="'under_review_current_fixed'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="reviewStateManageTempalate"></ng-container>
+                                            </ng-template>
+
+                                            <!-- under_review_current_open -->
+                                            <ng-template [ngSwitchCase]="'under_review_current_open'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="reviewStateManageTempalate"></ng-container>
+                                            </ng-template>
+
+
+                                        </ng-container>
+
+
+
+
+
+
+                                    </ng-container>
+
+                                </ng-template>
+
+
+                                <!-- For 'under_review' state -->
+                                <ng-template [ngSwitchCase]="'under_review'">
+
+
+                                    <ng-container>
+
+                                        <ng-template #reviewStateManageTempalate>
+
+                                            <ng-container>
+
+
+
+                                                <ng-container
+                                                    *ngIf=" ClosedFindingState.includes( data?.state ) ; else notClosedLocalTemplate ">
+
+                                                    <button outline shape="round" nbButton size="small"
+                                                        status="success">
+                                                        <!-- Verify -->
+                                                        <nb-icon icon="checkmark-outline"></nb-icon>
+                                                    </button>
+
+                                                </ng-container>
+
+                                                <ng-template #notClosedLocalTemplate>
+                                                    <button outline shape="round" nbButton size="small" status="danger">
+
+                                                        <!-- Verify -->
+                                                        <nb-icon icon="close-outline"></nb-icon>
+                                                    </button>
+                                                </ng-template>
+
+
+                                                <button nbButton [nbPopover]="changeFindingStatePopupTemplate" ghost
+                                                    size="small" nbPopoverPlacement="bottom"
+                                                    [nbPopoverContext]="{  mode: 'review'  ,  index: index , id: data._id.$oid , engagement_id: data.assessment_id.$oid }">
+                                                    <nb-icon icon="more-vertical"></nb-icon>
+                                                </button>
+
+
+                                            </ng-container>
+                                        </ng-template>
+
+                                        <ng-template #publishtStateSwitchTemplate>
+                                            <ng-container>
+
+
+                                                <div nbTooltipPlacement="bottom" nbTooltip="Move to draft"
+                                                    [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                                                    style="padding: 0;" fxLayoutAlign="center center" class=" item "
+                                                    fxFlex="0 0 3rem">
+
+                                                    <button (click)="  $event.stopPropagation();  moveToDraft( data )"
+                                                        ghost nbButton size="medium" status="warning">
+                                                        <!-- to Draft -->
+                                                        <nb-icon icon="trending-down-outline"></nb-icon>
+                                                    </button>
+
+
+                                                </div>
+
+
+                                            </ng-container>
+
+                                        </ng-template>
+
+
+                                        <ng-template #draftStateSwitchTemplate>
+
+                                            <ng-container>
+
+
+
+                                                <div nbTooltipPlacement="bottom" nbTooltip="Move to published"
+                                                    [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                                                    style="padding: 0;" fxLayoutAlign="center center" class=" item "
+                                                    fxFlex="0 0 3rem">
+
+                                                    <button (click)="  $event.stopPropagation();  moveToPublish( data )"
+                                                        ghost nbButton size="medium" status="success">
+                                                        <!-- to Draft -->
+                                                        <nb-icon icon="undo-outline"></nb-icon>
+                                                    </button>
+
+
+                                                </div>
+
+
+
+
+                                            </ng-container>
+                                        </ng-template>
+
+                                        <!--  current_tab: 'new'  new findings discovered in this assessment -> can be moved to drat / archived /  'under_review_current' findings under review for this asessment -> finding state management with vertical icon -->
+                                        <!-- draft state: like new -->
+
+
+
+                                        <ng-container [ngSwitch]=" current_tab  ">
+
+
+
+                                            <!-- new -->
+                                            <ng-template [ngSwitchCase]="'new'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="publishtStateSwitchTemplate"></ng-container>
+
+                                            </ng-template>
+
+                                            <!-- new -->
+                                            <ng-template [ngSwitchCase]="'draft'">
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="draftStateSwitchTemplate"></ng-container>
+
+                                            </ng-template>
+
+
+                                            <!-- under_review_current -->
+                                            <ng-template [ngSwitchCase]="'under_review_current'">
+
+
+                                                <ng-container
+                                                    *ngTemplateOutlet="reviewStateManageTempalate"></ng-container>
+                                            </ng-template>
+
+
+                                        </ng-container>
+
+
+
+
+
+
+                                    </ng-container>
+
+                                </ng-template>
+                            </ng-container>
+
+                        </ng-container>
+
+
+                        <!-- Severity state -->
+                        <!-- Will always be visible so no much of logic here -->
+                        <ng-container>
+                            <div style="padding: 0;" fxLayoutAlign="start center" class=" item " fxFlex="0 0 6rem">
+                                <button [style.color]="data?.color" outline shape="round" nbButton size="small">
+                                    {{ ( data?.severity )}}
                                 </button>
-
-                                <button *ngIf="data?.verifiable"
-                                    (click)="$event.stopPropagation();  unmarkForVerification( data )" outline nbButton
-                                    size="medium" ghost shape="round" status="danger">
-                                    <!-- Not Fixed -->
-                                    <nb-icon icon="close-circle"></nb-icon>
-
-                                </button>
-
-
                             </div>
                         </ng-container>
 
-                        <!-- Draft / Published in curent asessment -->
-                        <ng-container *ngIf="data?.from_currently_active_engagement">
 
-                            <ng-container *ngIf=" filter_finding_tab | async as filter_finding_tab">
+                        <!-- Title & Descrioptin with elipsie -->
+                        <ng-container>
+                            <div (click)="on_click_list_item(data?._id?.$oid , data)" fxFlex class="truncate-row item"
+                                fxLayoutGap="1rem" fxLayoutAlign="start center" fxLayout="row">
 
+                                <!--  -->
 
-
-
-                                <div nbTooltipPlacement="bottom"
-                                    [nbTooltip]="filter_finding_tab == 'new' ? 'Move to draft' : 'Mark it published'  "
-                                    [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
-                                    style="padding: 0;" fxLayoutAlign="center center" class=" item " fxFlex="0 0 3rem">
-
-                                    <button *ngIf="filter_finding_tab == 'draft' "
-                                        (click)="  $event.stopPropagation();  moveToPublish( data )" ghost nbButton
-                                        size="medium" status="success">
-                                        <!-- to Draft -->
-                                        <nb-icon icon="diagonal-arrow-left-up-outline"></nb-icon>
-                                    </button>
-
-                                    <button *ngIf="filter_finding_tab == 'new' "
-                                        (click)="$event.stopPropagation();  moveToDraft( data )" outline nbButton
-                                        size="medium" ghost shape="round" status="warning">
-                                        <!-- To New -->
-                                        <nb-icon icon="diagonal-arrow-right-down-outline"></nb-icon>
-
-                                    </button>
-
-
-                                </div>
-                            </ng-container>
-
-                        </ng-container>
-
-
-
-                        <!-- Severity -->
-                        <div style="padding: 0;" fxLayoutAlign="start center" class=" item " fxFlex="0 0 6rem">
-
-                            <button [style.color]="data?.color" outline shape="round" nbButton size="small">
-
-                                {{ ( data?.severity )}}
-
-                            </button>
-
-
-
-
-
-                        </div>
-                    </div>
-
-                    <div (click)="on_click_list_item(data?._id?.$oid , data)" fxFlex class="truncate-row item"
-                        fxLayoutGap="1rem" fxLayoutAlign="start center" fxLayout="row">
-
-                        <!--  -->
-
-                        <span class="caption-2">
-                            {{ index + 1}}.
-                        </span>
-                        <span class="truncate-cell">
-                            {{data?.title}}
-
-                        </span>
-
-                        <span fxFlex class="truncate-cell description">
-                            {{data?.description}}
-                            {{data?.description}}
-                            {{data?.description}}
-                            {{data?.description}}
-                            {{data?.description}}
-                            {{data?.description}}
-                        </span>
-
-
-
-                        <!-- {{data | json}} -->
-                        <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
-
-
-
-                        <div *ngIf="false" fxFlex fxLayout="row">
-
-                            <!-- Title -->
-                            <div fxLayoutGap="1rem" fxFlex fxLayout="row" class="truncate-row item">
-                                <div class="truncate-cell"> <!-- Adjust fxFlex as needed -->
-                                    <!-- Your content here -->
+                                <span class="caption-2">
+                                    {{ index + 1}}.
+                                </span>
+                                <span class="truncate-cell">
                                     {{data?.title}}
 
-                                </div>
-                                <div class="truncate-cell description"> <!-- Adjust fxFlex as needed -->
-                                    <!-- Your content here -->
+                                </span>
+
+                                <span fxFlex class="truncate-cell description">
                                     {{data?.description}}
                                     {{data?.description}}
                                     {{data?.description}}
                                     {{data?.description}}
                                     {{data?.description}}
                                     {{data?.description}}
+                                </span>
+
+
+                            </div>
+                        </ng-container>
+
+                        <!-- Debug disabled -->
+                        <ng-container *ngIf="false">
+
+
+                            <div fxLayout="row">
+
+
+
+                                <!-- <ng-container *ngIf="!data?.marked_for_review_under_other_engagement"> -->
+
+
+                                <!-- </ng-container> -->
+
+
+
+
+
+                                <ng-container *ngIf="current_state == 'in_progress' ">
+                                    <ng-container *ngIf=" ( current_tab ) == 'under_review_current' ">
+
+
+
+                                        <ng-container>
+
+
+
+                                            <button nbButton [nbPopover]="changeFindingStatePopupTemplate" ghost
+                                                size="small" nbPopoverPlacement="bottom"
+                                                [nbPopoverContext]="{  mode: 'review'  ,  index: index , id: data._id.$oid , engagement_id: data.assessment_id.$oid }">
+                                                <nb-icon icon="more-vertical"></nb-icon>
+                                            </button>
+
+                                        </ng-container>
+
+
+
+                                        <ng-container *ngIf=" ClosedFindingState.includes( data?.state ) ">
+
+                                            <button ghost nbButton size="medium" status="success">
+                                                <!-- Verify -->
+                                                <nb-icon icon="checkmark-circle-2"></nb-icon>
+                                            </button>
+
+                                        </ng-container>
+                                    </ng-container>
+
+
+                                </ng-container>
+
+
+
+
+                                <!-- Open / Makred for revalidation -->
+                                <ng-container *ngIf="!data?.from_currently_active_engagement">
+
+                                    <div nbTooltipPlacement="bottom"
+                                        [nbTooltip]="!data?.verifiable ? 'Mark for review' : 'Mark open' "
+                                        [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                                        style="padding: 0;" fxLayoutAlign="center center" class=" item "
+                                        fxFlex="0 0 3rem">
+
+                                        <button *ngIf="!data?.verifiable"
+                                            (click)="  $event.stopPropagation();  markForVerification( data )"
+                                            [disabled]="data?.verifiable" ghost nbButton size="medium" status="success">
+                                            <!-- Verify -->
+                                            <nb-icon icon="checkmark-circle-2"></nb-icon>
+                                        </button>
+
+                                        <button *ngIf="data?.verifiable"
+                                            (click)="$event.stopPropagation();  unmarkForVerification( data )" outline
+                                            nbButton size="medium" ghost shape="round" status="danger">
+                                            <!-- Not Fixed -->
+                                            <nb-icon icon="close-circle"></nb-icon>
+
+                                        </button>
+
+
+                                    </div>
+                                </ng-container>
+
+                                <!-- Draft / Published in curent asessment -->
+                                <ng-container *ngIf="data?.from_currently_active_engagement">
+
+                                    <ng-container *ngIf=" current_tab as current_tab">
+
+
+
+
+                                        <div nbTooltipPlacement="bottom"
+                                            [nbTooltip]="current_tab == 'new' ? 'Move to draft' : 'Mark it published'  "
+                                            [nbSpinner]="loading_staate_for_individual.has( data._id.$oid ) "
+                                            style="padding: 0;" fxLayoutAlign="center center" class=" item "
+                                            fxFlex="0 0 3rem">
+
+                                            <button *ngIf="current_tab == 'draft' "
+                                                (click)="  $event.stopPropagation();  moveToPublish( data )" ghost
+                                                nbButton size="medium" status="success">
+                                                <!-- to Draft -->
+                                                <nb-icon icon="diagonal-arrow-left-up-outline"></nb-icon>
+                                            </button>
+
+                                            <button *ngIf="current_tab == 'new' "
+                                                (click)="$event.stopPropagation();  moveToDraft( data )" outline
+                                                nbButton size="medium" ghost shape="round" status="warning">
+                                                <!-- To New -->
+                                                <nb-icon icon="diagonal-arrow-right-down-outline"></nb-icon>
+
+                                            </button>
+
+
+                                        </div>
+                                    </ng-container>
+
+                                </ng-container>
+
+
+
+                                <!-- Severity -->
+                                <div style="padding: 0;" fxLayoutAlign="start center" class=" item " fxFlex="0 0 6rem">
+
+                                    <button [style.color]="data?.color" outline shape="round" nbButton size="small">
+
+                                        {{ ( data?.severity )}}
+
+                                    </button>
+
+
+
+
 
                                 </div>
                             </div>
 
+                            <div (click)="on_click_list_item(data?._id?.$oid , data)" fxFlex class="truncate-row item"
+                                fxLayoutGap="1rem" fxLayoutAlign="start center" fxLayout="row">
+
+                                <!--  -->
+
+                                <span class="caption-2">
+                                    {{ index + 1}}.
+                                </span>
+                                <span class="truncate-cell">
+                                    {{data?.title}}
+
+                                </span>
+
+                                <span fxFlex class="truncate-cell description">
+                                    {{data?.description}}
+                                    {{data?.description}}
+                                    {{data?.description}}
+                                    {{data?.description}}
+                                    {{data?.description}}
+                                    {{data?.description}}
+                                </span>
 
 
-                        </div>
+
+                                <!-- {{data | json}} -->
+                                <!-- <div class="ribbon ribbon-top-left"><span>ribbon</span></div> -->
 
 
-                        <div *ngIf="false" class="   item " fxFlex="1 0" fxLayout="row" fxLayoutALign="start center">
 
-                            <!-- <span class="caption title"> -->
+                                <div *ngIf="false" fxFlex fxLayout="row">
 
-                            <!-- <span class="chip">
+                                    <!-- Title -->
+                                    <div fxLayoutGap="1rem" fxFlex fxLayout="row" class="truncate-row item">
+                                        <div class="truncate-cell"> <!-- Adjust fxFlex as needed -->
+                                            <!-- Your content here -->
+                                            {{data?.title}}
+
+                                        </div>
+                                        <div class="truncate-cell description"> <!-- Adjust fxFlex as needed -->
+                                            <!-- Your content here -->
+                                            {{data?.description}}
+                                            {{data?.description}}
+                                            {{data?.description}}
+                                            {{data?.description}}
+                                            {{data?.description}}
+                                            {{data?.description}}
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div *ngIf="false" class="   item " fxFlex="1 0" fxLayout="row"
+                                    fxLayoutALign="start center">
+
+                                    <!-- <span class="caption title"> -->
+
+                                    <!-- <span class="chip">
                             {{data?.component_name}}
                         </span> -->
 
@@ -577,166 +1322,169 @@
 
 
 
-                            <div>
+                                    <div>
 
-                                {{data?.title}}
+                                        {{data?.title}}
+                                    </div>
+
+                                    <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline"
+                                        status="danger" class="buildcount" size="tiny" text="Supressed">
+                                    </nb-tag>
+                                    <nb-tag *ngIf="data?.hawki_attributes?.accept_risk?.accepted" appearance="outline"
+                                        status="danger" class="buildcount" size="tiny" text="Known Risk">
+                                    </nb-tag>
+
+                                    <!-- {{data?.title}} -->
+                                    <!-- {{data?.title}} -->
+
+                                    <!-- </span> -->
+
+
+                                    <div class="description">
+
+                                        <!-- {{data?.found_by}} -->
+                                        {{data?.description}}
+                                        {{data?.description}}
+                                        {{data?.description}}
+                                        {{data?.description}}
+                                        {{data?.description}}
+                                        {{data?.description}}
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             </div>
 
-                            <nb-tag *ngIf="data?.hawki_attributes?.supress_vuln?.supressed" appearance="outline"
-                                status="danger" class="buildcount" size="tiny" text="Supressed">
-                            </nb-tag>
-                            <nb-tag *ngIf="data?.hawki_attributes?.accept_risk?.accepted" appearance="outline"
-                                status="danger" class="buildcount" size="tiny" text="Known Risk">
-                            </nb-tag>
+                            <div nbTooltipPlacement="bottom" nbTooltip="New" class="new-issue"
+                                *ngIf="data?.from_currently_active_engagement" [@drawerTransition]="'left'"
+                                (click)="view_finding(data?._id?.$oid)">
+                                <button ghost status="danger" size="medium" nbButton>
 
-                            <!-- {{data?.title}} -->
-                            <!-- {{data?.title}} -->
+                                    <nb-icon icon="droplet">
 
-                            <!-- </span> -->
-
-
-                            <div class="description">
-
-                                <!-- {{data?.found_by}} -->
-                                {{data?.description}}
-                                {{data?.description}}
-                                {{data?.description}}
-                                {{data?.description}}
-                                {{data?.description}}
-                                {{data?.description}}
-
+                                    </nb-icon>
+                                </button>
                             </div>
 
-                        </div>
+                            <div [@drawerTransition]="'left'" *ngIf="markMode" (click)="view_finding(data?._id?.$oid)">
+                                <button ghost [status]="markMode ? 'basic': 'info' " size="tiny" nbButton>
 
+                                    <nb-icon icon="diagonal-arrow-right-up">
 
+                                    </nb-icon>
+                                </button>
+                            </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
+                        </ng-container>
 
                     </div>
 
-                    <div nbTooltipPlacement="bottom" nbTooltip="New" class="new-issue"
-                        *ngIf="data?.from_currently_active_engagement" [@drawerTransition]="'left'"
-                        (click)="view_finding(data?._id?.$oid)">
-                        <button ghost status="danger" size="medium" nbButton>
 
-                            <nb-icon icon="droplet">
-
-                            </nb-icon>
-                        </button>
-                    </div>
-
-                    <div [@drawerTransition]="'left'" *ngIf="markMode" (click)="view_finding(data?._id?.$oid)">
-                        <button ghost [status]="markMode ? 'basic': 'info' " size="tiny" nbButton>
-
-                            <nb-icon icon="diagonal-arrow-right-up">
-
-                            </nb-icon>
-                        </button>
-                    </div>
-
-                </div>
+                </nb-list-item>
 
 
-            </nb-list-item>
-
-
-        </nb-list>
+            </nb-list>
 
 
 
-        <!-- </ng-template> -->
+            <!-- </ng-template> -->
 
 
-        <nb-card-footer *ngIf="false">
+            <nb-card-footer *ngIf="false">
 
 
-            <div fxFlex fxLayoutAlign="space-between">
-                <button style="margin-left:  1rem;" [disabled]="loadingFindings$
+                <div fxFlex fxLayoutAlign="space-between">
+                    <button style="margin-left:  1rem;" [disabled]="loadingFindings$
             ||
             ( math.ceil( lastFindingIdOffset / findingsListLimit ) <= 1 ) || 1
             " (click)="previousPage()" size="medium" status="success" nbButton ghost>
 
-                    <nb-icon icon="arrow-left-outline"></nb-icon>
-                    Prev
+                        <nb-icon icon="arrow-left-outline"></nb-icon>
+                        Prev
 
-                </button>
-
-
-
-                <div *ngIf="true" fxFlex fxLayoutAlign="center center">
-
-                    <nb-select [selected]="currentPage" (selectedChange)="goto($event)" placeholder="Go to">
-
-                        <nb-select-label>
-
-                            <div>
-                                Page
-
-                                <span class="page" [class.page_no]="!loadingFindings$">
-
-                                    <!-- {{selectedItem}} -->
-                                    <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
-
-                                    {{currentPage}}
-                                </span>
-
-                                of
-                                <span class="page" [class.page_no]="!loadingFindings$">
-
-                                    {{totalPages}}
-
-                                </span>
-
-                            </div>
+                    </button>
 
 
-                        </nb-select-label>
 
-                        <nb-option
-                            *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
-                            [value]="i + 1">
-                            <div>
-                                Page
-                                {{i + 1}}
-                            </div>
-                        </nb-option>
+                    <div *ngIf="true" fxFlex fxLayoutAlign="center center">
+
+                        <nb-select [selected]="currentPage" (selectedChange)="goto($event)" placeholder="Go to">
+
+                            <nb-select-label>
+
+                                <div>
+                                    Page
+
+                                    <span class="page" [class.page_no]="!loadingFindings$">
+
+                                        <!-- {{selectedItem}} -->
+                                        <!-- {{ math.ceil( lastFindingIdOffset / findingsListLimit ) }} -->
+
+                                        {{currentPage}}
+                                    </span>
+
+                                    of
+                                    <span class="page" [class.page_no]="!loadingFindings$">
+
+                                        {{totalPages}}
+
+                                    </span>
+
+                                </div>
 
 
-                    </nb-select>
-                    <!-- {{lastFindingIdOffset}} -->
-                    <!-- {{findingsListLimit}} -->
+                            </nb-select-label>
 
+                            <nb-option
+                                *ngFor="let item of [].constructor(  math.ceil( totalFindings / findingsListLimit ) ); let i = index"
+                                [value]="i + 1">
+                                <div>
+                                    Page
+                                    {{i + 1}}
+                                </div>
+                            </nb-option>
+
+
+                        </nb-select>
+                        <!-- {{lastFindingIdOffset}} -->
+                        <!-- {{findingsListLimit}} -->
+
+                    </div>
+
+                    <button style="margin-right:  1rem;"
+                        [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
+                        (click)="nextPage()" size="medium" status="success" nbButton ghost>
+
+                        Next
+                        <nb-icon icon="arrow-right-outline"></nb-icon>
+
+                    </button>
                 </div>
 
-                <button style="margin-right:  1rem;"
-                    [disabled]="loadingFindings$ || ( math.ceil( lastFindingIdOffset / findingsListLimit ) >= math.ceil( totalFindings / findingsListLimit ) ) "
-                    (click)="nextPage()" size="medium" status="success" nbButton ghost>
+            </nb-card-footer>
 
-                    Next
-                    <nb-icon icon="arrow-right-outline"></nb-icon>
-
-                </button>
-            </div>
-
-        </nb-card-footer>
-
-        <!-- </nb-card-body> -->
+            <!-- </nb-card-body> -->
 
 
-    </nb-card>
+        </nb-card>
 
+    </ng-container>
 
 </ng-container>
 

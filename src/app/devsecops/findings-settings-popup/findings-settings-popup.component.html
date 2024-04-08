@@ -1,0 +1,42 @@
+<!-- <ng-container *ngIf="findingDetails$  | async"> -->
+
+
+<nb-card   class="margin-bottom-0 nb-theme-default">
+
+
+
+
+
+  <nb-list>
+    <nb-list-item nbButton class="item" (click)="changeState(state)" fxLayoutAlign="start center"
+      *ngFor="let state of options">
+
+
+
+
+      <div fxFlex fxLayoutGap="1rem" fxLayout="row" fxLayoutAlign="start center"  >
+
+        <button outline status="hint" nbButton shape="round" size="tiny"  >
+
+          <nb-icon [icon]="state?.icon">
+
+          </nb-icon>
+        </button>
+
+        <div class=" text-hint">
+
+          {{state?.title}}
+        </div>
+
+
+      </div>
+
+    
+      
+
+    </nb-list-item>
+  </nb-list>
+
+</nb-card>
+
+<!-- </ng-container> -->

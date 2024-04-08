@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NbCheckboxComponent, NbContextMenuDirective, NbOverlayService, NbPopoverComponent, NbPosition, NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
+import { NbCheckboxComponent, NbContextMenuDirective, NbOverlayService, NbPopoverComponent, NbPopoverDirective, NbPosition, NbSidebarService, NbWindowRef, NbWindowService } from '@nebular/theme';
 import { BehaviorSubject, map, filter, switchMap, tap, share, startWith, Subject, shareReplay, Observable, take, of } from 'rxjs';
 import { NewSidebarService } from 'src/app/new-sidebar.service';
 import { ApiService } from '../api.service';
@@ -9,7 +9,7 @@ import { DrawerDirection } from '../drawer/drawer-direction.enum';
 import { DrawerService } from '../drawer/drawer.service';
 import { EngagementService } from '../engagement.service';
 import { FindingStatsComponent } from '../finding-stats/finding-stats.component';
-import { ColorSeverity, EngagementState } from 'src/environments/constants';
+import { ClosedFindingState, ColorSeverity, EngagementState, FindingState } from 'src/environments/constants';
 import { trigger } from '@angular/animations';
 import { DRAWER_ANIMATION } from '../drawer/drawer.animation';
 
@@ -24,8 +24,551 @@ import { DRAWER_ANIMATION } from '../drawer/drawer.animation';
 })
 export class EngagementFindingsComponent implements OnInit {
 
+
+  ClosedFindingState = ClosedFindingState;
   @ViewChildren('markFind') markFind: QueryList<NbCheckboxComponent>;
 
+  getPopoverRef(index) {
+    let ref = this.popoverComponents.get(index);
+
+    return ref;
+  }
+
+
+  toggleMarkMode(state?: boolean, markAl = true) {
+    if (state == undefined) {
+      this.markMode = !this.markMode;
+    } else {
+      this.markMode = state;
+
+    }
+
+    this.markModeChanged(markAl);
+
+
+
+  }
+
+  settingsPopupOptions = [
+
+    {
+      title: 'Mark Mode',
+      icon: 'checkmark-outline',
+      value: FindingState.OPEN,
+      id: 'mark-mode'
+    },
+    {
+      title: 'Mark All',
+      icon: 'done-all-outline',
+      value: FindingState.CLOSED,
+      id: 'mark-all-mode'
+
+
+    },
+
+  ]
+
+
+  invalidateSettingsMeny(tab) {
+
+
+
+    let settingsMenu$ = [];
+
+    if (tab == 'all') {
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+          // dradt
+          {
+            title: 'Mark as open',
+            icon: 'slash-outline',
+            id: 'mark-open'
+          },
+          {
+            title: 'Mark as under review',
+            icon: 'slash-outline',
+            id: 'mark-for-review'
+          },
+
+        ]
+
+
+
+      }
+
+    } else if (tab == 'open') {
+
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode' + tab,
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark as under review',
+            icon: 'slash-outline',
+            id: 'mark-for-review'
+          }
+
+          // In All
+          ,
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+    }
+    else if (tab == 'under_review_current') {
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark as fixed',
+            icon: 'done-all-outline',
+            id: 'mark-fixed'
+
+
+          },
+          {
+            title: 'Mark as still open',
+            icon: 'done-all-outline',
+            id: 'mark-not-fixed'
+
+
+          },
+
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+    }
+
+    else if (tab == 'under_review_current_open') {
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+ 
+
+    
+          {
+            title: 'Mark as still open',
+            icon: 'done-all-outline',
+            id: 'mark-not-fixed'
+
+
+          },
+
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+    }
+
+    else if (tab == 'under_review_current_fixed') {
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+
+          {
+            title: 'Mark as fixed',
+            icon: 'done-all-outline',
+            id: 'mark-fixed'
+
+
+          },
+
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+    }
+
+
+
+    else if (tab == 'under_review_others') {
+
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+
+          // In All
+          ,
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+      // No menu required
+      settingsMenu$ = []
+
+    } else if (tab == 'new') {
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+
+          {
+            title: 'Mark to draft',
+            icon: 'done-all-outline',
+            id: 'mark-to-draft'
+
+
+          },
+          // In All
+
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+    } else if (tab == 'recurrent') {
+
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+        settingsMenu$ = [
+
+
+          {
+            title: 'Mark as fixed',
+            icon: 'done-all-outline',
+            id: 'mark-fixed'
+
+
+          },
+          {
+            title: 'Mark as open',
+            icon: 'done-all-outline',
+            id: 'mark-open'
+
+
+          },
+          // In All
+          ,
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+
+    } else if (tab == 'draft') {
+
+      if (this.markMode == false) {
+
+        settingsMenu$ = [
+
+          {
+            title: 'Mark Mode',
+            icon: 'checkmark-outline',
+            id: 'mark-mode'
+          },
+          {
+            title: 'Mark All',
+            icon: 'done-all-outline',
+            id: 'mark-all-mode'
+
+
+          },
+
+        ]
+      } else {
+
+
+        settingsMenu$ = [
+
+
+          {
+            title: 'Move to publish',
+            icon: 'done-all-outline',
+            id: 'mark-to-publish'
+
+
+          },
+          // In All
+
+          {
+            title: 'Clear All',
+            icon: 'slash-outline',
+            id: 'clear-all'
+          }]
+
+
+
+      }
+    }
+
+
+    //  'all' , 'open' , under_review_current' , 'under_review_others : new , recurrent , draft
+    // if (tab == 'all') 
+
+
+
+
+
+
+
+    this.SetingsMenu$.next(settingsMenu$);
+
+
+    console.log('invalidateSettingsMeny', tab, settingsMenu$)
+
+
+  }
+
+  SetingsMenu$ = new BehaviorSubject([])
+
+
+
+  onSettingSelection(option) {
+    let id = option?.id;
+    if (id == 'mark-all-mode') {
+      console.log('onSettingSelection', id)
+      this.toggleMarkMode(true);
+
+
+
+    }
+    else if (id == 'mark-mode') {
+      console.log('onSettingSelection', id)
+      this.toggleMarkMode(true, false);
+
+    }
+    else if (id == 'mark-for-review') {
+      this.markForRevalidation();
+
+    } else if (id == 'mark-open') {
+      this.unmarkForRevalidation();
+
+    } else if (id == 'mark-to-draft') {
+
+      this.moveAllMarkedToDraft();
+
+    } else if (id == 'mark-not-fixed') {
+      this.changeMultipleFindingState(FindingState.CLOSED);
+
+
+    } else if (id == 'mark-fixed') {
+      this.changeMultipleFindingState(FindingState.OPEN);
+
+
+    } else if (id == 'mark-to-publish') {
+      this.moveAllMarkedToPublish();
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    else if (id == 'clear-all') {
+
+      this.toggleMarkMode(false);
+
+    }
+
+
+    this.cdr.detectChanges();
+  }
 
   ColorSeverity = ColorSeverity;
   @ViewChild(NbContextMenuDirective) contextMenu: NbContextMenuDirective;
@@ -63,13 +606,19 @@ export class EngagementFindingsComponent implements OnInit {
 
   markedFindings = new Set()
 
-  markModeChanged() {
+  markModeChanged(markAl = true) {
     this.markAll$ = false;
     this.markedFindings.clear();
 
-    if (this.markMode) {
+
+    if (markAl) {
       this.markAll();
     }
+
+    this.current_tab.pipe(take(1)).subscribe(tab => {
+
+      this.invalidateSettingsMeny(tab);
+    })
   }
 
   markFindingWithChecks(finding, id) {
@@ -138,9 +687,19 @@ export class EngagementFindingsComponent implements OnInit {
   totalPages;
 
 
-  filter_finding_tab$ = new BehaviorSubject('open'); // 'all' , 'open' , under_review' , 'under_review_others : new , recurrent , draft
+  current_tab$ = new BehaviorSubject('open'); // 'all' , 'open' , under_review' , 'under_review_others : new , recurrent , draft
 
-  filter_finding_tab = this.filter_finding_tab$.pipe(shareReplay());
+  current_tab = this.current_tab$.pipe(
+
+    tap(_ => {
+      console.log('switcherpoop',);
+
+      this.invalidateSettingsMeny(_)
+
+    }),
+
+    shareReplay({ refCount: true, bufferSize: 1 })
+  );
 
 
   @ViewChild('editTmpl', { static: false }) editTmpl: TemplateRef<any>;
@@ -200,6 +759,7 @@ export class EngagementFindingsComponent implements OnInit {
 
 
   refreshFinding(_id) {
+    console.log('triggered', 'onclose')
     this.refreshIndividualFindingSignal.get(_id).next(1);
 
   }
@@ -346,7 +906,8 @@ export class EngagementFindingsComponent implements OnInit {
 
   refreshFindings() {
     console.log('refreshFindings');
-    this.markMode = false;
+    this.toggleMarkMode(false, false);
+
 
     // this.triggerRefresh.next(true);
     let loadMoreFindings = this.loadMoreFindings$.value;
@@ -387,14 +948,23 @@ export class EngagementFindingsComponent implements OnInit {
 
     private windowService: NewSidebarService,
     private overlayService: NbOverlayService,
+    private cdr: ChangeDetectorRef
 
 
   ) { }
   ngOnInit(): void {
-    console.log('afterviewinit')
+
+
+    this.activatedRoute.data.subscribe(_ => {
+      if (_?.mode == 'active_revalidation') {
+        this.parent_tab = 'active_revalidation';
+        console.log('explicit_data', this.parent_tab);
+      }
+    })
 
   }
 
+  parent_tab;
 
 
   goTo(slug: string) {
@@ -444,7 +1014,7 @@ export class EngagementFindingsComponent implements OnInit {
 
     // this.currentPage = 0;
     this.loadMoreFindings$.next(1);
-    this.filter_finding_tab$.next(filter);
+    this.current_tab$.next(filter);
   }
 
 
@@ -471,7 +1041,8 @@ export class EngagementFindingsComponent implements OnInit {
     });
   }
 
-  current_route = EngagementState.OPEN;
+  // current_state
+  current_state = EngagementState.OPEN;
 
 
 
@@ -531,61 +1102,90 @@ export class EngagementFindingsComponent implements OnInit {
   }
   activeEngagement = this.engagementService.activeEngagement
 
-  .pipe(
-    filter(_ => !!_),
-    
-    tap(_ => {
+    .pipe(
+      filter(_ => !!_),
 
-      // return;
-      this.current_route = _.engagement.state;
-      console.log('current_route', this.current_route);
-      // return;
+      tap(_ => {
+
+        // return;
+        this.current_state = _.engagement.state;
+        console.log('current_state', this.current_state);
+        // return;
 
 
-      if (this.current_route == EngagementState.DRAFT) {
-        this.switch_finding_filter('all');
-
-      } else if (this.current_route == EngagementState.OPEN) {
-        this.switch_finding_filter('under_review_current');
-
-      }
-      else if (this.current_route == EngagementState.IN_PROGRESS) {
-        this.switch_finding_filter('new');
-
-      }
-      else if (this.current_route == EngagementState.PENDING_REVIEW) {
-
-      } else if (this.current_route == EngagementState.UNDER_REVIEW) {
-
-      } else if (this.current_route == EngagementState.ACCEPTED) {
-
-      } else if (this.current_route == EngagementState.CLOSED) {
-
-      } else if (this.current_route == EngagementState.REJECTED) {
-
-      }
+        // If explicit via route
 
 
 
 
-    })
-    ,
-    map(_ => _.id),
+        if (this.current_state == EngagementState.DRAFT) {
+          this.switch_finding_filter('open');
 
-  
-    
-  );
+        } else if (this.current_state == EngagementState.OPEN) {
+          this.switch_finding_filter('under_review_current');
+
+        }
+        else if (this.current_state == EngagementState.IN_PROGRESS) {
+
+          // Check if revalidation-page
+          if (this.parent_tab == 'active_revalidation') {
+            this.switch_finding_filter('under_review_current');
+
+          } else {
+            this.switch_finding_filter('new');
+          }
+
+
+        }
+        // else if (this.current_state == EngagementState.PENDING_REVIEW) {
+
+        // }
+        else if (this.current_state == EngagementState.UNDER_REVIEW) {
+          if (this.parent_tab == 'active_revalidation') {
+            this.switch_finding_filter('under_review_current');
+
+          } else{
+            this.switch_finding_filter('new');
+          }
+
+        }
+        else if (this.current_state == EngagementState.ACCEPTED) {
+
+          if (this.parent_tab == 'active_revalidation') {
+            this.switch_finding_filter('under_review_current');
+
+          } else{
+            this.switch_finding_filter('new');
+          }
+
+        } else if (this.current_state == EngagementState.CLOSED) {
+
+        } else if (this.current_state == EngagementState.REJECTED) {
+
+        }
+
+
+        this.toggleMarkMode(false, false);
+
+
+      })
+      ,
+      map(_ => _.id),
+
+
+
+    );
 
 
   loadingFindings = false;
 
-  findings$ = this.filter_finding_tab.pipe(
+  findings$ = this.current_tab.pipe(
 
-tap(_=>{
+    tap(_ => {
 
-  this.loadingFindings = true;
-  console.log('loading_cfindings', 'started');
-}),
+      this.loadingFindings = true;
+      console.log('loading_cfindings', 'started');
+    }),
 
     switchMap(filter_state => {
 
@@ -711,17 +1311,18 @@ tap(_=>{
     })
 
     ,
-    tap(_=>{
+    tap(_ => {
       this.loadingFindings = false;
 
       console.log('loading_cfindings', 'end');
     }),
-    // shareReplay(),
+    shareReplay({ refCount: true, bufferSize: 1 })
+
 
   )
   // To avoid errors..ngonint moved to ngafterviewinit
- 
-  
+
+
 
   ngOnDestroy(): void {
     // TODO
@@ -766,8 +1367,21 @@ tap(_=>{
 
   }
 
-  test(testTemplate){
-  //  let xo =  this.overlayService.create();
+
+  @ViewChildren(NbPopoverDirective) popoverComponents: QueryList<NbPopoverDirective>;
+
+
+  openPopover(ref: NbPopoverDirective) {
+
+    ref.show()
+  }
+
+  test(index: number) {
+    let ref: NbPopoverDirective = this.popoverComponents.get(index);
+
+    console.log('refref', ref.content, ref.context, typeof ref)
+    this.openPopover(ref)
+    //  let xo =  this.overlayService.create();
 
     // let sd : NbPopoverComponent;
     // sd.overlayContainer
@@ -972,5 +1586,95 @@ tap(_=>{
 
   }
 
+  moveAllMarkedToDraft() {
+    console.log('moveAllMarkedToDraft');
 
+    let marked = Array.from(this.markedFindings);
+    marked.forEach((_id: string) => {
+
+      this.loading_staate_for_individual.set(_id, 1);
+    })
+
+    this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
+
+
+
+
+
+      return this.apiService.moveMultipleFindingsToDraft(engagement_id, marked)
+    }))
+
+      .subscribe(_ => {
+        const timestamp = Date.now();
+        marked.forEach((_id: string) => {
+
+          this.loading_staate_for_individual.set(_id, timestamp);
+        })
+
+        this.refreshFindings();
+      })
+
+  }
+
+  moveAllMarkedToPublish() {
+    console.log('moveAllMarkedToPublish');
+
+    let marked = Array.from(this.markedFindings);
+    marked.forEach((_id: string) => {
+
+      this.loading_staate_for_individual.set(_id, 1);
+    })
+
+    this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
+
+
+
+
+
+      return this.apiService.moveMultipleFindingsToPublish(engagement_id, marked)
+    }))
+
+      .subscribe(_ => {
+        const timestamp = Date.now();
+        marked.forEach((_id: string) => {
+
+          this.loading_staate_for_individual.set(_id, timestamp);
+        })
+
+        this.refreshFindings();
+      })
+
+  }
+
+  changeMultipleFindingState(state: FindingState) {
+
+    let marked = Array.from(this.markedFindings);
+    marked.forEach((_id: string) => {
+
+      this.loading_staate_for_individual.set(_id, 1);
+    })
+
+
+
+
+    this.activeEngagement.pipe(take(1)).pipe(switchMap(engagement_id => {
+
+
+
+
+
+      return this.apiService.changeMultipleFindingsState(state, engagement_id, marked)
+    }))
+
+      .subscribe(_ => {
+        const timestamp = Date.now();
+        marked.forEach((_id: string) => {
+
+          this.loading_staate_for_individual.set(_id, timestamp);
+        })
+
+        this.refreshFindings();
+      })
+
+  }
 }

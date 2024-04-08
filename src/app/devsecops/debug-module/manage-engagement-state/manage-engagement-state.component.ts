@@ -27,7 +27,7 @@ export class ManageEngagementStateComponent implements OnInit {
     EngagementState.DRAFT,
     EngagementState.OPEN,
     EngagementState.IN_PROGRESS,
-    EngagementState.PENDING_REVIEW,
+    // EngagementState.PENDING_REVIEW,
     EngagementState.UNDER_REVIEW,
     EngagementState.ACCEPTED,
     EngagementState.REJECTED,
@@ -51,7 +51,7 @@ export class ManageEngagementStateComponent implements OnInit {
     this.subscription.unsubscribe();
     this.subscription = this.currentState.valueChanges
       .pipe(
-        mergeMap(state => {
+        switchMap(state => {
           return this.engagementService.activeEngagement.pipe(
 
             take(1),

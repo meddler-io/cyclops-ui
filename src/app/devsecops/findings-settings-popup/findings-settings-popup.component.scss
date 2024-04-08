@@ -4,7 +4,7 @@ nb-card {
     // max-height: calc(100vh - 7rem);
     margin       : 0;
     // padding-top  : 60px;
-    border-radius: 0 !important;
+    // border-radius: 0 !important;
   
   
     // max-height: calc(100vh - 14rem);
@@ -28,11 +28,12 @@ nb-card {
   }
   nb-list-item {
 
-    padding-bottom: 15px;
+
   
     overflow: hidden;
-  
-    padding-top: 15px;
+
+    padding: 5px;
+    margin: 2px;
 
   
     &:hover {
@@ -45,14 +46,14 @@ nb-card {
   
   
   
-    .item {
+    &.item {
   
-      border-radius: 0.3rem;
+
   
       font-size  : 1rem;
       line-height: 1.5rem;
   
-      padding            : var(--button-ghost-medium-padding);
+      padding            : 0.6rem;
       padding-right      : 0 !important;
       // background-color: nb-theme(	color-primary-400) !important;
   

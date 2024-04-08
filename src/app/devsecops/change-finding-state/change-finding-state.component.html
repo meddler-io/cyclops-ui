@@ -1,9 +1,57 @@
-<nb-card class="margin-bottom-0 nb-theme-default">
+<!-- <ng-container *ngIf="findingDetails$  | async"> -->
+
+
+<nb-card [nbSpinner]="loading" class="margin-bottom-0 nb-theme-default">
+
+
+  <nb-card-header>
+
+    <div fxLayoutAlign="center center" fxLayoutGap="0rem" fxLayout="row" class="header">
+
+
+      <button (click)="ref?.hide()" size="large" status="basic" ghost nbButton>
+
+        <nb-icon icon="chevron-left-outline"></nb-icon>
+
+      </button>
+
+
+      <div fxFlex>
+        Modify Finding State
+      </div>
+
+
+
+    </div>
+
+  </nb-card-header>
 
   <nb-list>
-    <nb-list-item *ngFor="let state of states">
-      {{state?.title}}
+    <nb-list-item class="item"  (click)="changeState(state.value)"
+      fxLayoutAlign="space-between center" *ngFor="let state of states">
+
+
+
+
+      <div [class.selected]="state?.value == ( findingDetails$  | async )?.claimed_state  ">
+
+        {{state?.title}}
+
+      </div>
+
+      <div fxLayoutAlign="center center">
+
+        <button style="padding: 0 ; margin: 0; ;" *ngIf="state?.value == ( findingDetails$  | async ) ?.claimed_state"
+          ghost nbButton size="medium" status="primary">
+          <!-- Verify -->
+          <nb-icon icon="done-all-outline"></nb-icon>
+        </button>
+
+      </div>
+
     </nb-list-item>
   </nb-list>
 
 </nb-card>
+
+<!-- </ng-container> -->

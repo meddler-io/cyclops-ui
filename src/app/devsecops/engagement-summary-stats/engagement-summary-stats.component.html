@@ -1,0 +1,37 @@
+<nb-card class="nb-theme-default" #ContainerRef>
+    <nb-card-body style="margin: rem;">
+        <div fxLayoutGap="0rem" fxLayout="column">
+
+            <div fxLayoutGap="0rem" fxFlex>
+
+                <div>
+                    <p class="h3">
+                        Stats
+                    </p>
+                </div>
+
+                <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center center">
+                    <div fxLayoutAlign="center center" fxFlex.gt-sm="20" fxFlex.gt-md="20" fxFlex.gt-lg="20" *ngFor="let data of severity_stats">
+                        <!-- Each chart item -->
+                        <ngx-charts-pie-grid [label]="label" [view]="[ 200 , 200 ]" [scheme]="colorScheme"
+                            [results]="[data]" (select)="onSelect($event)">
+                        </ngx-charts-pie-grid>
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </nb-card-body>
+
+</nb-card>

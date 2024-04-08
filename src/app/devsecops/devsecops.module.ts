@@ -125,6 +125,8 @@ import { EngagementFindingSeverityComponent } from './engagement-finding-severit
 import { NextActionScreenComponent } from './next-action-screen/next-action-screen.component';
 import { ChangeFindingStateComponent } from './change-finding-state/change-finding-state.component';
 import { PopoverScrollBlockerAbstractComponent } from './popover-scroll-blocker-abstract/popover-scroll-blocker-abstract.component';
+import { FindingsSettingsPopupComponent } from './findings-settings-popup/findings-settings-popup.component';
+import { EngagementSummaryStatsComponent } from './engagement-summary-stats/engagement-summary-stats.component';
 
 
 
@@ -132,12 +134,14 @@ import { PopoverScrollBlockerAbstractComponent } from './popover-scroll-blocker-
 
 @NgModule({
   declarations:  [  
+    FindingsSettingsPopupComponent,
     NextActionScreenComponent,
 
     ChangeFindingStateComponent,
     PopoverScrollBlockerAbstractComponent,
     EngagementFindingSeverityComponent,
     PerformanceDebugComponent,
+    EngagementSummaryStatsComponent,
 
     FsIconComponent, BootstrapComponent, AppListComponent, AppListItemComponent, BusinessListComponent, ProjectListComponent, MainAppComponent, ConfigComponent, IntegrationComponent, BuildsComponent, ApplicationDetailsComponent, FindingsComponent, SeverityPipe, FocusDirective, FindingDetailViewComponent, FindingStatsComponent, BuildDetailViewComponent, BuildItemComponent, DashboardComponent, IntUnintAppsComponent, HamburgerIconComponent, ProgressBarComponent, EmptyViewComponent, NullBuildsComponent, SidebarMenuComponent, BuildProgressViewComponent, BuildListComponent, BuildLoadingAnimationComponent, SwitchWorkspaceComponent, SidebarComponent, SelectedAppComponent, AppListSelectorComponent, SwitchAppViewerComponent, FrezzedInputFieldComponent, WorkspaceChooserComponent, FrezzedToggleFieldComponent, AppScrollableItemDirective, WorkspaceChooserFilterComponent, AppSelectorComponent, StaticConfigComponent, DynamicConfigComponent, GitLsRemoteComponent, ToolsConfigComponent, TextShowcaseDirective, TextShowcasePipe, ActivateToggleComponent, ActiveProtectionComponent, BitbucketIntegrationComponent, SearchBusinesssPipe, ExternalToolsRunnerComponent , AddOnToolsRunnerComponent, LogStreamComponent, CreateAppComponent, WithLoadingPipe, AssetsDnsComponent, AssetsDnsDiscoveredComponent, QuickScanJobsComponent, QuickScanJobsAdminComponent, VaptFindingsComponent, ManageAppsComponent, ManageAppsSidebarComponent, AssessmentsComponent, StatePipe, IssuesComponent, AppPageComponent, LayoutBootstrapComponent, ManageAppSidebarComponent, BPSelectorComponent, APSelectorComponent, ManageTeamComponent, DebugWindowComponent, AppsComponent, AppBriefDetailsComponent, PaginatorComponent, CreateEngagementComponent, CreateDastComponent, CreateSastComponent, CreatePentestComponent, LayoutAppComponent, ManageAppDetailSidebarComponent, AppGeneralsettingsComponent, EngagementLayoutComponent, EngagementCreateFindingComponent, EngagementDetailsComponent, EngagementFindingsToRevalidateComponent, EngagementAssignToComponent, EngagementFindingsComponent, EngagementSelectFindingComponent, HighlightPipe, EngagementStepToReproduceComponent, EngagementStepsToReproduceComponent, EngagementImpactComponent, EngagementImpactStepComponent, EngagementFindingBasicDetailsComponent, EngagementFindingCweSelectorComponent, VerticalComponentLabelComponent, FindingsSummaryBarChartComponent, BlockLoadingAnimationComponent, SeverityButtonComponent],
   imports: [

@@ -6,7 +6,7 @@
             <!-- Back Buttons -->
             <div fxLayout="row" fxLayoutAlign="start center">
 
-                <button [routerLink]=" [ '/' , 'devsec' , 'home' ] " nbButton appearance="ghost" status="info">
+                <button [routerLink]=" [ '/' , 'devsec' , 'application' ] " nbButton appearance="ghost" status="info">
                     <nb-icon icon="corner-left-up-outline">
 
                     </nb-icon>
@@ -25,6 +25,7 @@
                 <div>
 
                     <ng-container *ngFor="let tab of tabs ">
+                        <!-- {{tab | json}} -->
 
                         <button class="tab-button" [appearance]="rla?.isActive ?  'outline' : 'ghost' "
                             [status]="rla?.isActive ?  'info' : 'basic' " size="small" [routerLink]="tab[1]"
@@ -124,22 +125,8 @@
                     {{engagementDetails?.project?.name}}
 
 
-                    &nbsp;
-                    {{engagementDetails?.state}}
-
-
-
                 </div>
 
-                <div *ngIf="false" class="text-caption">
-                    {{engagementDetails?.application?.title}}
-                    (
-                    {{engagementDetails?.application?.platform}}
-
-                    )
-
-
-                </div>
 
 
             </div>
@@ -181,6 +168,7 @@
 
     <nb-layout-footer style="padding: 0;">
         <div fxFlex fxLayoutAlign="end end">
+
 
             <app-manage-engagement-state fx></app-manage-engagement-state>
         </div>

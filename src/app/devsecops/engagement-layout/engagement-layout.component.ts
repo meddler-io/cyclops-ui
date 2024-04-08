@@ -17,12 +17,11 @@ export class EngagementLayoutComponent implements OnInit {
   tabs$ = [
 
     // Testing phase routes
-    // 
-    ['Test', ['test'], [EngagementState.DRAFT, EngagementState.OPEN, EngagementState.IN_PROGRESS, EngagementState.PENDING_REVIEW, EngagementState.UNDER_REVIEW, EngagementState.ACCEPTED, EngagementState.REJECTED, EngagementState.CLOSED, EngagementState.ARCHIVED]],
+    ['Test', ['test'], [EngagementState.DRAFT, EngagementState.OPEN, EngagementState.IN_PROGRESS,  EngagementState.UNDER_REVIEW, EngagementState.ACCEPTED, EngagementState.REJECTED, EngagementState.CLOSED, EngagementState.ARCHIVED]],
 
-    // 
-    ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
-    ['Draft', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+    
+    ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+    ['Draft', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
 
     ['Assign', ['assign_task'], [EngagementState.OPEN]],
@@ -30,7 +29,7 @@ export class EngagementLayoutComponent implements OnInit {
 
 
 
-    ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+    ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
     ['Review', ['review'], [EngagementState.UNDER_REVIEW]], // List of all vulnerabilities
     ['Home', ['manage'], [EngagementState.UNDER_REVIEW]],
@@ -46,64 +45,58 @@ export class EngagementLayoutComponent implements OnInit {
 
     switch (state) {
       case EngagementState.DRAFT:
-        tabs = [['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
-        ['Draft', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+        tabs = [['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+        ['Draft', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
         ]
         break;
 
 
       case EngagementState.OPEN:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
           ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Review Findings', ['findings_under_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Review Findings', ['findings_under_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
         ]
         break;
 
       case EngagementState.IN_PROGRESS:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+
 
           // ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Revalidation', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Revalidation', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
-          ['Engagement', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Engagement', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
 
         ]
         break;
 
 
-      case EngagementState.PENDING_REVIEW:
-        tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
-
-          // ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
-
-
-        ]
-        break;
 
       case EngagementState.UNDER_REVIEW:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Revalidation', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
           // ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
 
         ]
         break;
       case EngagementState.ACCEPTED:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
-          ['Draft', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          // ['Draft', ['draft_review'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
           // ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Summary', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+
 
 
         ]
@@ -111,10 +104,10 @@ export class EngagementLayoutComponent implements OnInit {
 
       case EngagementState.REJECTED:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
           ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
 
         ]
@@ -122,10 +115,10 @@ export class EngagementLayoutComponent implements OnInit {
 
       case EngagementState.CLOSED:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
           ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
 
         ]
@@ -133,10 +126,10 @@ export class EngagementLayoutComponent implements OnInit {
 
       case EngagementState.ARCHIVED:
         tabs = [
-          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Details', ['details'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
           ['Assign', ['assign_task'], [EngagementState.OPEN]],
-          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN, EngagementState.PENDING_REVIEW, EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
+          ['Findings', ['in_progress'], [EngagementState.ACCEPTED, EngagementState.ARCHIVED, EngagementState.CLOSED, EngagementState.DRAFT, EngagementState.IN_PROGRESS, EngagementState.OPEN,  EngagementState.REJECTED, EngagementState.UNDER_REVIEW]],
 
 
         ]
@@ -162,7 +155,7 @@ export class EngagementLayoutComponent implements OnInit {
     [EngagementState.DRAFT]: 'Open',
     [EngagementState.OPEN]: 'Initiate',
     [EngagementState.IN_PROGRESS]: 'Publish',
-    [EngagementState.PENDING_REVIEW]: 'Review',
+    // [EngagementState.PENDING_REVIEW]: 'Review',
     [EngagementState.UNDER_REVIEW]: 'Accept',
     [EngagementState.ACCEPTED]: 'Close',
     [EngagementState.REJECTED]: 'Close',
@@ -185,7 +178,7 @@ export class EngagementLayoutComponent implements OnInit {
 
       // return;
 
-      return this.activatedRoute.firstChild.url.pipe(tap(segments => {
+      return this.activatedRoute.firstChild.url.pipe(map(segments => {
         const lastSegment = segments[segments.length - 1]; // Get the last segment
         let checkAuth = this.tabs.filter((v) => {
           return v[1].includes(lastSegment.path)
@@ -198,6 +191,7 @@ export class EngagementLayoutComponent implements OnInit {
         }
 
         console.log('lastSegment', checkAuth, lastSegment.path); // Output the last segment's path
+        return _;
 
       })
       );

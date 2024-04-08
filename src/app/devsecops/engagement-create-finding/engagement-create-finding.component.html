@@ -20,15 +20,12 @@
 
             </div>
 
-            <div>
+            <div *ngIf="draft ==  false ">
 
-                <app-engagement-finding-severity
-                [onrefresh]="onRefresh$" [draft]="draft" [readonly]="readonly"
-                [finding_id]="finding_id"                >
-
+                <app-engagement-finding-severity [onrefresh]="onRefresh$" [draft]="draft" [readonly]="readonly"
+                    [finding_id]="finding_id">
                 </app-engagement-finding-severity>
-          
-                
+
             </div>
 
             <!-- <button size="small" outline nbButton>                Save            </button> -->
